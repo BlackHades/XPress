@@ -1,22 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="ffbd7fa6-c7a0-4821-a15b-3db318b32be4" name="Default Changelist" comment="">
-      <change afterPath="$PROJECT_DIR$/app/middleware/ApiAuthMiddleware.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/app/validation/AuthValidator.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/app/validation/UserValidator.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/database/databaseSeeder.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/routes/api/users.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app.js" beforeDir="false" afterPath="$PROJECT_DIR$/app.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/api/auths/AuthController.js" beforeDir="false" afterPath="$PROJECT_DIR$/app/api/auths/AuthController.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/api/users/UserController.js" beforeDir="false" afterPath="$PROJECT_DIR$/app/api/users/UserController.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/database/sequelize.js" beforeDir="false" afterPath="$PROJECT_DIR$/database/sequelize.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/helpers/response.js" beforeDir="false" afterPath="$PROJECT_DIR$/helpers/response.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/package-lock.json" beforeDir="false" afterPath="$PROJECT_DIR$/package-lock.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/package.json" beforeDir="false" afterPath="$PROJECT_DIR$/package.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/routes/api/index.js" beforeDir="false" afterPath="$PROJECT_DIR$/routes/api/index.js" afterDir="false" />
-    </list>
+    <list default="true" id="ffbd7fa6-c7a0-4821-a15b-3db318b32be4" name="Default Changelist" comment="" />
     <ignored path="$PROJECT_DIR$/.tmp/" />
     <ignored path="$PROJECT_DIR$/temp/" />
     <ignored path="$PROJECT_DIR$/tmp/" />
@@ -40,8 +25,8 @@
       <file pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/app/api/auths/AuthController.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="256">
-              <caret line="16" column="3" lean-forward="true" selection-start-line="16" selection-start-column="3" selection-end-line="16" selection-end-column="3" />
+            <state relative-caret-position="336">
+              <caret line="21" column="50" lean-forward="true" selection-start-line="21" selection-start-column="50" selection-end-line="21" selection-end-column="50" />
             </state>
           </provider>
         </entry>
@@ -262,16 +247,15 @@
       <updated>1548938284403</updated>
       <workItem from="1548938287463" duration="10654000" />
       <workItem from="1548949259227" duration="813000" />
-      <workItem from="1549022354450" duration="20279000" />
+      <workItem from="1549022354450" duration="20337000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="31746000" />
+    <option name="totallyTimeSpent" value="31804000" />
   </component>
   <component name="ToolWindowManager">
     <frame x="-8" y="-8" width="1382" height="754" extended-state="6" />
-    <editor active="true" />
     <layout>
       <window_info content_ui="combo" id="Project" order="0" visible="true" weight="0.16133828" />
       <window_info id="Structure" order="1" side_tool="true" weight="0.25" />
@@ -510,8 +494,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/app/api/auths/AuthController.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="256">
-          <caret line="16" column="3" lean-forward="true" selection-start-line="16" selection-start-column="3" selection-end-line="16" selection-end-column="3" />
+        <state relative-caret-position="336">
+          <caret line="21" column="50" lean-forward="true" selection-start-line="21" selection-start-column="50" selection-end-line="21" selection-end-column="50" />
         </state>
       </provider>
     </entry>
