@@ -10,8 +10,8 @@ const sequelize = new Sequelize(config.DB_NAME, config.DB_USERNAME, config.DB_PA
         min: 0,
         acquire: 30000,
         idle: 10000
-    }
-
+    },
+    logging: false
 });
 sequelize
     .authenticate()

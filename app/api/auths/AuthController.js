@@ -1,12 +1,20 @@
 const {User} = require('../../../database/sequelize');
-const {createSuccessResponse, createErrorResponse} = require('../../../helpers/response');
-const handler = require('../../../helpers/ErrorHandler');
-const { check, validationResult } = require('express-validator/check');
+const roles = require('../users/UserConstant');
+const {createSuccessResponse, createErrorResponse, validationHandler} = require('../../../helpers/response');
+const {validationResult } = require('express-validator/check');
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 const {fetchByEmail} = require('../users/UserRepository');
 const config = require('../../../config/config');
 
+
+/**
+ * Authenticate User
+ * @param req
+ * @param res
+ * @param next
+ * @returns {Promise<void|*>}
+ */
 const login = async (req, res, next) => {
   try{
     const valFails = validationResult(req);
@@ -14,24 +22,28 @@ const login = async (req, res, next) => {
       return createErrorResponse(res,validationHandler(valFails), valFails.array);
 
     let payload = req.body;
-    console.log("Password: " + payload.password);
     let user = await fetchByEmail(payload.email);
-    console.log("UserPassword: " + JSON.stringify(user));
     if(!bcrypt.compareSync(payload.password,user.password))
       return createErrorResponse(res,"Invalid Credentials",);
 
-    // create a token
+
     const token = jwt.sign({ user: user }, config.SECURITY_KEY, {
-      expiresIn: 86400 // expires in 24 hours
+      expiresIn: (86400 * 2) // expires in 48 hours
     });
     return createSuccessResponse(res,{user:user,token:token},"Login Successful" )
-    // console.log("User: " + user);
-    // createSuccessResponse(res, user)
   }catch (e) {
      next(e);
   }
 };
 
+
+/**
+ * Validate User
+ * @param req
+ * @param res
+ * @param next
+ * @returns {Promise<void|*>}
+ */
 const register = async (req, res, next) => {
   try{
     const valFails = validationResult(req);
@@ -43,6 +55,7 @@ const register = async (req, res, next) => {
     console.log("hashedPassword: " + hashedPassword);
     let user = await User.create({
       name: payload.name,
+      roleId: roles.USER,
       email:payload.email,
       phone:payload.phone,
       password: hashedPassword
@@ -56,54 +69,7 @@ const register = async (req, res, next) => {
     next(e);
   }
 };
-
-
-/**
- * Request Validator
- * @param method
- * @returns {*}
- */
-let validate = (method) => {
-  switch (method) {
-    case 'login':{
-      return [
-          check('email','email is required').exists(),
-          check('password','password is required').exists(),
-          check('email','email has been taken').custom(value => {
-            return User.findOne({email: value}).then(user => {
-              console.log("Validation-Email: " + user);
-              if(!user){
-                return Promise.reject('Invalid Email');
-              }
-            })
-          })
-      ];
-    }
-    case 'register':{
-      return [
-        check('name','Name is required').exists(),
-        check('password','Password is required').exists(),
-        check('email','email is required').exists(),
-        check('email','email has been taken').custom(value => {
-          return User.findOne({email: value}).then(user => {
-            console.log("Validation-Email: " + user);
-            if(user){
-              return Promise.reject('E-mail has been taken');
-            }
-          })
-        })
-      ];
-    }
-  }
-};
-
-const validationHandler = result => {
-  return result.array().map(i => `${i.msg}`).join('. ')
-};
-
-
 module.exports = {
-  validate,
   login,
   register
 };
