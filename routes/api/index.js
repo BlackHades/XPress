@@ -7,7 +7,7 @@ const authRouter = require('./auth');
 const AuthController = require('../../app/api/auths/AuthController');
 
 //Validators
-const AuthValidator  = require('../../app/validation/AuthValidator');
+const AuthValidator  = require('../../app/validator/AuthValidator');
 /* GET home page. */
 
 router.post('/login', AuthValidator.login(), AuthController.login);

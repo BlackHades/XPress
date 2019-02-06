@@ -8,6 +8,7 @@ const logger = require('morgan');
 
 const indexRouter = require('./routes/index');
 const usersRouter = require('./routes/api/users');
+const filesRouter = require('./routes/api/files');
 const apiRouter = require('./routes/api');
 const errorHandler = require('./helpers/ErrorHandler');
 const app = express();
@@ -16,7 +17,7 @@ const {seeder} = require('./database/databaseSeeder');
 const {sequelize} = require('./database/sequelize');
 
 sequelize.sync({force: false}).then(() => {
-  console.log('Drop and Resync with { force: false }');
+  // console.log('Drop and Resync with { force: false }');
   seeder()
 });
 
@@ -29,11 +30,14 @@ app.use(logger('dev'));
 app.use(express.json());
 app.use(expressValidator());
 app.use(express.urlencoded({ extended: false }));
+app.use(express.static(path.resolve('./public')));
+
 
 
 app.use('/', indexRouter);
 app.use('/api/v1',apiRouter);
 app.use('/api/v1/users',usersRouter);
+app.use('/api/v1/files',filesRouter);
 // app.use('/users', usersRouter);
 
 // catch 404 and forward to error handler

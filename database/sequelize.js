@@ -1,6 +1,7 @@
 const Sequelize = require('sequelize');
 const config = require('../config/config');
 const UserModel = require('../app/api/users/UserModel');
+const FileModel = require('../app/api/files/FileModel');
 
 const sequelize = new Sequelize(config.DB_NAME, config.DB_USERNAME, config.DB_PASSWORD, {
     host: config.DB_HOST,
@@ -16,7 +17,7 @@ const sequelize = new Sequelize(config.DB_NAME, config.DB_USERNAME, config.DB_PA
 sequelize
     .authenticate()
     .then(() => {
-        console.log('Connection has been established successfully.');
+        // console.log('Connection has been established successfully.');
     })
     .catch(err => {
         console.error('Unable to connect to the database:', err);
@@ -24,6 +25,7 @@ sequelize
 
 
 const User = UserModel(sequelize, Sequelize);
+const File = FileModel(sequelize, Sequelize);
 // const Message = MessageModel(sequelize, Sequelize);
 // const OnlineUser = OnlineUserModel(sequelize, Sequelize);
 // const MessageDelete = MessageDeleteModel(sequelize, Sequelize);
@@ -75,6 +77,7 @@ const User = UserModel(sequelize, Sequelize);
 
 module.exports = {
     sequelize,
-    User
+    User,
+    File
 };
 

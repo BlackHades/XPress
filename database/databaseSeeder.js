@@ -4,7 +4,7 @@ const {fetchByEmail} = require('../app/api/users/UserRepository');
 
 
 let seeder = ()=> {
-    console.log("Seeding Started");
+    // console.log("Seeding Started");
     admin();
 };
 

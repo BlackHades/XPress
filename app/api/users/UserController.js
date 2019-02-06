@@ -1,5 +1,8 @@
 const {createSuccessResponse, createErrorResponse, validationHandler} = require('../../../helpers/response');
 const {validationResult } = require('express-validator/check');
+const bcrypt = require('bcryptjs');
+const {User} = require('../../../database/sequelize');
+const {fetchByEmail} = require('../users/UserRepository');
 
 
 /**
@@ -25,13 +28,12 @@ let create = async (req, res, next) => {
             phone:payload.phone,
             password: hashedPassword
         });
-        console.log("User: " + user);
-        createSuccessResponse(res, user)
+        console.log("User: " + JSON.stringify(user));
+        return createSuccessResponse(res, user, "User Created");
     }catch (e) {
         // handler(e);
         next(e);
     }
-    return createSuccessResponse(res, {admin:req.admin, body: req.body});
 };
 
 

@@ -7,10 +7,13 @@ const {authenticate,adminAuth} = require('../../app/middleware/ApiAuthMiddleware
 
 //Controllers
 const userController = require('../../app/api/users/UserController');
+
+//Validators
+const userValidator  = require('../../app/validator/UserValidator');
 //All User
 router.use(authenticate);
 //Routes 1. get User Details
-router.post('/me', userController.create);
+router.post('/me',  userController.create);
 
 
 //Agents And Above
@@ -21,7 +24,7 @@ router.post('/me', userController.create);
 
 
 router.use(adminAuth);
-router.post('/create', userController.create);
+router.post('/create', userValidator.create(), userController.create);
 
 module.exports = router;
 

@@ -5,7 +5,9 @@ let create = () => {
     return [
         check('name','Name is required').exists(),
         check('password','Password is required').exists(),
+        check('phone','Phone Number is required').exists(),
         check('email','email is required').exists(),
+        check('roleId','User role is required').exists(),
         check('email').custom(value => {
             return fetchByEmail(value).then(user => {
                 if(user){
@@ -17,6 +19,5 @@ let create = () => {
 };
 
 module.exports = {
-    create,
-    register
+    create
 };

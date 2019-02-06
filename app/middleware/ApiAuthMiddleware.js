@@ -35,7 +35,7 @@ let authenticate = (req,res,next) => {
 
 
 let adminAuth = (req,res,next) => {
-    if(req.user && req.user === roles.ADMINISTRATOR)
+    if(req.user && req.user.roleId === roles.ADMINISTRATOR)
         next();
     else
         return createErrorResponse(res,"Unauthorized");

@@ -29,7 +29,10 @@ module.exports = (sequelize, type) => {
             type: type.STRING,
             unique: true,
         },
-        phone: type.STRING,
+        phone: {
+            type: type.STRING,
+            unique: true,
+        },
         password: type.STRING,
         avatar: type.STRING,
         last_seen: type.DATE

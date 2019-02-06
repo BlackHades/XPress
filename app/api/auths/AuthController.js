@@ -22,7 +22,10 @@ const login = async (req, res, next) => {
       return createErrorResponse(res,validationHandler(valFails), valFails.array);
 
     let payload = req.body;
+    //Fetch User By Email
     let user = await fetchByEmail(payload.email);
+
+    //Compare Password
     if(!bcrypt.compareSync(payload.password,user.password))
       return createErrorResponse(res,"Invalid Credentials",);
 
@@ -69,6 +72,9 @@ const register = async (req, res, next) => {
     next(e);
   }
 };
+
+
+
 module.exports = {
   login,
   register
