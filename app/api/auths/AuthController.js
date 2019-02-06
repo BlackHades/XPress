@@ -14,9 +14,9 @@ const login = async (req, res, next) => {
       return createErrorResponse(res,validationHandler(valFails), valFails.array);
 
     let payload = req.body;
-    console.log("Password: " + payload.password);
     let user = await fetchByEmail(payload.email);
-    console.log("UserPassword: " + JSON.stringify(user));
+
+    //Compare Password
     if(!bcrypt.compareSync(payload.password,user.password))
       return createErrorResponse(res,"Invalid Credentials",);
 
@@ -63,7 +63,7 @@ const register = async (req, res, next) => {
  * @param method
  * @returns {*}
  */
-let validate = (method) => {
+const validate = (method) => {
   switch (method) {
     case 'login':{
       return [
