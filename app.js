@@ -2,6 +2,7 @@ const createError = require('http-errors');
 const express = require('express');
 const path = require('path');
 require('dotenv').config();
+const fs = require('fs');
 // const cookieParser = require('cookie-parser');
 const expressValidator = require('express-validator');
 const cors = require('cors');
@@ -34,7 +35,11 @@ app.use(expressValidator());
 app.use(express.urlencoded({ extended: false }));
 app.use(express.static(path.resolve('./public')));
 
-
+try {
+  fs.mkdirSync(path.join(__dirname, '/public/uploads/'))
+} catch (err) {
+  if (err.code !== 'EEXIST') throw err
+}
 app.use('/', indexRouter);
 app.use('/api/v1',apiRouter);
 app.use('/api/v1/users',usersRouter);
