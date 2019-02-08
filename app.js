@@ -1,6 +1,7 @@
 const createError = require('http-errors');
 const express = require('express');
 const path = require('path');
+require('dotenv').config();
 // const cookieParser = require('cookie-parser');
 const expressValidator = require('express-validator');
 const cors = require('cors');

@@ -30,7 +30,7 @@ const login = async (req, res, next) => {
       return createErrorResponse(res,"Invalid Credentials",);
 
 
-    const token = jwt.sign({ user: user }, config.SECURITY_KEY, {
+    const token = jwt.sign({ user: user }, process.env.SECURITY_KEY, {
       expiresIn: (86400 * 2) // expires in 48 hours
     });
     return createSuccessResponse(res,{user:user,token:token},"Login Successful" )
