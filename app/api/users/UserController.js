@@ -2,7 +2,7 @@ const {createSuccessResponse, createErrorResponse, validationHandler} = require(
 const {validationResult } = require('express-validator/check');
 const bcrypt = require('bcryptjs');
 const {User} = require('../../../database/sequelize');
-const {fetchByEmail} = require('../users/UserRepository');
+const {fetchByEmail, updateUser} = require('../users/UserRepository');
 
 
 /**
@@ -36,12 +36,60 @@ let create = async (req, res, next) => {
     }
 };
 
+/**
+ * Update User Details
+ * @param req
+ * @param res
+ * @param next
+ * @returns {Promise<void|*>}
+ */
 
-let me = (req,res,next) => {
+let update = async (req, res, next) => {
+    try{
+        const valFails = validationResult(req);
+        if(!valFails.isEmpty())
+            return createErrorResponse(res,validationHandler(valFails), valFails.array);
 
+        let payload = req.body;
+        let user = req.user;
+        let result = await updateUser({name: payload.name, email:payload.email,phone:payload.phone},req.user.id);
+        console.log("User: " + JSON.stringify(result));
+        console.log("User: " + JSON.stringify(user));
+        return createSuccessResponse(res, user, "User Profile Updated");
+    }catch (e) {
+        // handler(e);
+        next(e);
+    }
 };
 
+/**
+ * Update Avatar
+ * @param req
+ * @param res
+ * @param next
+ * @returns {void|*}
+ */
 
+let avatar = async (req,res,next) => {
+    try{
+        const valFails = validationResult(req);
+        if(!valFails.isEmpty())
+            return createErrorResponse(res,validationHandler(valFails), valFails.array);
+
+        let payload = req.body;
+        let user = req.user;
+        //Update user Object
+        user.avatar = payload.avatar;
+        // Update Database
+        await updateUser({avatar: payload.avatar},req.user.id);
+
+        console.log("User: " + JSON.stringify(user));
+        return createSuccessResponse(res, user, "Avatar Updated Successfully");
+    }catch (e) {
+        // handler(e);
+        next(e);
+    }
+};
 module.exports = {
-  create
+  create, update, avatar
 };

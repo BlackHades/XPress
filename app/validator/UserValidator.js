@@ -1,6 +1,11 @@
 const { check } = require('express-validator/check');
 const {fetchByEmail} = require('../api/users/UserRepository');
 
+
+/**
+ * Create User Validation
+ * @returns {any[]}
+ */
 let create = () => {
     return [
         check('name','Name is required').exists(),
@@ -18,6 +23,27 @@ let create = () => {
     ];
 };
 
+/**
+ * Update User Validation
+ * @returns {ValidationChain[]}
+ */
+let update = () => {
+    return [
+        check('name','Name is required').exists(),
+        check('phone','Phone Number is required').exists(),
+        check('email','email is required').exists()
+    ];
+};
+
+let avatar = () => {
+    return [
+        check('avatar','Avatar is required').exists(),
+    ];
+};
+
+
+
+
 module.exports = {
-    create
+    create, update, avatar
 };

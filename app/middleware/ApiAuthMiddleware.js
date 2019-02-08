@@ -12,13 +12,13 @@ const {createErrorResponse} = require('../../helpers/response');
  * @returns {void|*}
  */
 let authenticate = (req,res,next) => {
-    // console.log('data', req.headers['authentication']);
-    let token = req.headers['x-access-token'] || req.headers['authorization'];
+    console.log('data', req.headers['authentication']);
+    let token = req.headers['x-access-token'] || req.headers['authorization'] || req.body.token;
+    if (!token) return createErrorResponse(res,"No token provided.");
     if (token.startsWith('Bearer ')) {
         // Remove Bearer from string
         token = token.slice(7, token.length);
     }
-    if (!token) return createErrorResponse(res,"No token provided.");
 
     jwt.verify(token, config.SECURITY_KEY, function(err, decoded) {
         if (err) return createErrorResponse(res,'Failed to authenticate token.');

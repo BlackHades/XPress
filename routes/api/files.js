@@ -24,10 +24,6 @@ const fileController = require('../../app/api/files/FileController');
 router.get('/check/:checksum', fileController.check);
 router.post('/upload',upload.single('file'), fileController.upload);
 
-
-// router.get('/checksum', fileController.checksum);
-
-
 //Export
 module.exports = router;
 

@@ -10,10 +10,11 @@ const userController = require('../../app/api/users/UserController');
 
 //Validators
 const userValidator  = require('../../app/validator/UserValidator');
-//All User
+
+//General Auth
 router.use(authenticate);
-//Routes 1. get User Details
-router.post('/me',  userController.create);
+router.post('/update', userValidator.update(),  userController.update);
+router.post('/avatar', userValidator.avatar(),  userController.avatar);
 
 
 //Agents And Above
@@ -25,6 +26,8 @@ router.post('/me',  userController.create);
 
 router.use(adminAuth);
 router.post('/create', userValidator.create(), userController.create);
+router.get('/all', userValidator.create(), userController.create);
+router.delete('/delete/:id', userValidator.create(), userController.create);
 
 module.exports = router;
 

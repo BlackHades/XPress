@@ -9,6 +9,7 @@ const logger = require('morgan');
 const indexRouter = require('./routes/index');
 const usersRouter = require('./routes/api/users');
 const filesRouter = require('./routes/api/files');
+const passwordsRouter = require('./routes/api/passwords');
 const apiRouter = require('./routes/api');
 const errorHandler = require('./helpers/ErrorHandler');
 const app = express();
@@ -38,7 +39,8 @@ app.use('/', indexRouter);
 app.use('/api/v1',apiRouter);
 app.use('/api/v1/users',usersRouter);
 app.use('/api/v1/files',filesRouter);
-// app.use('/users', usersRouter);
+app.use('/api/v1/passwords',passwordsRouter);
+
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {

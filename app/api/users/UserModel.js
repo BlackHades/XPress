@@ -35,7 +35,7 @@ module.exports = (sequelize, type) => {
         },
         password: type.STRING,
         avatar: type.STRING,
-        last_seen: type.DATE
+        lastSeen: type.DATE
     });
 };
 // Export the model
