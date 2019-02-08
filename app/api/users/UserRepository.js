@@ -21,10 +21,16 @@ let updateUser = (update, id) => {
     return User.update(update,{where:{id:id}});
 };
 
+let all = () => {
+  return User.findAll();
+};
 
-
+let destroy = (userId) => {
+    return User.destroy({where:{id:userId}});
+};
 module.exports = {
   fetchByEmail,
-    updateUser
+    updateUser,
+    all, destroy
 };
 

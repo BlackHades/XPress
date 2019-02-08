@@ -1,4 +1,4 @@
-const { check } = require('express-validator/check');
+const { check, param, query } = require('express-validator/check');
 const {fetchByEmail} = require('../api/users/UserRepository');
 
 
@@ -42,8 +42,15 @@ let avatar = () => {
 };
 
 
+let destroy = () => {
+    return [
+        param('userId','User Id is required').exists().not().isEmpty(),
+    ];
+};
+
+
 
 
 module.exports = {
-    create, update, avatar
+    create, update, avatar, destroy
 };

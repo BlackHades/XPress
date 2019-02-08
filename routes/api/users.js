@@ -26,8 +26,8 @@ router.post('/avatar', userValidator.avatar(),  userController.avatar);
 
 router.use(adminAuth);
 router.post('/create', userValidator.create(), userController.create);
-router.get('/all', userValidator.create(), userController.create);
-router.delete('/delete/:id', userValidator.create(), userController.create);
+router.get('/all', userController.all);
+router.delete('/delete/:userId', userValidator.destroy(), userController.destroy);
 
 module.exports = router;
 

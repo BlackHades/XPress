@@ -2,7 +2,7 @@ const {createSuccessResponse, createErrorResponse, validationHandler} = require(
 const {validationResult } = require('express-validator/check');
 const bcrypt = require('bcryptjs');
 const {User} = require('../../../database/sequelize');
-const {fetchByEmail, updateUser} = require('../users/UserRepository');
+const userRepository = require('../users/UserRepository');
 
 
 /**
@@ -52,7 +52,7 @@ let update = async (req, res, next) => {
 
         let payload = req.body;
         let user = req.user;
-        let result = await updateUser({name: payload.name, email:payload.email,phone:payload.phone},req.user.id);
+        let result = await userRepository.updateUser({name: payload.name, email:payload.email,phone:payload.phone},req.user.id);
         console.log("User: " + JSON.stringify(result));
         console.log("User: " + JSON.stringify(user));
         return createSuccessResponse(res, user, "User Profile Updated");
@@ -90,6 +90,35 @@ let avatar = async (req,res,next) => {
         next(e);
     }
 };
+
+
+/**
+ * Fetch All Users
+ * @param req
+ * @param res
+ * @param next
+ * @returns {Promise<void|*>}
+ */
+const all = async (req, res, next) => {
+    return createSuccessResponse(res, await userRepository.all());
+};
+
+
+/**
+ * Delete User
+ * @param req
+ * @param res
+ * @param next
+ * @returns {Promise<void|*>}
+ */
+const destroy = async (req,res,next) => {
+    let userId = req.params.userId;
+    if(req.user.id === userId)
+        return createErrorResponse(res, "An Error Occurred. Can't delete Self");
+
+    return createSuccessResponse(res, await userRepository.destroy(userId),"User deleted successfully");
+
+};
 module.exports = {
-  create, update, avatar
+  create, update, avatar, all, destroy
 };

@@ -20,7 +20,7 @@ let authenticate = (req,res,next) => {
         token = token.slice(7, token.length);
     }
 
-    jwt.verify(token, config.SECURITY_KEY, function(err, decoded) {
+    jwt.verify(token, process.env.SECURITY_KEY, function(err, decoded) {
         if (err) return createErrorResponse(res,'Failed to authenticate token.');
         // console.log("User: " + JSON.stringify(decoded));
         let user = decoded.user;
