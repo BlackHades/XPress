@@ -34,7 +34,6 @@ app.use(express.urlencoded({ extended: false }));
 app.use(express.static(path.resolve('./public')));
 
 
-
 app.use('/', indexRouter);
 app.use('/api/v1',apiRouter);
 app.use('/api/v1/users',usersRouter);

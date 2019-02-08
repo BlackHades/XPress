@@ -29,7 +29,7 @@ const upload = async (req,res,next) => {
       return createErrorResponse(res,"File Not Found");
     const file = req.file;
     const path = "./public/uploads/" + file.filename;
-    const url = config.HOST() + "uploads/" + file.filename;
+    const url = config.HOST + "uploads/" + file.filename;
 
     //calculate Checksum
     const checksum = await calculateCheckSum(path);
