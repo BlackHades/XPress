@@ -17,15 +17,15 @@ let  fetchByEmail =  (email) => {
  * @param update
  * @param id
  */
-let updateUser = (update, id) => {
+const updateUser = (update, id) => {
     return User.update(update,{where:{id:id}});
 };
 
-let all = () => {
+const all = () => {
   return User.findAll();
 };
 
-let destroy = (userId) => {
+const destroy = (userId) => {
     return User.destroy({where:{id:userId}});
 };
 module.exports = {

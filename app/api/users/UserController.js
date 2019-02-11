@@ -1,8 +1,10 @@
+'use strict';
 const {createSuccessResponse, createErrorResponse, validationHandler} = require('../../../helpers/response');
 const {validationResult } = require('express-validator/check');
 const bcrypt = require('bcryptjs');
 const {User} = require('../../../database/sequelize');
-const userRepository = require('../users/UserRepository');
+const userRepository = require('./UserRepository');
+const userConstant = require('./UserConstant');
 
 
 /**
@@ -23,7 +25,7 @@ let create = async (req, res, next) => {
         console.log("hashedPassword: " + hashedPassword);
         let user = await User.create({
             name: payload.name,
-            roleId: payload.roleId,
+            roleId: payload.roleId || userConstant.AGENT,
             email:payload.email,
             phone:payload.phone,
             password: hashedPassword
@@ -113,12 +115,13 @@ const all = async (req, res, next) => {
  */
 const destroy = async (req,res,next) => {
     let userId = req.params.userId;
-    if(req.user.id === userId)
+    if(req.user.id.toString() === userId)
         return createErrorResponse(res, "An Error Occurred. Can't delete Self");
 
     return createSuccessResponse(res, await userRepository.destroy(userId),"User deleted successfully");
 
 };
+
 module.exports = {
   create, update, avatar, all, destroy
 };
