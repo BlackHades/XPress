@@ -1,0 +1,18 @@
+const STATUS_SENT = 1;
+const STATUS_DELIVERED = 2;
+const STATUS_READ = 3;
+
+const TYPE_TEXT = "TEXT";
+const TYPE_IMAGE = "IMAGE";
+
+
+
+module.exports = {
+
+  STATUS_SENT,
+  STATUS_DELIVERED,
+  STATUS_READ,
+
+  TYPE_TEXT,
+  TYPE_IMAGE
+};
