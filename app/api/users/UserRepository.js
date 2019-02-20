@@ -1,14 +1,19 @@
 const {User} = require('../../../database/sequelize');
 const Sequelize = require('sequelize');
 const Op = Sequelize.Op;
+const uuid = require("uuid");
 
 /**
  * Fetch User By Email
  * @param email
  * @returns {*}
  */
-let  fetchByEmail =  (email) => {
+const fetchByEmail =  (email) => {
     return User.findOne({where:{email:email}});
+};
+
+const find = (userId) => {
+  return User.findByPk(userId);
 };
 
 /**
@@ -28,9 +33,24 @@ let all = () => {
 let destroy = (userId) => {
     return User.destroy({where:{id:userId}});
 };
+
+
+/**generate unique User UID
+ *
+ * @returns {Promise<*>}
+ */
+const generateUid = async () => {
+    let uid = uuid.v4();
+    // console.log(uid);
+    let user = await User.findOne({where:{uid:uid}});
+    if(user == null)
+        return uid;
+    else
+        return this.generateUid();
+};
 module.exports = {
   fetchByEmail,
     updateUser,
-    all, destroy
+    all, destroy, generateUid, find
 };
 

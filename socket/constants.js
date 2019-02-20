@@ -10,7 +10,7 @@ const EVENT_FETCH_MESSAGE = "event-fetch-message";
 //Emissions
 const EMIT_ERROR = "emit-error";
 const EMIT_AUTHENTICATED = "emit-authenticated";
-const EMIT_MESSAGE = "emit-message";
+const EMIT_RECEIVE_MESSAGE = "emit-receive-message";
 module.exports = {
     CONNECTION,
     CONNECTED,
@@ -24,5 +24,5 @@ module.exports = {
     //Emissions
     EMIT_ERROR,
     EMIT_AUTHENTICATED,
-    EMIT_MESSAGE
+    EMIT_RECEIVE_MESSAGE
 };

@@ -9,7 +9,7 @@ module.exports = (sequelize, type) => {
             autoIncrement: true
         },
         mid:{
-            type: type.INTEGER,
+            type: type.STRING,
             unique: true
         },
         to: type.INTEGER,
@@ -18,6 +18,10 @@ module.exports = (sequelize, type) => {
         type: type.STRING,
         mediaLink: {
             type: type.STRING,
+            allowNull:true
+        },
+        agentId:{
+            type: type.INTEGER,
             allowNull:true
         },
         status: {

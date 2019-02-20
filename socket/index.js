@@ -51,6 +51,10 @@ const ioEvents = (io) => {
             }
         });
 
+        socket.on(EVENT_SEND_MESSAGE,(payload) => {
+            messageController.send(io,socket,payload)
+        });
+
         /**
          * Disconnect User and Remove from Online users
          */

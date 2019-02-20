@@ -20,6 +20,10 @@ module.exports = (sequelize, type) => {
             primaryKey: true,
             autoIncrement: true
         },
+        uid:{
+            type: type.STRING,
+            unique: true
+        },
         roleId:{
             type: type.INTEGER,
             defaultValue: roles.USER,
