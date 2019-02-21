@@ -1,5 +1,6 @@
 'use strict';
 const {authenticate} = require("../app/middleware/SocketMiddleware");
+const onlineUserRepository= require("../app/api/online-users/OnlineUserRepository");
 const {
 
     //Events
@@ -45,6 +46,8 @@ const ioEvents = (io) => {
                 socket.auth = true;
                 socket.userId = payload.userId;
                 console.log("Initialized: " + socket);
+                //add user to online-users table
+                onlineUserRepository.add(socket.userId, socket.id);
                 messageController.fetchMessages(socket,0);
             }else{
                 socket.disconnect(true);
@@ -58,7 +61,9 @@ const ioEvents = (io) => {
         /**
          * Disconnect User and Remove from Online users
          */
-        socket.on(DISCONNECTED, (payload) => {
+        socket.on(DISCONNECTED, () => {
+            //remove user from online-users table
+            onlineUserRepository.remove(socket.userId, socket.id);
             console.log(socket.id + " is disconnected");
         });
     });

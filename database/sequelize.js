@@ -3,6 +3,7 @@ const config = require('../config/config');
 const UserModel = require('../app/api/users/UserModel');
 const FileModel = require('../app/api/files/FileModel');
 const MessageModel = require('../app/api/messages/MessageModel');
+const OnlineUserModel = require('../app/api/online-users/OnlineUserModel');
 
 const sequelize = new Sequelize(process.env.DB_NAME, process.env.DB_USERNAME, process.env.DB_PASSWORD, {
     host: process.env.DB_HOST,
@@ -13,7 +14,7 @@ const sequelize = new Sequelize(process.env.DB_NAME, process.env.DB_USERNAME, pr
         acquire: 30000,
         idle: 10000
     },
-    logging: false
+    // logging: false
 });
 sequelize
     .authenticate()
@@ -28,14 +29,7 @@ sequelize
 const User = UserModel(sequelize, Sequelize);
 const File = FileModel(sequelize, Sequelize);
 const Message = MessageModel(sequelize, Sequelize);
-// const Message = MessageModel(sequelize, Sequelize);
-// const OnlineUser = OnlineUserModel(sequelize, Sequelize);
-// const MessageDelete = MessageDeleteModel(sequelize, Sequelize);
-// const Group = GroupModel(sequelize,Sequelize);
-// const GroupMember = GroupMemberModel(sequelize,Sequelize);
-// const Token = TokenModel(sequelize,Sequelize);
-// const OneSignalToken = OneSignalTokenModel(sequelize,Sequelize);
-// const Mute = MuteModel(sequelize,Sequelize);
+const OnlineUser = OnlineUserModel(sequelize, Sequelize);
 
 
 /**
@@ -81,6 +75,7 @@ module.exports = {
     sequelize,
     User,
     File,
-    Message
+    Message,
+    OnlineUser
 };
 

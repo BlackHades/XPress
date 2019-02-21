@@ -1,4 +1,5 @@
 const {User} = require('../../../database/sequelize');
+const userConstant = require("./UserConstant");
 const Sequelize = require('sequelize');
 const Op = Sequelize.Op;
 const uuid = require("uuid");
@@ -34,7 +35,12 @@ let destroy = (userId) => {
     return User.destroy({where:{id:userId}});
 };
 
-
+const getAllNonUser = (id = false) => {
+    if(id)
+        return User.findAll({attributes:["id"],where:{roleId:{[Op.ne]:userConstant.USER}}});
+    else
+        return User.findAll({where:{roleId:{[Op.ne]:userConstant.USER}}});
+};
 /**generate unique User UID
  *
  * @returns {Promise<*>}
@@ -51,6 +57,10 @@ const generateUid = async () => {
 module.exports = {
   fetchByEmail,
     updateUser,
-    all, destroy, generateUid, find
+    all,
+    destroy,
+    generateUid,
+    find,
+    getAllNonUser
 };
 

@@ -1,7 +1,7 @@
-const SYSTEM = 0;
-const ADMINISTRATOR = 1;
-const AGENT = 2;
-const USER = 3;
+const SYSTEM = 1;
+const ADMINISTRATOR = 2;
+const AGENT = 3;
+const USER = 4;
 
 
 module.exports = {
