@@ -19,7 +19,7 @@ const {seeder} = require('./database/databaseSeeder');
 
 const {sequelize} = require('./database/sequelize');
 
-sequelize.sync({force: false}).then(() => {
+sequelize.sync({force: true}).then(() => {
   // console.log('Drop and Resync with { force: false }');
   seeder()
 });
