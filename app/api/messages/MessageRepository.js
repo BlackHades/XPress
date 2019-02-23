@@ -5,7 +5,12 @@ const create = (payload) => {
   return Message.create(payload);
 };
 
-
+/**
+ * Fetch Message From a lastMessageId
+ * @param userId
+ * @param lastMessageId
+ * @returns {*}
+ */
 const fetchMessage = (userId,lastMessageId) => {
     return Message.findAll({
       where:{
