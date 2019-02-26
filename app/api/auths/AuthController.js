@@ -4,7 +4,7 @@ const {createSuccessResponse, createErrorResponse, validationHandler} = require(
 const {validationResult } = require('express-validator/check');
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
-const {fetchByEmail} = require('../users/UserRepository');
+const {fetchByEmail, generateUid} = require('../users/UserRepository');
 const config = require('../../../config/config');
 
 
@@ -55,9 +55,12 @@ const register = async (req, res, next) => {
 
     let payload = req.body;
     const hashedPassword = bcrypt.hashSync(payload.password,  bcrypt.genSaltSync(10));
-    console.log("hashedPassword: " + hashedPassword);
+    // console.log("hashedPassword: " + hashedPassword);
+    let uid = await generateUid();
+
     let user = await User.create({
       name: payload.name,
+      uid:uid,
       roleId: roles.USER,
       email:payload.email,
       phone:payload.phone,

@@ -21,8 +21,10 @@ let create = async (req, res, next) => {
         let payload = req.body;
         const hashedPassword = bcrypt.hashSync(payload.password,  bcrypt.genSaltSync(10));
         console.log("hashedPassword: " + hashedPassword);
+        let uid = await userRepository.generateUid();
         let user = await User.create({
             name: payload.name,
+            uid:uid,
             roleId: payload.roleId,
             email:payload.email,
             phone:payload.phone,
