@@ -64,9 +64,6 @@ const register = async (req, res, next) => {
       password: hashedPassword
     });
 
-
-
-
     console.log("User: " + user);
 
     const token = jwt.sign({ user: user }, process.env.SECURITY_KEY, {
