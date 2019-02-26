@@ -65,8 +65,14 @@ const register = async (req, res, next) => {
     });
 
 
+
+
     console.log("User: " + user);
-    createSuccessResponse(res, user)
+
+    const token = jwt.sign({ user: user }, process.env.SECURITY_KEY, {
+      expiresIn: (86400 * 2) // expires in 48 hours
+    });
+    return createSuccessResponse(res,{user:user,token:token},"Registration Successful" );
   }catch (e) {
     // handler(e);
     next(e);
