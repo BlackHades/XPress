@@ -1,6 +1,10 @@
 const {Post} = require('../../../database/sequelize');
 
 
+const find = (postId, withComment = false) => {
+  return Post.findOne({where:{id:postId}})
+};
+
 const all = () => {
   return Post.findAll({order: [['id', 'DESC']]});
 };
@@ -18,5 +22,6 @@ const  destroy = (postId) => {
 module.exports = {
   create,
     destroy,
-    all
+    all,
+    find
 };

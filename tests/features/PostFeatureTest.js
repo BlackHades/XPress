@@ -8,7 +8,7 @@ const  expect = chai.expect;
 
 const {destroy,find} = require("../../app/api/users/UserRepository");
 
-describe('Post API Integration Tests', function() {
+describe('Posts API Integration Tests', function() {
 
 
     it("should fetch all posts", (done) => {
@@ -54,6 +54,26 @@ describe('Post API Integration Tests', function() {
         });
     });
 
+    it('should view post', (done) => {
+        const postId = 3;
+        request(app).get(`/api/v1/posts/view/${postId}`).end((err,res) => {
+            if(err !== undefined && err !== null){
+                console.log("Error: " + JSON.stringify(err));
+                return done();
+            }
+            expect(res.statusCode).to.equal(200);
+            const response = res.body;
+            if(response.status === 1){
+                expect(response.data).to.be.an("object");
+                console.log("Posts: " + JSON.stringify(response.data))
+            }else{
+                console.log("Error: status is 0");
+            }
+            console.log("Body: " + JSON.stringify(response));
+
+            done();
+        });
+    });
 
     it('should delete post', function(done) {
         const postId = 2;

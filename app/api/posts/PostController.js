@@ -1,10 +1,17 @@
+'use strict';
 const {createSuccessResponse, createErrorResponse, validationHandler} = require('../../../helpers/response');
 const {validationResult } = require('express-validator/check');
 const {Post} = require('../../../database/sequelize');
 const postRepository = require('../posts/PostRepository');
 
 
-
+/**
+ * Fetch All Posts
+ * @param req
+ * @param res
+ * @param next
+ * @returns {Promise<void|*>}
+ */
 const all = async (req,res,next) => {
     let posts = await postRepository.all();
     console.log("Posts: " + JSON.stringify(posts));
@@ -40,13 +47,31 @@ const create = async (req, res, next) => {
 
 
 /**
+ * Show Post
+ * @param req
+ * @param res
+ * @param next
+ * @returns {Promise<void|*>}
+ */
+const show = async (req,res,next) => {
+    //get postId
+    const postId = req.params.postId;
+
+    //fetch post by id
+    let post = await postRepository.find(postId, true);
+
+    //get with comments
+    return createSuccessResponse(res,post,"Post Fetched");
+};
+
+
+/**
  * Delete Post
  * @param req
  * @param res
  * @param next
  * @returns {void|*}
  */
-
 const destroy = (req, res, next) => {
     try{
 
@@ -57,7 +82,6 @@ const destroy = (req, res, next) => {
         postRepository.destroy(postId);
         return createSuccessResponse(res,null,"Post Deleted");
     }catch (e) {
-        console.log("Error: " + JSON.stringify(e));
         next(e);
     }
 };
@@ -66,5 +90,6 @@ const destroy = (req, res, next) => {
 module.exports = {
     create,
     destroy,
-    all
+    all,
+    show
 };

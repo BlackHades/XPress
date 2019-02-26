@@ -5,8 +5,17 @@ module.exports = (sequelize, type) => {
             primaryKey: true,
             autoIncrement: true
         },
-        userId: type.INTEGER,
-        postId: type.INTEGER,
-        content: type.TEXT
+        userId: {
+            type:type.INTEGER,
+            allowNull:false
+        },
+        postId: {
+            type:type.INTEGER,
+            allowNull:false
+        },
+        content: {
+            type:type.TEXT,
+            allowNull:false
+        },
     });
 };

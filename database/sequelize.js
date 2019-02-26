@@ -5,6 +5,7 @@ const FileModel = require('../app/api/files/FileModel');
 const MessageModel = require('../app/api/messages/MessageModel');
 const OnlineUserModel = require('../app/api/online-users/OnlineUserModel');
 const PostModel = require('../app/api/posts/PostModel');
+const CommentModel = require("../app/api/comments/CommentModel");
 
 const sequelize = new Sequelize(process.env.DB_NAME, process.env.DB_USERNAME, process.env.DB_PASSWORD, {
     host: process.env.DB_HOST,
@@ -32,6 +33,7 @@ const File = FileModel(sequelize, Sequelize);
 const Message = MessageModel(sequelize, Sequelize);
 const OnlineUser = OnlineUserModel(sequelize, Sequelize);
 const Post = PostModel(sequelize, Sequelize);
+const Comment = CommentModel(sequelize, Sequelize);
 
 /**
  * Relationships
@@ -78,6 +80,7 @@ module.exports = {
     File,
     Message,
     OnlineUser,
-    Post
+    Post,
+    Comment
 };
 
