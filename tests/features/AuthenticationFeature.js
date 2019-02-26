@@ -16,7 +16,13 @@ describe('Authentication API Integration Tests', function() {
         request(app).post('/api/v1/login').send(credentials).end(function(err, res) {
             expect(res.statusCode).to.equal(200);
             const response = res.body;
-            expect(response.data).to.be.an('object');
+            if(response.status === 1){
+                console.log("Response: " + JSON.stringify(response.data));
+                console.log("TOKEN: " + JSON.stringify(response.data.token));
+                expect(response.data).to.be.an('object');
+            }else{
+                console.log("Error: " + JSON.stringify(response));
+            }
             done();
         });
     });
