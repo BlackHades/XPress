@@ -36,6 +36,11 @@ const login = async (req, res, next) => {
     });
 
     delete user.dataValues.password;
+
+    if(req.body.isMobile !== undefined && req.body.isMobile){
+        if(user.roleId !== roles.USER)
+          return createErrorResponse(res, "Unauthorized User");
+    }
     return createSuccessResponse(res,{user:user,token:token},"Login Successful" )
   }catch (e) {
      next(e);
