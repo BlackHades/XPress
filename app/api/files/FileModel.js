@@ -18,7 +18,7 @@ module.exports = (sequelize, type) => {
             type: type.TEXT,
             allowNull: true
         }
-    });
+    },);
 };
 
 

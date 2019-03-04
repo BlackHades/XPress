@@ -7,10 +7,14 @@ const uuid = require("uuid");
 /**
  * Fetch User By Email
  * @param email
+ * @param withPassword
  * @returns {*}
  */
-const fetchByEmail =  (email) => {
-    return User.findOne({where:{email:email}});
+const fetchByEmail =  (email, withPassword = false) => {
+    if(withPassword)
+        return User.scope("withPassword").findOne({where:{email:email}});
+    else
+        return User.findOne({where:{email:email}});
 };
 
 const find = (userId) => {

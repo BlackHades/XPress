@@ -40,6 +40,19 @@ module.exports = (sequelize, type) => {
         password: type.STRING,
         avatar: type.STRING,
         lastSeen: type.DATE
+    },{
+        defaultScope: {
+            attributes: {
+                exclude: ["password"]
+            }
+        },scopes: {
+            withPassword: {
+                attributes:{
+                    include: ["password"]
+                }
+            }
+        }
+
     });
 };
 // Export the model

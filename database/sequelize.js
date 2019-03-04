@@ -74,6 +74,9 @@ const Comment = CommentModel(sequelize, Sequelize);
 //     });
 
 
+//User Settings
+
+
 module.exports = {
     sequelize,
     User,

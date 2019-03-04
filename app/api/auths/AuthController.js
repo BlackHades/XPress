@@ -23,16 +23,19 @@ const login = async (req, res, next) => {
 
     let payload = req.body;
     //Fetch User By Email
-    let user = await fetchByEmail(payload.email);
+    let user = await fetchByEmail(payload.email, true);
 
     //Compare Password
     if(!bcrypt.compareSync(payload.password,user.password))
       return createErrorResponse(res,"Invalid Credentials",);
 
 
+
     const token = jwt.sign({ user: user }, process.env.SECURITY_KEY, {
       expiresIn: (86400 * 2) // expires in 48 hours
     });
+
+    delete user.dataValues.password;
     return createSuccessResponse(res,{user:user,token:token},"Login Successful" )
   }catch (e) {
      next(e);
@@ -72,6 +75,7 @@ const register = async (req, res, next) => {
     const token = jwt.sign({ user: user }, process.env.SECURITY_KEY, {
       expiresIn: (86400 * 2) // expires in 48 hours
     });
+    delete user.dataValues.password;
     return createSuccessResponse(res,{user:user,token:token},"Registration Successful" );
   }catch (e) {
     // handler(e);
