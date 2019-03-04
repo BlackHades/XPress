@@ -1,8 +1,12 @@
-'use strict'
+'use strict';
 const Sequelize = require('sequelize');
 const UserModel = require('../app/api/users/UserModel');
 const FileModel = require('../app/api/files/FileModel');
 const CardModel = require('../app/api/cards/CardModel');
+const MessageModel = require('../app/api/messages/MessageModel');
+const OnlineUserModel = require('../app/api/online-users/OnlineUserModel');
+const PostModel = require('../app/api/posts/PostModel');
+const CommentModel = require("../app/api/comments/CommentModel");
 
 const sequelize = new Sequelize(process.env.DB_NAME, process.env.DB_USERNAME, process.env.DB_PASSWORD, {
     host: process.env.DB_HOST,
@@ -12,31 +16,26 @@ const sequelize = new Sequelize(process.env.DB_NAME, process.env.DB_USERNAME, pr
         min: 0,
         acquire: 30000,
         idle: 10000
-    }
-    // logging: true
+    },
+    logging: false
 });
-sequelize
-    .authenticate()
-    .then(() => {
-        // console.log('Connection has been established successfully.');
-    })
-    .catch(err => {
-        console.error('Unable to connect to the database:', err);
-    });
+// sequelize
+//     .authenticate()
+//     .then(() => {
+//         // console.log('Connection has been established successfully.');
+//     })
+//     .catch(err => {
+//         console.error('Unable to connect to the database:', err);
+//     });
 
 
 const User = UserModel(sequelize, Sequelize);
 const File = FileModel(sequelize, Sequelize);
 const Card = CardModel(sequelize, Sequelize);
-// const Message = MessageModel(sequelize, Sequelize);
-// const OnlineUser = OnlineUserModel(sequelize, Sequelize);
-// const MessageDelete = MessageDeleteModel(sequelize, Sequelize);
-// const Group = GroupModel(sequelize,Sequelize);
-// const GroupMember = GroupMemberModel(sequelize,Sequelize);
-// const Token = TokenModel(sequelize,Sequelize);
-// const OneSignalToken = OneSignalTokenModel(sequelize,Sequelize);
-// const Mute = MuteModel(sequelize,Sequelize);
-
+const Message = MessageModel(sequelize, Sequelize);
+const OnlineUser = OnlineUserModel(sequelize, Sequelize);
+const Post = PostModel(sequelize, Sequelize);
+const Comment = CommentModel(sequelize, Sequelize);
 
 /**
  * Relationships
@@ -77,10 +76,20 @@ const Card = CardModel(sequelize, Sequelize);
 //     });
 
 
+//User Settings
+
+
 module.exports = {
     sequelize,
     User,
     File,
+<<<<<<< HEAD
     Card
+=======
+    Message,
+    OnlineUser,
+    Post,
+    Comment
+>>>>>>> dev
 };
 

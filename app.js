@@ -14,6 +14,7 @@ const usersRouter = require('./routes/api/users');
 const filesRouter = require('./routes/api/files');
 const passwordsRouter = require('./routes/api/passwords');
 const cardsRouter = require('./routes/api/cards');
+const postRouter = require('./routes/api/posts');
 const apiRouter = require('./routes/api');
 const errorHandler = require('./helpers/ErrorHandler');
 const app = express();
@@ -48,6 +49,7 @@ app.use('/api/v1/users',usersRouter);
 app.use('/api/v1/files',filesRouter);
 app.use('/api/v1/passwords',passwordsRouter);
 app.use('/api/v1/cards',cardsRouter);
+app.use('/api/v1/posts',postRouter);
 
 
 // catch 404 and forward to error handler

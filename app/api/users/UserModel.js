@@ -9,6 +9,10 @@ module.exports = (sequelize, type) => {
             primaryKey: true,
             autoIncrement: true
         },
+        uid:{
+            type: type.STRING,
+            unique: true
+        },
         roleId:{
             type: type.INTEGER,
             defaultValue: roles.USER,
@@ -25,6 +29,19 @@ module.exports = (sequelize, type) => {
         password: type.STRING,
         avatar: type.STRING,
         lastSeen: type.DATE
+    },{
+        defaultScope: {
+            attributes: {
+                exclude: ["password"]
+            }
+        },scopes: {
+            withPassword: {
+                attributes:{
+                    include: ["password"]
+                }
+            }
+        }
+
     });
 };
 // Export the model
