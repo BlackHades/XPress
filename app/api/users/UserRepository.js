@@ -1,3 +1,4 @@
+'use strict';
 const {User} = require('../../../database/sequelize');
 const userConstant = require("./UserConstant");
 const Sequelize = require('sequelize');

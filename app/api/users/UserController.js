@@ -107,6 +107,20 @@ const all = async (req, res, next) => {
 
 
 /**
+ * Returns User Details
+ * @param req
+ * @param res
+ * @param next
+ */
+const details = async (req, res, next) => {
+    let transactions = [];
+    return createSuccessResponse(res, {
+        user:await userRepository.find(req.params.userId),
+        transactions:transactions
+    },"User Details Fetched");
+};
+
+/**
  * Delete User
  * @param req
  * @param res
@@ -122,5 +136,5 @@ const destroy = async (req,res,next) => {
 
 };
 module.exports = {
-  create, update, avatar, all, destroy
+  create, update, avatar, all, destroy, details
 };
