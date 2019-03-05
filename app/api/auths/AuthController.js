@@ -6,7 +6,7 @@ const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 const {fetchByEmail, generateUid} = require('../users/UserRepository');
 const config = require('../../../config/config');
-
+const {log} = require("../../../helpers/Logger");
 
 /**
  * Authenticate User
@@ -17,6 +17,8 @@ const config = require('../../../config/config');
  */
 const login = async (req, res, next) => {
   try{
+
+    //validate
     const valFails = validationResult(req);
     if(!valFails.isEmpty())
       return createErrorResponse(res,validationHandler(valFails), valFails.array);
@@ -30,15 +32,20 @@ const login = async (req, res, next) => {
       return createErrorResponse(res,"Invalid Credentials",);
 
 
-
+    //generate jwt token
     const token = jwt.sign({ user: user }, process.env.SECURITY_KEY, {
       expiresIn: (86400 * 2) // expires in 48 hours
     });
 
+    //delete password value
     delete user.dataValues.password;
 
+    log("user: " + JSON.stringify(user));
+
+    //check is request is from the mobile app
     if(req.body.isMobile !== undefined && req.body.isMobile){
-        if(user.roleId !== roles.USER)
+      //return an error if user is not a USER
+      if(user.roleId !== roles.USER)
           return createErrorResponse(res, "Unauthorized User");
     }
     return createSuccessResponse(res,{user:user,token:token},"Login Successful" )

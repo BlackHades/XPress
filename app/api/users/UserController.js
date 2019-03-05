@@ -5,6 +5,7 @@ const bcrypt = require('bcryptjs');
 const {User} = require('../../../database/sequelize');
 const userRepository = require('./UserRepository');
 const userConstant = require('./UserConstant');
+const debug = require("debug");
 
 
 /**
@@ -21,9 +22,16 @@ let create = async (req, res, next) => {
             return createErrorResponse(res,validationHandler(valFails), valFails.array);
 
         let payload = req.body;
+
+        //hash password
         const hashedPassword = bcrypt.hashSync(payload.password,  bcrypt.genSaltSync(10));
-        console.log("hashedPassword: " + hashedPassword);
+        debug("hashedPassword: " + hashedPassword);
+
+
+        //generate UID
         let uid = await userRepository.generateUid();
+
+        //Create User
         let user = await User.create({
             name: payload.name,
             uid:uid,
@@ -32,7 +40,7 @@ let create = async (req, res, next) => {
             phone:payload.phone,
             password: hashedPassword
         });
-        console.log("User: " + JSON.stringify(user));
+        debug("User: " + JSON.stringify(user));
         return createSuccessResponse(res, user, "User Created");
     }catch (e) {
         // handler(e);
@@ -56,9 +64,11 @@ let update = async (req, res, next) => {
 
         let payload = req.body;
         let user = req.user;
+
+        //Update User
         let result = await userRepository.updateUser({name: payload.name, email:payload.email,phone:payload.phone},req.user.id);
-        console.log("User: " + JSON.stringify(result));
-        console.log("User: " + JSON.stringify(user));
+        debug("User: " + JSON.stringify(result));
+        debug("User: " + JSON.stringify(user));
         return createSuccessResponse(res, user, "User Profile Updated");
     }catch (e) {
         // handler(e);
@@ -87,7 +97,7 @@ let avatar = async (req,res,next) => {
         // Update Database
         await updateUser({avatar: payload.avatar},req.user.id);
 
-        console.log("User: " + JSON.stringify(user));
+        debug("User: " + JSON.stringify(user));
         return createSuccessResponse(res, user, "Avatar Updated Successfully");
     }catch (e) {
         // handler(e);

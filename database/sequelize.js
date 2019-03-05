@@ -83,13 +83,10 @@ module.exports = {
     sequelize,
     User,
     File,
-<<<<<<< HEAD
-    Card
-=======
+    Card,
     Message,
     OnlineUser,
     Post,
     Comment
->>>>>>> dev
 };
 

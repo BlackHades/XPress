@@ -81,6 +81,7 @@ const user = async () => {
             phone: "+23470381012474"
         });
         console.log("User Seeder Complete");
+
     }
 };
 

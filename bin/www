@@ -40,13 +40,13 @@ const setupWorkerProcesses = () => {
 
   // if any of the worker process dies then start a new one by simply forking another one
   cluster.on('exit', function(worker, code, signal) {
-    console.log('Worker ' + worker.process.pid + ' died with code: ' + code + ', and signal: ' + signal);
+    debug('Worker ' + worker.process.pid + ' died with code: ' + code + ', and signal: ' + signal);
     // console.log('Starting a new worker');
     // cluster.fork();
     // workers.push(cluster.fork());
     // to receive messages from worker process
     workers[workers.length-1].on('message', (message) => {
-      console.log(message);
+      debug(message);
     });
   });
 };
@@ -88,7 +88,10 @@ const setupExpress = () => {
   console.log(`Worker ${process.pid} started`);
 };
 
-
+/**
+ * setup Server
+ * @param isClusterRequired
+ */
 const setupServer = (isClusterRequired) => {
 
   // if it is a master process then call setting up worker process

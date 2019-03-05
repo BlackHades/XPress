@@ -7,7 +7,7 @@ const fs = require('fs');
 // const cookieParser = require('cookie-parser');
 const expressValidator = require('express-validator');
 const cors = require('cors');
-const logger = require('morgan');
+const morgan = require('morgan');
 
 const indexRouter = require('./routes/index');
 const usersRouter = require('./routes/api/users');
@@ -18,13 +18,12 @@ const postRouter = require('./routes/api/posts');
 const apiRouter = require('./routes/api');
 const errorHandler = require('./helpers/ErrorHandler');
 const app = express();
+const {sequelize} = require('./database/sequelize');
 const {seeder} = require('./database/databaseSeeder');
 
-const {sequelize} = require('./database/sequelize');
 
-sequelize.sync({force: true}).then(() => {
-  // console.log('Drop and Resync with { force: false }');
-  seeder()
+sequelize.sync({force: false}).then(() => {
+    seeder()
 });
 
 // view engine setup
@@ -32,7 +31,7 @@ app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'jade');
 
 app.use(cors());
-app.use(logger('dev'));
+app.use(morgan('combined'));
 app.use(express.json());
 app.use(expressValidator());
 app.use(express.urlencoded({ extended: true }));
