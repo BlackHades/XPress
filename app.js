@@ -22,16 +22,22 @@ const {sequelize} = require('./database/sequelize');
 const {seeder} = require('./database/databaseSeeder');
 
 
+
+
+
 sequelize
     .authenticate()
     .then(() => {
       console.log('Connection has been established successfully.');
       // seeder();
+
+      // sequelize.sync({force: true}).then(() => {
+      //     seeder();
+      // });
     })
     .catch(err => {
       console.error('Unable to connect to the database:', err);
     });
-
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'jade');

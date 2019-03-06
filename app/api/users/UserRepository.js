@@ -18,6 +18,10 @@ const fetchByEmail =  (email, withPassword = false) => {
         return User.findOne({where:{email:email}});
 };
 
+const fetchByPhone =  (phone) => {
+    return User.findOne({where:{phone:phone}});
+};
+
 const find = (userId) => {
   return User.findByPk(userId);
 };
@@ -66,6 +70,7 @@ module.exports = {
     destroy,
     generateUid,
     find,
-    getAllNonUser
+    getAllNonUser,
+    fetchByPhone
 };
 

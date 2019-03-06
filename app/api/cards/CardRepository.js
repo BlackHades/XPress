@@ -17,10 +17,28 @@ const create = (data) => {
   return Card.create(data);
 };
 
+const find = (cardId) => {
+    return Card.findByPk(cardId);
+};
+
+
+const groupByName = () => {
+    return Card.findAll({
+        group:"name"
+    });
+};
+
+
+const destroy = (cardId) => {
+  return Card.destroy({where:{id:cardId}});
+};
 
 module.exports = {
     fetchByName,
     create,
     all,
-    update
+    update,
+    destroy,
+    find,
+    groupByName
 };

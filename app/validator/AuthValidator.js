@@ -1,5 +1,5 @@
 const { check } = require('express-validator/check');
-const {fetchByEmail} = require('../api/users/UserRepository');
+const {fetchByEmail,fetchByPhone} = require('../api/users/UserRepository');
 
 let login = () => {
     return [
@@ -27,6 +27,13 @@ let register = () => {
             return fetchByEmail(value).then(user => {
                 if(user){
                     return Promise.reject('Email has been taken');
+                }
+            })
+        }),
+        check('phone').custom(value => {
+            return fetchByPhone(value).then(user => {
+                if(user){
+                    return Promise.reject('Phone Number has been taken');
                 }
             })
         })

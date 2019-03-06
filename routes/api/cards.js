@@ -12,6 +12,11 @@ const cardController = require('../../app/api/cards/CardController');
 //Validators
 const cardValidator  = require('../../app/validator/CardValidator');
 
+
+router.get('/all', cardController.all);
+router.get('/all/name', cardController.groupCardsByName);
+router.get('/show/:cardId', cardController.show);
+
 //General Auth
 router.use(authenticate);
 
@@ -25,8 +30,7 @@ router.use(authenticate);
 
 router.use(adminAuth);
 router.post('/create', cardValidator.create(), cardController.create);
-router.get('/all', cardController.all);
-router.delete('/delete/:cardId', cardValidator.destroy(), cardController.destroy);
+router.delete('/delete/:cardId', cardController.destroy);
 router.post('/update/:cardId', cardValidator.update(), cardController.update);
 
 module.exports = router;

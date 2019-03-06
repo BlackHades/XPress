@@ -38,8 +38,14 @@ const create = async (req,res,next) => {
 
 
 const destroy = (req, res, next) => {
-    // Delete from Card Information too
-    //Delete all relationship...No wasting time
+    //delete all cards and transaction attached to it
+    const cardId = req.params.cardId;
+    if(!isNaN(cardId)){
+        //delete all relationships here
+        cardRepository.destroy(cardId);
+    }
+
+    return createSuccessResponse(res,null,"Card Deleted Successfully");
 };
 
 /**
@@ -87,7 +93,35 @@ const all = async (req, res, next) => {
     return createSuccessResponse(res, await cardRepository.all());
 };
 
+/**
+ * Get Card By ID
+ * @param req
+ * @param res
+ * @param next
+ * @returns {Promise<void|*>}
+ */
+const show = async (req, res, next) => {
+    let cardId = req.params.cardId;
+    if(isNaN(cardId))
+        return createErrorResponse(res,"Invalid Card Id");
 
+    return createSuccessResponse(res, await cardRepository.find(cardId));
+};
+
+const groupCardsByName = async (req,res,next) => {
+
+
+    //get all cards/
+    //loop through and put new data in an array
+    const result = await cardRepository.all();
+    let cards = {};
+    for(let i = 0; i < result.length; i++){
+        let card = cards[result[i].name] !== undefined ?  cards[result[i].name]: [];
+        card.push(result[i]);
+        cards[result[i].name] = card;
+    }
+    return createSuccessResponse(res, cards);
+};
 module.exports = {
-  create, destroy, update, all
+  create, destroy, update, all, show, groupCardsByName
 };

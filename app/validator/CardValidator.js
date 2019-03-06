@@ -20,17 +20,7 @@ let update = () => {
 };
 
 
-const destroy = () => {
-    return [
-        check('name','card Name is required').exists().not().isEmpty(),
-        check('name').custom(value => {
-
-        }),
-    ];
-};
-
 module.exports = {
     create,
-    update,
-    destroy
+    update
 };
