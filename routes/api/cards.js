@@ -27,6 +27,7 @@ router.use(adminAuth);
 router.post('/create', cardValidator.create(), cardController.create);
 router.get('/all', cardController.all);
 router.delete('/delete/:cardId', cardValidator.destroy(), cardController.destroy);
+router.post('/update/:cardId', cardValidator.update(), cardController.update);
 
 module.exports = router;
 

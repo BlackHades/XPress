@@ -9,6 +9,10 @@ const fetchByName = (name) => {
     return Card.findOne({where:{name:name}});
 };
 
+const update = (data,id) => {
+    return Card.update(data,{where:{id:id}})
+};
+
 const create = (data) => {
   return Card.create(data);
 };
@@ -17,5 +21,6 @@ const create = (data) => {
 module.exports = {
     fetchByName,
     create,
-    all
+    all,
+    update
 };

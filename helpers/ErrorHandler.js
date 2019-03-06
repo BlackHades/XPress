@@ -1,4 +1,5 @@
 const {createErrorResponse} = require('./response');
+const log = require("../helpers/Logger");
 
 // let handler = (ex, data = null) =>{
 //     console.log("An Error Occurred: " + JSON.stringify(ex));
@@ -13,6 +14,7 @@ let handler = (err, req, res, next) => {
 
     // res.locals.message = err.message;
     // res.locals.error = req.app.get('env') === 'development' ? err : {};
+    log(err.message);
     createErrorResponse(res,err.message, err);
 };
 

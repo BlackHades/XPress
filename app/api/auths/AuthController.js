@@ -6,7 +6,7 @@ const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 const {fetchByEmail, generateUid} = require('../users/UserRepository');
 const config = require('../../../config/config');
-const {log} = require("../../../helpers/Logger");
+const log = require("../../../helpers/Logger");
 
 /**
  * Authenticate User

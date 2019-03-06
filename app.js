@@ -22,9 +22,9 @@ const {sequelize} = require('./database/sequelize');
 const {seeder} = require('./database/databaseSeeder');
 
 
-sequelize.sync({force: false}).then(() => {
-    seeder()
-});
+// sequelize.sync({force: false}).then(() => {
+//     seeder();
+// });
 
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));

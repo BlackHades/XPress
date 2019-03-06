@@ -12,10 +12,22 @@ module.exports = (sequelize, type) => {
             type: type.STRING,
             unique: true,
         },
+        country: type.STRING,
         description: {
             type: type.TEXT,
-            allowNull: false
+            allowNull: true
         },
+        type: {
+            type: type.STRING,
+            allowNull: true,
+        },
+        priceRange:{
+            type: type.STRING,
+            allowNull: true
+        },
+        amount:type.STRING,
+    },{
+        paranoid:true
     });
 };
 // Export the model
