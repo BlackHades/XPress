@@ -22,9 +22,15 @@ const {sequelize} = require('./database/sequelize');
 const {seeder} = require('./database/databaseSeeder');
 
 
-// sequelize.sync({force: false}).then(() => {
-//     seeder();
-// });
+sequelize
+    .authenticate()
+    .then(() => {
+      console.log('Connection has been established successfully.');
+      // seeder();
+    })
+    .catch(err => {
+      console.error('Unable to connect to the database:', err);
+    });
 
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));

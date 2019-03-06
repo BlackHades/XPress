@@ -22,9 +22,9 @@ const create = async (req,res,next) => {
         let payload = req.body;
         log("Card Payload: " + JSON.stringify(payload));
         let card = await cardRepository.create({
-            name: payload.name,
+            name: payload.name.charAt(0).toUpperCase() + payload.name.slice(1),
             description: payload.description,
-            country:payload.country,
+            country:payload.country.toUpperCase(),
             type:payload.type,
             priceRange: payload.priceRange,
             amount: payload.amount
@@ -62,9 +62,9 @@ const update = async (req, res, next) => {
         log("CardId: " + cardId);
         log("Card Payload: " + JSON.stringify(payload));
         let card = await cardRepository.update({
-            name: payload.name,
+            name: payload.name.charAt(0).toUpperCase() + payload.name.slice(1),
             description: payload.description,
-            country:payload.country,
+            country:payload.country.toUpperCase(),
             type:payload.type,
             priceRange: payload.priceRange,
             amount: payload.amount
