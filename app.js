@@ -15,6 +15,7 @@ const filesRouter = require('./routes/api/files');
 const passwordsRouter = require('./routes/api/passwords');
 const cardsRouter = require('./routes/api/cards');
 const postRouter = require('./routes/api/posts');
+const transactionRouter = require('./routes/api/transactions');
 const apiRouter = require('./routes/api');
 const errorHandler = require('./helpers/ErrorHandler');
 const app = express();
@@ -31,9 +32,9 @@ sequelize
       console.log('Connection has been established successfully.');
       // seeder();
 
-      sequelize.sync({force: false}).then(() => {
-          seeder();
-      });
+      // sequelize.sync({force: false}).then(() => {
+      //     seeder();
+      // });
     })
     .catch(err => {
       console.error('Unable to connect to the database:', err);
@@ -61,6 +62,7 @@ app.use('/api/v1/files',filesRouter);
 app.use('/api/v1/passwords',passwordsRouter);
 app.use('/api/v1/cards',cardsRouter);
 app.use('/api/v1/posts',postRouter);
+app.use('/api/v1/transactions',transactionRouter);
 
 
 // catch 404 and forward to error handler

@@ -61,7 +61,7 @@ const generateUid = async () => {
     if(user == null)
         return uid;
     else
-        return this.generateUid();
+        return generateUid();
 };
 module.exports = {
   fetchByEmail,

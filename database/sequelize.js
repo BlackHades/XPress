@@ -1,13 +1,5 @@
 'use strict';
 const Sequelize = require('sequelize');
-const UserModel = require('../app/api/users/UserModel');
-const FileModel = require('../app/api/files/FileModel');
-const CardModel = require('../app/api/cards/CardModel');
-const MessageModel = require('../app/api/messages/MessageModel');
-const OnlineUserModel = require('../app/api/online-users/OnlineUserModel');
-const PostModel = require('../app/api/posts/PostModel');
-const CommentModel = require("../app/api/comments/CommentModel");
-
 const sequelize = new Sequelize(process.env.DB_NAME, process.env.DB_USERNAME, process.env.DB_PASSWORD, {
     host: process.env.DB_HOST,
     dialect: 'mysql',
@@ -21,13 +13,14 @@ const sequelize = new Sequelize(process.env.DB_NAME, process.env.DB_USERNAME, pr
 });
 
 
-const User = UserModel(sequelize, Sequelize);
-const File = FileModel(sequelize, Sequelize);
-const Card = CardModel(sequelize, Sequelize);
-const Message = MessageModel(sequelize, Sequelize);
-const OnlineUser = OnlineUserModel(sequelize, Sequelize);
-const Post = PostModel(sequelize, Sequelize);
-const Comment = CommentModel(sequelize, Sequelize);
+const User = require('../app/api/users/UserModel')(sequelize, Sequelize);
+const File = require('../app/api/files/FileModel')(sequelize, Sequelize);
+const Card = require('../app/api/cards/CardModel')(sequelize, Sequelize);
+const Message = require('../app/api/messages/MessageModel')(sequelize, Sequelize);
+const OnlineUser = require('../app/api/online-users/OnlineUserModel')(sequelize, Sequelize);
+const Post = require('../app/api/posts/PostModel')(sequelize, Sequelize);
+const Comment = require("../app/api/comments/CommentModel")(sequelize, Sequelize);
+const Transaction = require("../app/api/transactions/TransactionModel")(sequelize, Sequelize);
 
 /**
  * Relationships
@@ -79,6 +72,7 @@ module.exports = {
     Message,
     OnlineUser,
     Post,
-    Comment
+    Comment,
+    Transaction
 };
 

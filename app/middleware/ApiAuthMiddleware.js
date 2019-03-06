@@ -34,6 +34,15 @@ let authenticate = (req,res,next) => {
 };
 
 
+let agentAuth = (req,res,next) => {
+    if(req.user && req.user.roleId <= roles.AGENT)
+        next();
+    else
+        return createErrorResponse(res,"Unauthorized");
+
+};
+
+
 let adminAuth = (req,res,next) => {
     if(req.user && req.user.roleId === roles.ADMINISTRATOR)
         next();
@@ -43,5 +52,5 @@ let adminAuth = (req,res,next) => {
 };
 
 module.exports = {
-    authenticate, adminAuth
+    authenticate, agentAuth,adminAuth
 };
