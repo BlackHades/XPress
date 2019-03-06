@@ -23,9 +23,29 @@ const create = (data) => {
     return Transaction.create(data);
 };
 
+const getAllTransactions = () => {
+    return Transaction.findAll();
+};
 
+
+const getUserTransaction = (userId) => {
+    return Transaction.findAll({where:{userId:userId}})
+};
+
+
+const getAgentTransaction = (userId) => {
+    return Transaction.findAll({where:{createdBy:userId}})
+};
+
+const find = (transactionId) => {
+    return Transaction.findOne({where:{transactionId: transactionId}});
+};
 
 module.exports = {
     generateTransactionId,
-    create
+    create,
+    getAllTransactions,
+    getUserTransaction,
+    getAgentTransaction,
+    find
 };

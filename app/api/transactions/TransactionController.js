@@ -3,7 +3,8 @@
 const {createSuccessResponse, createErrorResponse, validationHandler} = require('../../../helpers/response'),
     {validationResult } = require('express-validator/check'),
     transactionRepository = require("./TransactionRepository"),
-    log = require("../../../helpers/Logger");
+    log = require("../../../helpers/Logger"),
+    role = require("../../api/users/UserConstant");
 /**
  * Create Transactions
  * @param req
@@ -22,6 +23,7 @@ const create = async (req, res, next) => {
         if(!valFails.isEmpty())
             return createErrorResponse(res,validationHandler(valFails), valFails.array);
 
+        //Extract Data
         let creatorId = req.user.id;
         let payload = req.body;
         payload.createdBy = creatorId;
@@ -36,7 +38,25 @@ const create = async (req, res, next) => {
 };
 
 
+const all = async (req,res,next) => {
+    let transactions;
+    if(req.user.roleId === role.ADMINISTRATOR)
+        transactions = await transactionRepository.getAllTransactions();
+    if(req.user.roleId === role.AGENT)
+        transactions = await transactionRepository.getAgentTransaction(req.user.id);
+    if(req.user.roleId === role.USER)
+        transactions = await transactionRepository.getUserTransaction(req.user.id);
+
+
+    return createSuccessResponse(res,transactions,"Transaction Fetched");
+};
+
+
+const show = (req, res, next) => {
+
+};
 
 module.exports = {
-    create
+    create,
+    all
 };

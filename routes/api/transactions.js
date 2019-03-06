@@ -14,6 +14,7 @@ const transactionValidator  = require('../../app/validator/TransactionValidator'
 
 //General Auth
 router.use(authenticate);
+router.get("/all",transactionController.all);
 
 //Agents And Above
 router.use(agentAuth);
