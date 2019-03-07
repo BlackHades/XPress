@@ -32,9 +32,9 @@ sequelize
       console.log('Connection has been established successfully.');
       // seeder();
 
-      // sequelize.sync({force: false}).then(() => {
-      //     seeder();
-      // });
+      sequelize.sync({force: false}).then(() => {
+          seeder();
+      });
     })
     .catch(err => {
       console.error('Unable to connect to the database:', err);
