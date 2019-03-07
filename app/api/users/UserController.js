@@ -5,7 +5,7 @@ const bcrypt = require('bcryptjs');
 const {User} = require('../../../database/sequelize');
 const userRepository = require('./UserRepository');
 const userConstant = require('./UserConstant');
-const debug = require("debug");
+const transactionRepository = require("../transactions/TransactionRepository");
 
 
 /**
@@ -25,7 +25,6 @@ let create = async (req, res, next) => {
 
         //hash password
         const hashedPassword = bcrypt.hashSync(payload.password,  bcrypt.genSaltSync(10));
-        debug("hashedPassword: " + hashedPassword);
 
 
         //generate UID
@@ -40,7 +39,6 @@ let create = async (req, res, next) => {
             phone:payload.phone,
             password: hashedPassword
         });
-        debug("User: " + JSON.stringify(user));
         return createSuccessResponse(res, user, "User Created");
     }catch (e) {
         // handler(e);
@@ -66,9 +64,7 @@ let update = async (req, res, next) => {
         let user = req.user;
 
         //Update User
-        let result = await userRepository.updateUser({name: payload.name, email:payload.email,phone:payload.phone},req.user.id);
-        debug("User: " + JSON.stringify(result));
-        debug("User: " + JSON.stringify(user));
+        await userRepository.updateUser({name: payload.name, email:payload.email,phone:payload.phone},req.user.id);
         return createSuccessResponse(res, user, "User Profile Updated");
     }catch (e) {
         // handler(e);
@@ -97,7 +93,6 @@ let avatar = async (req,res,next) => {
         // Update Database
         await updateUser({avatar: payload.avatar},req.user.id);
 
-        debug("User: " + JSON.stringify(user));
         return createSuccessResponse(res, user, "Avatar Updated Successfully");
     }catch (e) {
         // handler(e);
@@ -125,10 +120,9 @@ const all = async (req, res, next) => {
  * @param next
  */
 const details = async (req, res, next) => {
-    let transactions = [];
     return createSuccessResponse(res, {
-        user:await userRepository.find(req.params.userId),
-        transactions:transactions
+        user: await userRepository.find(req.params.userId),
+        transactions: await transactionRepository.getUserTransaction(req.params.userId)
     },"User Details Fetched");
 };
 

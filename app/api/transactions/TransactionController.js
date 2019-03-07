@@ -51,12 +51,31 @@ const all = async (req,res,next) => {
     return createSuccessResponse(res,transactions,"Transaction Fetched");
 };
 
+const destroy = (req,res,next) => {
+    const transactionId = req.params.transactionId;
+    log("TransactionId: " + transactionId);
+    if(transactionId !== undefined)
+        transactionRepository.destroy(transactionId);
+    return createSuccessResponse(res,null, "Transaction Deleted");
+};
 
 const show = (req, res, next) => {
-
+    transactionRepository.find(req.params.transactionId)
+        .then(transaction => {
+            if(req.user.roleId === role.ADMINISTRATOR
+                || transaction.userId === req.user.id
+                || transaction.createdBy === req.user.id)
+                return createSuccessResponse(res, transaction,"Transaction Fetched");
+            else
+                return createErrorResponse(res,"Unauthorized");
+        }).catch(error => {
+            next(error);
+        });
 };
 
 module.exports = {
     create,
-    all
+    all,
+    destroy,
+    show
 };

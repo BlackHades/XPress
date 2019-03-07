@@ -9,8 +9,8 @@ const  expect = chai.expect;
 
 describe("User Controller Test", () => {
    it("should fetch user details and transaction", (done) => {
-       const userId = 1;
-       const token = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjp7ImlkIjoyLCJ1aWQiOiI3NGYwYjMyYi05ZGUxLTRlYzgtOGY5My03NTViYTI1MzAzNjUiLCJyb2xlSWQiOjIsIm5hbWUiOiJIYWRlcyIsImVtYWlsIjoiaGFkZXNAaGFkZXMuY29tIiwicGhvbmUiOiIrMjM0NzAzODEwMTIxNzQiLCJwYXNzd29yZCI6IiQyYSQxMCRSWDJxSm94WllhNVdncFNIRTZ1c2VlNzRKamVGNWdNcmxqTUxoVmR3eDBTSWhSOFRpRE1ERyIsImF2YXRhciI6bnVsbCwibGFzdFNlZW4iOm51bGwsImNyZWF0ZWRBdCI6IjIwMTktMDItMjZUMTI6MDE6NDkuMDAwWiIsInVwZGF0ZWRBdCI6IjIwMTktMDItMjZUMTI6MDE6NDkuMDAwWiJ9LCJpYXQiOjE1NTE3MTk2NzMsImV4cCI6MTU1MTg5MjQ3M30.RZnkVTwipPIWd3TnGdep9HvhWhTEQplZKmOxeCL6E0Q";
+       const userId = 4;
+       const token = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjp7ImlkIjoyLCJ1aWQiOiJlYmUxMTc0MS00OGFmLTRhNzItOWEyMy04ZmZiMWI1NzI1NGYiLCJyb2xlSWQiOjIsIm5hbWUiOiJIYWRlcyIsImVtYWlsIjoiaGFkZXNAaGFkZXMuY29tIiwicGhvbmUiOiIrMjM0NzAzODEwMTIxNzQiLCJwYXNzd29yZCI6IiQyYSQxMCRiYTRrcWp4WmJoM2t4S1ZJZ21WQU4uM2dVMGFlOXdzRVo3Rzc3QzE2TGJZemF4SXF0UUwweSIsImF2YXRhciI6bnVsbCwibGFzdFNlZW4iOm51bGwsImNyZWF0ZWRBdCI6IjIwMTktMDMtMDZUMTU6MTE6NTAuMDAwWiIsInVwZGF0ZWRBdCI6IjIwMTktMDMtMDZUMTU6MTE6NTAuMDAwWiJ9LCJpYXQiOjE1NTE5MDExNjIsImV4cCI6MTU1MjA3Mzk2Mn0.hzmCtYXrKfDcf7OMYEGlNzBF8kt7w8z_XuKepxZKkhA";
        request(app).get(`/api/v1/users/details/${userId}`)
            .set("Authorization",`Bearer ${token}`)
            .end((err,res) => {

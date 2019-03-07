@@ -36,7 +36,7 @@ describe('Transactions API Integration Tests', function() {
 
     const token = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjp7ImlkIjoyLCJ1aWQiOiJlYmUxMTc0MS00OGFmLTRhNzItOWEyMy04ZmZiMWI1NzI1NGYiLCJyb2xlSWQiOjIsIm5hbWUiOiJIYWRlcyIsImVtYWlsIjoiaGFkZXNAaGFkZXMuY29tIiwicGhvbmUiOiIrMjM0NzAzODEwMTIxNzQiLCJwYXNzd29yZCI6IiQyYSQxMCRiYTRrcWp4WmJoM2t4S1ZJZ21WQU4uM2dVMGFlOXdzRVo3Rzc3QzE2TGJZemF4SXF0UUwweSIsImF2YXRhciI6bnVsbCwibGFzdFNlZW4iOm51bGwsImNyZWF0ZWRBdCI6IjIwMTktMDMtMDZUMTU6MTE6NTAuMDAwWiIsInVwZGF0ZWRBdCI6IjIwMTktMDMtMDZUMTU6MTE6NTAuMDAwWiJ9LCJpYXQiOjE1NTE5MDExNjIsImV4cCI6MTU1MjA3Mzk2Mn0.hzmCtYXrKfDcf7OMYEGlNzBF8kt7w8z_XuKepxZKkhA";
     it('should create transaction', function(done) {
-        // const admin = await find(1);
+        // const a dmin = await find(1);
         const transaction = {
             userId:4,
             amount:40000,
@@ -60,9 +60,23 @@ describe('Transactions API Integration Tests', function() {
     });
 
 
-    it('should delete comment', function(done) {
-        const commentId = 2;
-        request(app).delete(`/api/v1/posts/comments/delete/${commentId}`)
+    it('should delete transaction', function(done) {
+        const transactionId = 644067159430;
+        request(app).delete(`/api/v1/transactions/delete/${transactionId}`)
+            .set("Authorization",`Bearer ${token}`)
+            .end(function(err, res) {
+                expect(res.statusCode).to.equal(200);
+                console.log("Result: " + JSON.stringify(res));
+                const response = res.body;
+                console.log("Body: " + JSON.stringify(response));
+                done();
+            });
+    });
+
+
+    it("should fetch one transaction by transaction Id", (done) => {
+        const transactionId = 644067159430;
+        request(app).get(`/api/v1/transactions/show/${transactionId}`)
             .set("Authorization",`Bearer ${token}`)
             .end(function(err, res) {
                 expect(res.statusCode).to.equal(200);

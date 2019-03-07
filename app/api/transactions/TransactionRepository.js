@@ -41,11 +41,17 @@ const find = (transactionId) => {
     return Transaction.findOne({where:{transactionId: transactionId}});
 };
 
+
+const destroy = (transactionId) => {
+    return Transaction.destroy({where:{transactionId: transactionId}})
+};
+
 module.exports = {
     generateTransactionId,
     create,
     getAllTransactions,
     getUserTransaction,
     getAgentTransaction,
-    find
+    find,
+    destroy
 };

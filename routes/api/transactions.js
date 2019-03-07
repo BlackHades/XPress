@@ -15,14 +15,14 @@ const transactionValidator  = require('../../app/validator/TransactionValidator'
 //General Auth
 router.use(authenticate);
 router.get("/all",transactionController.all);
-
+router.get("/show/:transactionId", transactionController.show);
 //Agents And Above
 router.use(agentAuth);
 router.post("/create",transactionValidator.create(),transactionController.create);
 
 
 router.use(adminAuth);
-
+router.delete("/delete/:transactionId", transactionController.destroy);
 
 
 
