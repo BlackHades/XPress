@@ -55,6 +55,8 @@ try {
 } catch (err) {
   if (err.code !== 'EEXIST') throw err
 }
+
+//Routes
 app.use('/', indexRouter);
 app.use('/api/v1',apiRouter);
 app.use('/api/v1/users',usersRouter);

@@ -23,6 +23,7 @@ const create = async (req,res,next) => {
         log("Card Payload: " + JSON.stringify(payload));
         let card = await cardRepository.create({
             name: payload.name.charAt(0).toUpperCase() + payload.name.slice(1),
+            avatar: payload.avatar,
             description: payload.description,
             country:payload.country.toUpperCase(),
             type:payload.type,
@@ -69,6 +70,7 @@ const update = async (req, res, next) => {
         log("Card Payload: " + JSON.stringify(payload));
         let card = await cardRepository.update({
             name: payload.name.charAt(0).toUpperCase() + payload.name.slice(1),
+            avatar: payload.avatar,
             description: payload.description,
             country:payload.country.toUpperCase(),
             type:payload.type,
@@ -109,18 +111,21 @@ const show = async (req, res, next) => {
 };
 
 const groupCardsByName = async (req,res,next) => {
-
-
-    //get all cards/
-    //loop through and put new data in an array
-    const result = await cardRepository.all();
-    let cards = {};
-    for(let i = 0; i < result.length; i++){
-        let card = cards[result[i].name] !== undefined ?  cards[result[i].name]: [];
-        card.push(result[i]);
-        cards[result[i].name] = card;
+    try{
+        //get all cards/
+        //loop through and put new data in an array
+        const result = await cardRepository.all();
+        let cards = {};
+        for(let i = result.length - 1; i > 0; i--){
+            //group cards by their name
+            let card = cards[result[i].name] !== undefined ?  cards[result[i].name]: [];
+            card.push(result[i]);
+            cards[result[i].name] = card;
+        }
+        return createSuccessResponse(res, cards, "Cards Fetched");
+    }catch (e) {
+        next(e);
     }
-    return createSuccessResponse(res, cards);
 };
 module.exports = {
   create, destroy, update, all, show, groupCardsByName
