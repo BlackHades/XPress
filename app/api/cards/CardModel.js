@@ -27,6 +27,10 @@ module.exports = (sequelize, type) => {
             allowNull: true
         },
         amount:type.STRING,
+        isAvailable:{
+            type: type.BOOLEAN,
+            defaultValue: true
+        }
     },{
         paranoid:true
     });

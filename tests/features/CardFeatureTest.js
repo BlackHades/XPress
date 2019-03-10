@@ -11,7 +11,7 @@ const {find} = require('../../app/api/users/UserRepository');
 describe("CardController Test", () => {
     // const user = await find(1);
 
-    const token = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjp7ImlkIjoyLCJ1aWQiOiIwYTM2NzI5MS1jNGM1LTQwMDktYjM4NC01MmM0MDA2Zjc4OTgiLCJyb2xlSWQiOjIsIm5hbWUiOiJIYWRlcyIsImVtYWlsIjoiaGFkZXNAaGFkZXMuY29tIiwicGhvbmUiOiIrMjM0NzAzODEwMTIxNzQiLCJwYXNzd29yZCI6IiQyYSQxMCQ5NjRYZkF3UWZvZEl6eXd2M0tpY1dlS0d2WE52MkpaeGJmQWszNm9WMnd6d2ZJWEpEenZIaSIsImF2YXRhciI6bnVsbCwibGFzdFNlZW4iOm51bGwsImNyZWF0ZWRBdCI6IjIwMTktMDMtMDVUMTM6MTg6NTAuMDAwWiIsInVwZGF0ZWRBdCI6IjIwMTktMDMtMDVUMTM6MTg6NTAuMDAwWiJ9LCJpYXQiOjE1NTE3OTM2NDgsImV4cCI6MTU1MTk2NjQ0OH0.tLoG45IY_xZGobZeSmWC3DpH7K8FVgdGh1dfXUYaNAE";
+    const token = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjp7ImlkIjoyLCJ1aWQiOiJlYmUxMTc0MS00OGFmLTRhNzItOWEyMy04ZmZiMWI1NzI1NGYiLCJyb2xlSWQiOjIsIm5hbWUiOiJIYWRlcyIsImVtYWlsIjoiaGFkZXNAaGFkZXMuY29tIiwicGhvbmUiOiIrMjM0NzAzODEwMTIxNzQiLCJwYXNzd29yZCI6IiQyYSQxMCRiYTRrcWp4WmJoM2t4S1ZJZ21WQU4uM2dVMGFlOXdzRVo3Rzc3QzE2TGJZemF4SXF0UUwweSIsImF2YXRhciI6bnVsbCwibGFzdFNlZW4iOm51bGwsImNyZWF0ZWRBdCI6IjIwMTktMDMtMDZUMTU6MTE6NTAuMDAwWiIsInVwZGF0ZWRBdCI6IjIwMTktMDMtMDZUMTU6MTE6NTAuMDAwWiJ9LCJpYXQiOjE1NTIyMTg4ODQsImV4cCI6MTU1MjM5MTY4NH0.3BXyQV4yVfDa5onIwfp2SNhCH4TgAERfrGABrysVBlE";
     it("Should Fetch All Cards",  (done) => {
 
         request(app)
@@ -144,6 +144,27 @@ describe("CardController Test", () => {
     it("Should Delete Card",  (done) => {
         request(app)
             .delete("/api/v1/cards/delete/2")
+            .set("Authorization",`Bearer ${token}`)
+            .end((err, res) => {
+                console.log("Response: " + JSON.stringify(res));
+                expect(res.statusCode).to.equal(200);
+                const response = res.body;
+                if(response.status === 1){
+                    console.log("Payload: ",JSON.stringify(response.data));
+                    //assert
+                }else{
+                    console.log("Res: " + JSON.stringify(response));
+                }
+                // expect(response.data).to.be.an('object');
+                done();
+            })
+    });
+
+
+
+    it("Should Toggle card Availability Card",  (done) => {
+        request(app)
+            .get("/api/v1/cards/toggle-availability/2")
             .set("Authorization",`Bearer ${token}`)
             .end((err, res) => {
                 console.log("Response: " + JSON.stringify(res));

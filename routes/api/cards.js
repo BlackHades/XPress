@@ -32,6 +32,7 @@ router.use(adminAuth);
 router.post('/create', cardValidator.create(), cardController.create);
 router.delete('/delete/:cardId', cardController.destroy);
 router.post('/update/:cardId', cardValidator.update(), cardController.update);
+router.get('/toggle-availability/:cardId',  cardController.toggleAvailability);
 
 module.exports = router;
 

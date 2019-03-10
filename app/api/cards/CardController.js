@@ -110,6 +110,13 @@ const show = async (req, res, next) => {
     return createSuccessResponse(res, await cardRepository.find(cardId));
 };
 
+/**
+ * Group cards by name
+ * @param req
+ * @param res
+ * @param next
+ * @returns {Promise<void|*>}
+ */
 const groupCardsByName = async (req,res,next) => {
     try{
         //get all cards/
@@ -127,6 +134,32 @@ const groupCardsByName = async (req,res,next) => {
         next(e);
     }
 };
+
+/**
+ * Toggle Availability
+ * @param req
+ * @param res
+ * @param next
+ * @returns {Promise<void|*>}
+ */
+const toggleAvailability = async (req, res, next) =>{
+    try{
+        let card = await cardRepository.find(req.params.cardId);
+        log("Cards: " + JSON.stringify(card));
+        if(card){
+            //update The isAvailable column
+            await cardRepository.update({isAvailable: card.isAvailable === "0" || !card.isAvailable}, card.id);
+
+            //return data
+            card.isAvailable = card.isAvailable === "0" || !card.isAvailable;
+            return createSuccessResponse(res,card,"Card Updated");
+        }else{
+            return createErrorResponse(res,"Card Not Found");
+        }
+    }catch (e) {
+        next(e);
+    }
+};
 module.exports = {
-  create, destroy, update, all, show, groupCardsByName
+  create, destroy, update, all, show, groupCardsByName, toggleAvailability
 };
