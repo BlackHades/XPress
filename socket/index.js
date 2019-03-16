@@ -11,6 +11,7 @@ const {
     EVENT_USER_INFO,
     EVENT_SEND_MESSAGE,
     EVENT_FETCH_MESSAGE,
+    EVENT_MARK_MESSAGE_AS_DELIVERED,
     DISCONNECTED,
 
     //Emissions
@@ -56,6 +57,11 @@ const ioEvents = (io) => {
 
         socket.on(EVENT_SEND_MESSAGE,(payload) => {
             messageController.send(io,socket,payload)
+        });
+
+        socket.on(EVENT_MARK_MESSAGE_AS_DELIVERED, (payload) => {
+            console.log("payload: ", JSON.stringify(payload));
+           messageController.markAsDelivered(payload);
         });
 
         /**

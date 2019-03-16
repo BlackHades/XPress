@@ -1,0 +1,143 @@
+<!doctype html>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+
+        <title>Laravel</title>
+
+        <!-- Fonts -->
+        <link href="https://fonts.googleapis.com/css?family=Nunito:200,600" rel="stylesheet" type="text/css">
+
+        <!-- Styles -->
+        <style>
+            html, body {
+                background-color: #fff;
+                color: #636b6f;
+                font-family: 'Nunito', sans-serif;
+                font-weight: 200;
+                height: 100vh;
+                margin: 0;
+            }
+
+            .full-height {
+                height: 100vh;
+            }
+
+            .flex-center {
+                align-items: center;
+                display: flex;
+                justify-content: center;
+            }
+
+            .position-ref {
+                position: relative;
+            }
+
+            .top-right {
+                position: absolute;
+                right: 10px;
+                top: 18px;
+            }
+
+            .content {
+                text-align: center;
+            }
+
+            .title {
+                font-size: 84px;
+            }
+
+            .links > a {
+                color: #636b6f;
+                padding: 0 25px;
+                font-size: 13px;
+                font-weight: 600;
+                letter-spacing: .1rem;
+                text-decoration: none;
+                text-transform: uppercase;
+            }
+
+            .m-b-md {
+                margin-bottom: 30px;
+            }
+        </style>
+    </head>
+    <body>
+        <div class="flex-center position-ref full-height">
+            <div class="content">
+                <div class="title m-b-md">
+                    FoodVendorNG
+                </div>
+
+                <div class="links">
+                    <a href="#connect" onClick="init()">Connect to Stream</a>
+                    <a href="#send-message" onClick="sendMessage()">Send Message</a>
+                    <a href="#disconnect" onClick="disconnect()">Disconnect From Stream</a>
+                </div>
+            </div>
+        </div>
+    </body>
+    <script
+            src="https://code.jquery.com/jquery-3.3.1.min.js"
+            integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8="
+            crossorigin="anonymous"></script>
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/2.2.0/socket.io.js"></script>
+    <script>
+        const token = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjp7ImlkIjoxLCJyb2xlSWQiOjEsIm5hbWUiOiJIYWRlcyIsImVtYWlsIjoiaGFkZXNAaGFkZXMuY29tIiwicGhvbmUiOiIrMjM0NzAzODEwMTI0NzQiLCJwYXNzd29yZCI6IiQyYSQxMCR6TExiRVBRTjJ4VmRIUVFDZmI0ZlV1S2JGdGkxTmhIaHJEb3R4Y2phNjhWMi9zRS5BWWNZLiIsImF2YXRhciI6bnVsbCwibGFzdFNlZW4iOm51bGwsImNyZWF0ZWRBdCI6IjIwMTktMDItMTFUMTU6Mjc6MTMuMDAwWiIsInVwZGF0ZWRBdCI6IjIwMTktMDItMTFUMTU6Mjc6MTMuMDAwWiJ9LCJpYXQiOjE1NTA1OTk5MjYsImV4cCI6MTU1MDc3MjcyNn0.sjhwipQB74-wUwTiXzUQy0yngRRJnPD6ZRLXH388Gxs";
+        let auth = false;
+        let uid = "6379e69d-b80a-47e7-a4b8-4b261e67ab22";
+        let userId = 3;
+        let socket;
+        let prod = false;
+        let liveUrl = "https://shrouded-lowlands.herokuapp.com";
+        let localUrl = "http://localhost:3000";
+        function init(){
+            socket === null ? socket.disconnect() : console.log("Socket is Null");
+            console.clear();
+            console.log("Message: Init");
+            socket = io.connect(prod ? liveUrl : localUrl);
+            // io().on('connection',(payload) => {
+            //      console.log('Connection Done');
+            // });
+
+
+            // console.log('Socket: '+ socket);
+            socket.on('connected', (payload) => {
+                console.log(`Connected: ${payload.payload}`);
+                socket.emit('event-initialization',{userId: userId});
+            });
+
+            socket.on('emit-receive-message',(payload) => {
+                console.log(`Message received: ${JSON.stringify(payload)}`);
+            });
+
+            socket.on('emit-error',(payload) =>{
+                console.log("Error: " + JSON.stringify(payload));
+                socket.emit('event-authentication',{token: token});
+            });
+
+
+        }
+
+        function sendMessage(){
+            let message = {
+                mid:`${uid}-${Date.now()}`,
+                from:userId,
+                to:4,
+                content: "Message New Message",
+                type:"TEXT",
+            };
+            console.clear();
+            socket.emit("event-send-message", {message:message});
+            console.log("Message Sent: " + JSON.stringify(message));
+        }
+
+
+
+        function disconnect(){
+            socket.disconnect(true);
+            console.log("Disconnected")
+        }
+    </script>
+</html>

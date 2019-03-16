@@ -26,7 +26,13 @@ const fetchMessage = (userId,lastMessageId) => {
     });
 };
 
+
+const update = (messageId, payload) => {
+    return Message.update(payload,{where:{mid:messageId}});
+};
+
 module.exports = {
   create,
-  fetchMessage
+  fetchMessage,
+  update
 };

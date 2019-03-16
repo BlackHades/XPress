@@ -9,6 +9,8 @@ const messageRepository = require("./MessageRepository");
 
 const userConstant = require("../users/UserConstant");
 
+const log = require("../../../helpers/Logger");
+
 /**
  * Fetch Recent Messaged
  * @param socket
@@ -99,7 +101,23 @@ const disperseMessageToUser = async (io,message) => {
     });
 };
 
+/**
+ *
+ * mark message as delivered
+ */
+const markAsDelivered = (payload) => {
+    log("Payload: " + JSON.stringify(payload));
+    messageRepository.update(payload.mid,{
+        status: 2
+    }).then(data => {
+        log(data);
+    }).catch(error => {
+        log(error);
+    })
+};
+
 module.exports = {
     fetchMessages,
-    send
+    send,
+    markAsDelivered
 };
