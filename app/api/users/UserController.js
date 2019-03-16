@@ -142,6 +142,13 @@ const destroy = async (req,res,next) => {
 
 };
 
+const me = async (req, res, next) => {
+    return createSuccessResponse(res, {
+        user: await userRepository.find(req.user.id),
+        transactions: await transactionRepository.getUserTransaction(req.user.id)
+    },"User Details Fetched");
+};
+
 module.exports = {
-  create, update, avatar, all, destroy, details
+  create, update, avatar, all, destroy, details, me
 };

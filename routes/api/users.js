@@ -16,6 +16,7 @@ router.use(authenticate);
 router.post('/update', userValidator.update(),  userController.update);
 router.post('/avatar', userValidator.avatar(),  userController.avatar);
 router.get("/details/:userId", userController.details);
+router.get("/me", userController.me);
 
 //Agents And Above
 
