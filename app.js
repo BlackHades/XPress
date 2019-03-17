@@ -33,7 +33,7 @@ sequelize
       // seeder();
 
       sequelize.sync({force: false}).then(() => {
-          seeder();
+          // seeder();
 
       });
     })
