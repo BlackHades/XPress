@@ -34,6 +34,7 @@ sequelize
 
       sequelize.sync({force: false}).then(() => {
           seeder();
+
       });
     })
     .catch(err => {
