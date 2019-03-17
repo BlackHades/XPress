@@ -91,7 +91,7 @@ let avatar = async (req,res,next) => {
         //Update user Object
         user.avatar = payload.avatar;
         // Update Database
-        await updateUser({avatar: payload.avatar},req.user.id);
+        await userRepository.updateUser({avatar: payload.avatar},req.user.id);
 
         return createSuccessResponse(res, user, "Avatar Updated Successfully");
     }catch (e) {
