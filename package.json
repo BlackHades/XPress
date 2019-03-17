@@ -21,6 +21,7 @@
     "multer": "^1.4.1",
     "mysql2": "^1.6.4",
     "randomstring": "^1.1.5",
+    "random-sentence": "^1.0.4",
     "sequelize": "^4.42.0",
     "sequelize-cli": "^5.4.0",
     "socket.io": "^2.2.0",
@@ -29,7 +30,6 @@
   "devDependencies": {
     "chai": "^4.2.0",
     "mocha": "^6.0.2",
-    "random-sentence": "^1.0.4",
     "supertest": "^3.4.2"
   }
 }
