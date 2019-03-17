@@ -16,7 +16,7 @@ let change = async (req, res, next) => {
 
         //Compare oldPassword to Users Password
         if(!bcrypt.compareSync(payload.oldPassword,user.password))
-            return createErrorResponse(res,"Password Mismatch");
+            return createErrorResponse(res,"Current Password is invalid");
 
         //Hash New Password
         const hashedPassword = bcrypt.hashSync(payload.newPassword,  bcrypt.genSaltSync(10));
