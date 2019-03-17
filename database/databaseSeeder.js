@@ -1,13 +1,15 @@
 const bcrypt = require('bcryptjs');
-const {User} = require('../database/sequelize');
+const {User, Transaction} = require('../database/sequelize');
 const {fetchByEmail, generateUid} = require('../app/api/users/UserRepository');
-
+const transactionRepository = require('../app/api/transactions/TransactionRepository');
+const     randomSentence = require("random-sentence");
 let seeder = () => {
     // console.log("Seeding Started");
     system();
     admin();
     agent();
     user();
+    transactions();
 };
 
 const system = async () => {
@@ -85,6 +87,18 @@ const user = async () => {
     }
 };
 
+
+const transactions = async () => {
+    for(let i = 0; i < 20; i++){
+        Transaction.create({
+            transactionId: await  transactionRepository.generateTransactionId(),
+            userId: 4,
+            description: randomSentence({words: 1000}),
+            createdBy: 2,
+            amount: 100000 * Math.random()
+        });
+    }
+};
 module.exports = {
     seeder
 };
