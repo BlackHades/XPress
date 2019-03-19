@@ -11,6 +11,10 @@ module.exports = (queryInterface, Sequelize) => {
             type:Sequelize.STRING,
             unique: true
         },
+        cardId:{
+            type: Sequelize.INTEGER,
+            allowNull: false
+        },
         userId: Sequelize.INTEGER,
         amount: Sequelize.STRING,
         description: {

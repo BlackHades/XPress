@@ -1,4 +1,4 @@
-const { Transaction } = require("../../../database/sequelize");
+const { Transaction, User, Card } = require("../../../database/sequelize");
 const randomstring = require("randomstring");
 
 
@@ -24,21 +24,68 @@ const create = (data) => {
 };
 
 const getAllTransactions = () => {
-    return Transaction.findAll();
+    return Transaction.findAll({
+        include:[{
+            model: Card,
+            as: "card"
+        },{
+            model: User,
+            as: "user"
+        },{
+            model: User,
+            as: "agent",
+        }]
+    });
 };
 
 
 const getUserTransaction = (userId) => {
-    return Transaction.findAll({where:{userId:userId}})
+    return Transaction.findAll({
+        where:{userId:userId},
+        include:[{
+            model: Card,
+            as: "card"
+        },{
+            model: User,
+            as: "user"
+        },{
+            model: User,
+            as: "agent",
+        }]
+    })
 };
 
 
 const getAgentTransaction = (userId) => {
-    return Transaction.findAll({where:{createdBy:userId}})
+    return Transaction.findAll({
+        where:{createdBy:userId},
+        include:[{
+            model: Card,
+            as: "card"
+        },{
+            model: User,
+            as: "user"
+        },{
+            model: User,
+            as: "agent",
+        }]
+    })
 };
 
 const find = (transactionId) => {
-    return Transaction.findOne({where:{transactionId: transactionId}});
+    return Transaction.findOne({
+        where:{transactionId: transactionId},
+        include:[{
+            model: Card,
+            as: "card"
+        },{
+            model: User,
+            as: "user"
+        },{
+            model: User,
+            as: "agent",
+        }]
+    });
 };
 
 

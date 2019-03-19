@@ -25,6 +25,24 @@ const Transaction = require("../app/api/transactions/TransactionModel")(sequeliz
 /**
  * Relationships
  */
+
+/**
+ * Transactions
+ */
+Transaction.belongsTo(Card,{as: "card", foreignKey:"cardId"});
+Transaction.belongsTo(User,{as: "user", foreignKey: "userId"});
+Transaction.belongsTo(User,{as: "agent", foreignKey: "createdBy"});
+
+/**
+ * Users
+ */
+User.hasMany(Transaction,{as: "transactions", foreignKey:"userId",targetKey:"id"});
+
+
+/**
+ * Cards
+ */
+Card.hasMany(Transaction,{as: "transactions", foreignKey:"cardId",targetKey:"id"});
 //Users
 // User.hasMany(Message,{ as: "sentMessages", foreignKey: "from",  targetKey: "id"});
 // User.hasMany(Message,{as: "receivedMessages", foreignKey: "to", targetKey:"id"});

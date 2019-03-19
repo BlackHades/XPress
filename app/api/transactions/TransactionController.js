@@ -28,7 +28,6 @@ const create = async (req, res, next) => {
         let payload = req.body;
         payload.createdBy = creatorId;
         payload.transactionId = await transactionRepository.generateTransactionId();
-
         const transaction = await transactionRepository.create(payload);
         log("Transactions: " + JSON.stringify(transaction));
         return createSuccessResponse(res, transaction, "Transaction Completed");
