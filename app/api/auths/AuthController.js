@@ -4,7 +4,7 @@ const {createSuccessResponse, createErrorResponse, validationHandler} = require(
 const {validationResult } = require('express-validator/check');
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
-const {fetchByEmail, generateUid} = require('../users/UserRepository');
+const {fetchByEmail, generateUid, find} = require('../users/UserRepository');
 const config = require('../../../config/config');
 const log = require("../../../helpers/Logger");
 
@@ -33,8 +33,12 @@ const login = async (req, res, next) => {
 
 
     //generate jwt token
-    const token = jwt.sign({ user: user }, process.env.SECURITY_KEY, {
+    const access = jwt.sign({ user: user }, process.env.SECURITY_KEY, {
       expiresIn: (86400 * 2) // expires in 48 hours
+    });
+
+    const refresh = jwt.sign({ user: user }, process.env.SECURITY_KEY, {
+      expiresIn: (86400 * 30) // expires in 30days
     });
 
     //delete password value
@@ -48,7 +52,12 @@ const login = async (req, res, next) => {
       if(user.roleId !== roles.USER)
           return createErrorResponse(res, "Unauthorized User");
     }
-    return createSuccessResponse(res,{user:user,token:token},"Login Successful" )
+    return createSuccessResponse(res,{
+      user:user,
+      token:{
+        access:access,
+        refresh:refresh
+      }},"Login Successful" )
   }catch (e) {
      next(e);
   }
@@ -84,11 +93,20 @@ const register = async (req, res, next) => {
 
     console.log("User: " + user);
 
-    const token = jwt.sign({ user: user }, process.env.SECURITY_KEY, {
+    const access = jwt.sign({ user: user }, process.env.SECURITY_KEY, {
       expiresIn: (86400 * 2) // expires in 48 hours
     });
+
+    const refresh = jwt.sign({ user: user }, process.env.SECURITY_KEY, {
+      expiresIn: (86400 * 30) // expires in 30days
+    });
     delete user.dataValues.password;
-    return createSuccessResponse(res,{user:user,token:token},"Registration Successful" );
+    return createSuccessResponse(res,{
+        user:user,
+        token:{
+            access:access,
+            refresh:refresh
+        }},"Registration Successful" );
   }catch (e) {
     // handler(e);
     next(e);
@@ -97,7 +115,29 @@ const register = async (req, res, next) => {
 
 
 
+const refreshToken = async (req,res,next) => {
+    log("User: " + JSON.stringify(req.user));
+    let user = await find(req.user.id);
+
+
+    const access = jwt.sign({ user: user }, process.env.SECURITY_KEY, {
+      expiresIn: (86400 * 2) // expires in 48 hours
+    });
+
+    const refresh = jwt.sign({ user: user }, process.env.SECURITY_KEY, {
+      expiresIn: (86400 * 30) // expires in 30days
+    });
+    delete user.dataValues.password;
+    return createSuccessResponse(res,{
+      user:user,
+      token:{
+        access:access,
+        refresh:refresh
+      }}, "Registration Successful" );
+};
+
 module.exports = {
   login,
-  register
+  register,
+  refreshToken
 };
