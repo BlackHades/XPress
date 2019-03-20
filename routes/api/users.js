@@ -3,7 +3,7 @@ const app = express();
 const router = express.Router();
 
 //Middleware
-const {authenticate,adminAuth} = require('../../app/middleware/ApiAuthMiddleware');
+const {authenticate,agentAuth,adminAuth} = require('../../app/middleware/ApiAuthMiddleware');
 
 //Controllers
 const userController = require('../../app/api/users/UserController');
@@ -20,6 +20,8 @@ router.get("/me", userController.me);
 
 //Agents And Above
 
+router.use(agentAuth);
+router.get('/all', userController.all);
 
 //Administrator Only
 //Admin Middleware
@@ -27,7 +29,6 @@ router.get("/me", userController.me);
 
 router.use(adminAuth);
 router.post('/create', userValidator.create(), userController.create);
-router.get('/all', userController.all);
 router.delete('/delete/:userId', userValidator.destroy(), userController.destroy);
 
 module.exports = router;
