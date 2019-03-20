@@ -51,6 +51,24 @@ let adminAuth = (req,res,next) => {
 
 };
 
+let refresh = (req,res,next) => {
+    console.log('data', req.headers['authentication']);
+    let token = req.headers['x-access-token'] || req.headers['authorization'] || req.body.token;
+    if (!token) return createErrorResponse(res,"No token provided.");
+    if (token.startsWith('Bearer ')) {
+        // Remove Bearer from string
+        token = token.slice(7, token.length);
+    }
+
+    jwt.verify(token, process.env.SECURITY_KEY, function(err, decoded) {
+        if (err) return createErrorResponse(res,'Failed to authenticate token.');
+        // console.log("User: " + JSON.stringify(decoded));
+        req.userId = decoded.userId;
+        next();
+    });
+};
+
+
 module.exports = {
-    authenticate, agentAuth,adminAuth
+    authenticate, agentAuth,adminAuth, refresh
 };

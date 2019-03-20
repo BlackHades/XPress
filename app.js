@@ -62,8 +62,8 @@ app.use('/', indexRouter);
 app.use('/api/v1',apiRouter);
 app.use('/api/v1/users',usersRouter);
 app.use('/api/v1/files',filesRouter);
-app.use('/api/v1/passwords',passwordsRouter);
 app.use('/api/v1/cards',cardsRouter);
+app.use('/api/v1/passwords',passwordsRouter);
 app.use('/api/v1/posts',postRouter);
 app.use('/api/v1/transactions',transactionRouter);
 

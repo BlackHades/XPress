@@ -131,6 +131,7 @@ const groupCardsByName = async (req,res,next) => {
         }
         return createSuccessResponse(res, cards, "Cards Fetched");
     }catch (e) {
+        log(JSON.stringify(e));
         next(e);
     }
 };

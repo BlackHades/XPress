@@ -1,10 +1,10 @@
 'use strict';
 const express = require('express');
-const app = express();
 const router = express.Router();
+const app = express();
 
 //Middleware
-const {authenticate,adminAuth} = require('../../app/middleware/ApiAuthMiddleware');
+const {adminAuth} = require('../../app/middleware/ApiAuthMiddleware');
 
 //Controllers
 const cardController = require('../../app/api/cards/CardController');
@@ -20,14 +20,8 @@ router.get('/show/:cardId', cardController.show);
 
 
 
-//Agents And Above
-
-
-//Administrator Only
-//Admin Middleware
-
-
-router.use(adminAuth);
+//Admin Routes Only
+app.use(adminAuth);
 router.post('/create', cardValidator.create(), cardController.create);
 router.delete('/delete/:cardId', cardController.destroy);
 router.post('/update/:cardId', cardValidator.update(), cardController.update);

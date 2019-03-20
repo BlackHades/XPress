@@ -20,9 +20,12 @@ const upload = multer({storage: storage});
 //Controllers
 const fileController = require('../../app/api/files/FileController');
 
+
 //Route
 router.get('/check/:checksum', fileController.check);
 router.post('/upload',upload.single('file'), fileController.upload);
+
+
 
 //Export
 module.exports = router;

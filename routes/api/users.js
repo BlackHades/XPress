@@ -12,7 +12,7 @@ const userController = require('../../app/api/users/UserController');
 const userValidator  = require('../../app/validator/UserValidator');
 
 //General Auth
-router.use(authenticate);
+app.use(authenticate);
 router.post('/update', userValidator.update(),  userController.update);
 router.post('/avatar', userValidator.avatar(),  userController.avatar);
 router.get("/details/:userId", userController.details);
@@ -20,14 +20,14 @@ router.get("/me", userController.me);
 
 //Agents And Above
 
-router.use(agentAuth);
+app.use(agentAuth);
 router.get('/all', userController.all);
 
 //Administrator Only
 //Admin Middleware
 
 
-router.use(adminAuth);
+app.use(adminAuth);
 router.post('/create', userValidator.create(), userController.create);
 router.delete('/delete/:userId', userValidator.destroy(), userController.destroy);
 
