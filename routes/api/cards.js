@@ -17,8 +17,7 @@ router.get('/all', cardController.all);
 router.get('/all/name', cardController.groupCardsByName);
 router.get('/show/:cardId', cardController.show);
 
-//General Auth
-router.use(authenticate);
+
 
 
 //Agents And Above

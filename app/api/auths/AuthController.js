@@ -32,17 +32,20 @@ const login = async (req, res, next) => {
       return createErrorResponse(res,"Invalid Credentials",);
 
 
+    const isMobile = req.body.isMobile || false;
+
     //generate jwt token
     const access = jwt.sign({ user: user }, process.env.SECURITY_KEY, {
-      expiresIn: (86400 * 2) // expires in 48 hours
+      expiresIn: isMobile ? (86400 * 30) : (86400 * 2) // expires in 48 hours if its not from a mobile device else 30 days
     });
 
-    const refresh = jwt.sign({ user: user }, process.env.SECURITY_KEY, {
+    const refresh = jwt.sign({ userId: user.id  }, process.env.SECURITY_KEY, {
       expiresIn: (86400 * 30) // expires in 30days
     });
 
     //delete password value
     delete user.dataValues.password;
+
 
     log("user: " + JSON.stringify(user));
 
@@ -91,13 +94,16 @@ const register = async (req, res, next) => {
       password: hashedPassword
     });
 
+    const isMobile = req.body.isMobile || false;
+
     console.log("User: " + user);
 
+
     const access = jwt.sign({ user: user }, process.env.SECURITY_KEY, {
-      expiresIn: (86400 * 2) // expires in 48 hours
+      expiresIn: isMobile ? (86400 * 30) : (86400 * 2) // expires in 48 hours if its not from a mobile device else 30 days
     });
 
-    const refresh = jwt.sign({ user: user }, process.env.SECURITY_KEY, {
+    const refresh = jwt.sign({ userId: user.id }, process.env.SECURITY_KEY, {
       expiresIn: (86400 * 30) // expires in 30days
     });
     delete user.dataValues.password;
@@ -117,14 +123,14 @@ const register = async (req, res, next) => {
 
 const refreshToken = async (req,res,next) => {
     log("User: " + JSON.stringify(req.user));
-    let user = await find(req.user.id);
+    let user = await find(req.userId);
 
 
     const access = jwt.sign({ user: user }, process.env.SECURITY_KEY, {
-      expiresIn: (86400 * 2) // expires in 48 hours
+      expiresIn: isMobile ? (86400 * 30) : (86400 * 2) // expires in 48 hours if its not from a mobile device else 30 days
     });
 
-    const refresh = jwt.sign({ user: user }, process.env.SECURITY_KEY, {
+    const refresh = jwt.sign({ userId: user.id  }, process.env.SECURITY_KEY, {
       expiresIn: (86400 * 30) // expires in 30days
     });
     delete user.dataValues.password;
@@ -133,7 +139,7 @@ const refreshToken = async (req,res,next) => {
       token:{
         access:access,
         refresh:refresh
-      }}, "Registration Successful" );
+      }}, "Token Refresh Successful" );
 };
 
 module.exports = {
