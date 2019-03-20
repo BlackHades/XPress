@@ -3,6 +3,8 @@ let fs = require('fs');
 const {createSuccessResponse, createErrorResponse} = require('../../../helpers/response');
 const config = require('../../../config/config');
 const {File} = require('../../../database/sequelize');
+const cloudinary = require('cloudinary').v2;
+const log = require("../../../helpers/Logger");
 /**
  * Check if file has been uploaded before to avoid duplicates using the checksum of the file
  * @param req
@@ -29,21 +31,35 @@ const upload = async (req,res,next) => {
       return createErrorResponse(res,"File Not Found");
     const file = req.file;
     const path = "./public/uploads/" + file.filename;
-    const url = process.env.HOST + "uploads/" + file.filename;
+    const filePath = req.file.path;
 
+    cloudinary.config({
+      cloud_name: process.env.CLOUDINARY_CLOUD_NAME,
+      api_key: process.env.CLOUDINARY_API_KEY,
+      api_secret: process.env.CLOUDINARY_API_SECRET
+    });
     //calculate Checksum
     const checksum = await calculateCheckSum(path);
 
-    //Save File in to Database
+    let image =  await cloudinary.uploader.upload(filePath,{
+      public_id:checksum
+    });
+
+    log("Upload Response: " + JSON.stringify(image));
+
+    // Save File in to Database
     let newFile = await File.findOrCreate({where:{checksum:checksum}, defaults: {
       checksum:checksum,
-      url: url,
+      url: image.secure_url || image.url,
       mimeType:file.mimetype,
-      extras: JSON.stringify(file)
+      extras: JSON.stringify(image)
     }});
+    fs.unlinkSync(path);
     //Image: id, checksum, url;
     return createSuccessResponse(res, newFile[0],"Upload Successful");
+    // return createSuccessResponse(res, new,"Upload Successful");
   }catch (e) {
+    return createErrorResponse(res,"An Error Occurred");
     next(e);
   }
 };
