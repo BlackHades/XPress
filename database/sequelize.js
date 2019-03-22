@@ -43,6 +43,14 @@ User.hasMany(Transaction,{as: "transactions", foreignKey:"userId",targetKey:"id"
  * Cards
  */
 Card.hasMany(Transaction,{as: "transactions", foreignKey:"cardId",targetKey:"id"});
+
+/**
+ *  Message
+ * */
+
+Message.belongsTo(User,{as:"agent", foreignKey:"agentId"});
+Message.belongsTo(User,{as:"sender", foreignKey:"from"});
+Message.belongsTo(User,{as:"receiver", foreignKey:"to"});
 //Users
 // User.hasMany(Message,{ as: "sentMessages", foreignKey: "from",  targetKey: "id"});
 // User.hasMany(Message,{as: "receivedMessages", foreignKey: "to", targetKey:"id"});

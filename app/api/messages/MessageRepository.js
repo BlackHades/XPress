@@ -1,4 +1,4 @@
-const {Message} = require("../../../database/sequelize");
+const {Message, User} = require("../../../database/sequelize");
 const Sequelize = require('sequelize');
 const Op = Sequelize.Op;
 const create = (payload) => {
@@ -22,10 +22,37 @@ const fetchMessage = (userId,lastMessageId) => {
         id:{
           [Op.gt]:lastMessageId
         }
-      }
+      },
+      include:[{
+        model: User,
+        as: "sender"
+      },{
+        model: User,
+        as: "receiver"
+      },{
+        model: User,
+        as: "agent"
+      }]
     });
 };
 
+const findByMessageId = (messageId) => {
+    return Message.findOne({
+      where:{
+        mid:messageId
+      },
+      include:[{
+        model: User,
+        as: "sender"
+      },{
+        model: User,
+        as: "receiver"
+      },{
+        model: User,
+        as: "agent"
+      }]
+    })
+};
 
 const update = (messageId, payload) => {
     return Message.update(payload,{where:{mid:messageId}});
@@ -34,5 +61,6 @@ const update = (messageId, payload) => {
 module.exports = {
   create,
   fetchMessage,
-  update
+  update,
+  findByMessageId
 };

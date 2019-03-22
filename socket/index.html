@@ -111,19 +111,34 @@
             socket.on('emit-receive-message',(payload) => {
                 console.log(`Message received: ${JSON.stringify(payload)}`);
                 console.log(`Message received: ${JSON.stringify(payload.message.mid)}`);
-                emitDelivered(payload.message.mid);
+                if(payload.message.status < 2){
+                    emitDelivered(payload.message.mid);
+                }
             });
 
             socket.on('emit-error',(payload) =>{
                 console.log("Error: " + JSON.stringify(payload));
                 socket.emit('event-authentication',{token: token});
             });
-
-
         }
 
+
+        function sendMessage(){
+            let message = {
+                mid:`${uid}-${Date.now()}`,
+                from:userId,
+                to:1,
+                content: "Message New Message",
+                type:"TEXT",
+            };
+            console.clear();
+            socket.emit("event-send-message", {message:message});
+            console.log("Message Sent: " + JSON.stringify(message));
+        }
+
+
         function emitDelivered(messageId){
-            console.log("Error: " + JSON.stringify(messageId));
+            console.log("Delivered: " + JSON.stringify(messageId));
             socket.emit("event-mark-message-as-delivered",{mid:messageId});
         }
 

@@ -31,7 +31,7 @@ const send = async (io,socket,payload) => {
         console.log("Message Payload: " + socket.userId);
         console.log("Message Payload: " + socket.id);
 
-        const message = payload.message;
+        let message = payload.message;
 
         //validate Message Object
         if(message.from == null || message.content == null || message.type == null){
@@ -57,14 +57,14 @@ const send = async (io,socket,payload) => {
         }
         //Save Message Object
         let messageCreated = await messageRepository.create(message);
-
+        message = await messageRepository.findByMessageId(messageCreated.mid);
         //if message was sent from a user
         if(message.from !== userConstant.SYSTEM){
             //emit data to all agents stream
-            disperseMessageToAllAgentAndAdmins(io, messageCreated);
+            disperseMessageToAllAgentAndAdmins(io, message);
         }else{
             //emit data to user if online
-            disperseMessageToUser(io,messageCreated)
+            disperseMessageToUser(io,message)
 
         }
     }catch (e) {
@@ -105,15 +105,19 @@ const disperseMessageToUser = async (io,message) => {
  *
  * mark message as delivered
  */
-const markAsDelivered = (payload) => {
-    log("Payload: " + JSON.stringify(payload));
-    messageRepository.update(payload.mid,{
-        status: 2
-    }).then(data => {
-        log(data);
-    }).catch(error => {
-        log(error);
-    })
+const markAsDelivered = async (payload) => {
+    log("PayloadDelivered: " + JSON.stringify(payload));
+    let message = await messageRepository.findByMessageId(payload.mid);
+    console.clear();
+    log("Message: " + JSON.stringify(message));
+    if(message.status < 2)
+        messageRepository.update(payload.mid,{
+            status: 2
+        }).then(data => {
+            log("delivered: " + JSON.stringify(data));
+        }).catch(error => {
+            log("delivered: " + JSON.stringify(error));
+        })
 };
 
 module.exports = {

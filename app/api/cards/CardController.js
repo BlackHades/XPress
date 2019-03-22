@@ -123,11 +123,12 @@ const groupCardsByName = async (req,res,next) => {
         //loop through and put new data in an array
         const result = await cardRepository.all();
         let cards = {};
-        for(let i = result.length - 1; i > 0; i--){
+        for(let i = result.length; i > 0; i--){
+            let j = i-1;
             //group cards by their name
-            let card = cards[result[i].name] !== undefined ?  cards[result[i].name]: [];
-            card.push(result[i]);
-            cards[result[i].name] = card;
+            let card = cards[result[j].name] !== undefined ?  cards[result[j].name]: [];
+            card.push(result[j]);
+            cards[result[j].name] = card;
         }
         return createSuccessResponse(res, cards, "Cards Fetched");
     }catch (e) {
