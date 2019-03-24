@@ -59,8 +59,8 @@ const upload = async (req,res,next) => {
     return createSuccessResponse(res, newFile[0],"Upload Successful");
     // return createSuccessResponse(res, new,"Upload Successful");
   }catch (e) {
-    return createErrorResponse(res,"An Error Occurred");
-    next(e);
+
+    return createErrorResponse(res,"An Error Occurred " + JSON.stringify(e));
   }
 };
 

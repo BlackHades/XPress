@@ -61,15 +61,16 @@ const send = async (io, socket, payload) => {
             return;
         }
         //Save Message Object
-        message = await messageRepository.create(message);
-        message.sender = sender;
-        message.receiver = receiver;
-        if(message.type === messageConstant.TYPE_CARD)
-            message.card = await cardRepository.find(message.cardId);
-        // message = await messageRepository.findByMessageId(messageCreated.mid);
-        //emit data to user if online
-        disperseMessageToUser(io,message);
-        socket.emit(EMIT_MESSAGE_SENT,{message:message});
+        let newMessage = await messageRepository.create(message);
+        newMessage.dataValues.sender = sender;
+        newMessage.dataValues.receiver = receiver;
+        if(newMessage.type === messageConstant.TYPE_CARD)
+            newMessage.dataValues.card = await cardRepository.find(newMessage.cardId);
+
+
+        console.log("Message: " +JSON.stringify(newMessage));
+        disperseMessageToUser(io,newMessage);
+        socket.emit(EMIT_MESSAGE_SENT,{message:newMessage});
     }catch (e) {
         console.log("Error Handler: " + JSON.stringify(e));
         socket.emit(EMIT_ERROR,JSON.stringify(e));
