@@ -49,14 +49,14 @@ const ioEvents = (io) => {
                 console.log("Initialized: " + socket);
                 //add user to online-users table
                 onlineUserRepository.add(socket.userId, socket.id);
-                messageController.fetchMessages(socket,0);
+                messageController.fetchMessages(socket,payload.lastMessageId || 0);
             }else{
                 socket.disconnect(true);
             }
         });
 
         socket.on(EVENT_SEND_MESSAGE,(payload) => {
-            messageController.send(io,socket,payload)
+            messageController.send(io, socket, payload)
         });
 
         socket.on(EVENT_MARK_MESSAGE_AS_DELIVERED, (payload) => {

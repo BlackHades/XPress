@@ -86,8 +86,8 @@
     <script>
         const token = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjp7ImlkIjoxLCJyb2xlSWQiOjEsIm5hbWUiOiJIYWRlcyIsImVtYWlsIjoiaGFkZXNAaGFkZXMuY29tIiwicGhvbmUiOiIrMjM0NzAzODEwMTI0NzQiLCJwYXNzd29yZCI6IiQyYSQxMCR6TExiRVBRTjJ4VmRIUVFDZmI0ZlV1S2JGdGkxTmhIaHJEb3R4Y2phNjhWMi9zRS5BWWNZLiIsImF2YXRhciI6bnVsbCwibGFzdFNlZW4iOm51bGwsImNyZWF0ZWRBdCI6IjIwMTktMDItMTFUMTU6Mjc6MTMuMDAwWiIsInVwZGF0ZWRBdCI6IjIwMTktMDItMTFUMTU6Mjc6MTMuMDAwWiJ9LCJpYXQiOjE1NTA1OTk5MjYsImV4cCI6MTU1MDc3MjcyNn0.sjhwipQB74-wUwTiXzUQy0yngRRJnPD6ZRLXH388Gxs";
         let auth = false;
+        let userId = 3;
         let uid = "6379e69d-b80a-47e7-a4b8-4b261e67ab22";
-        let userId = 4;
         let socket;
         let prod = false;
         let liveUrl = "https://shrouded-lowlands.herokuapp.com";
@@ -97,11 +97,6 @@
             console.clear();
             console.log("Message: Init");
             socket = io.connect(prod ? liveUrl : localUrl);
-            // io().on('connection',(payload) => {
-            //      console.log('Connection Done');
-            // });
-
-
             // console.log('Socket: '+ socket);
             socket.on('connected', (payload) => {
                 console.log(`Connected: ${payload.payload}`);
@@ -118,7 +113,6 @@
 
             socket.on('emit-error',(payload) =>{
                 console.log("Error: " + JSON.stringify(payload));
-                socket.emit('event-authentication',{token: token});
             });
         }
 
@@ -126,8 +120,8 @@
         function sendMessage(){
             let message = {
                 mid:`${uid}-${Date.now()}`,
-                from:userId,
-                to:1,
+                from: userId,
+                to:2,
                 content: "Message New Message",
                 type:"TEXT",
             };

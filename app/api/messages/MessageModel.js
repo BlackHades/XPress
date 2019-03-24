@@ -14,14 +14,14 @@ module.exports = (sequelize, type) => {
         },
         to: type.INTEGER,
         from: type.INTEGER,
+        cardId:{
+            type: type.INTEGER,
+            allowNull:true
+        },
         content: type.TEXT,
         type: type.STRING,
         mediaLink: {
             type: type.STRING,
-            allowNull:true
-        },
-        agentId:{
-            type: type.INTEGER,
             allowNull:true
         },
         status: {

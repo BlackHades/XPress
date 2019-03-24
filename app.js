@@ -30,10 +30,9 @@ sequelize
     .authenticate()
     .then(() => {
       console.log('Connection has been established successfully.');
-      // seeder();
 
-      // sequelize.sync({force: false}).then(() => {
-      //     // seeder();
+      // sequelize.sync({force: true}).then(() => {
+      //     seeder();
       //
       // });
     })

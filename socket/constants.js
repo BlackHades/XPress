@@ -11,6 +11,7 @@ const EVENT_MARK_MESSAGE_AS_DELIVERED = "event-mark-message-as-delivered";
 const EMIT_ERROR = "emit-error";
 const EMIT_AUTHENTICATED = "emit-authenticated";
 const EMIT_RECEIVE_MESSAGE = "emit-receive-message";
+const EMIT_MESSAGE_SENT = "emit-message-sent";
 module.exports = {
     CONNECTION,
     CONNECTED,
@@ -26,5 +27,6 @@ module.exports = {
     //Emissions
     EMIT_ERROR,
     EMIT_AUTHENTICATED,
-    EMIT_RECEIVE_MESSAGE
+    EMIT_RECEIVE_MESSAGE,
+    EMIT_MESSAGE_SENT,
 };

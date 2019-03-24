@@ -1,13 +1,15 @@
 const userRepository =  require("../users/UserRepository");
 const onlineUserRepository =  require("../online-users/OnlineUserRepository");
+const cardRepository =  require("../cards/CardRepository");
 const {
     EMIT_RECEIVE_MESSAGE,
+    EMIT_MESSAGE_SENT,
     EMIT_ERROR
 } = require("../../../socket/constants");
 
 const messageRepository = require("./MessageRepository");
 
-const userConstant = require("../users/UserConstant");
+const messageConstant = require("./MessageConstant");
 
 const log = require("../../../helpers/Logger");
 
@@ -25,7 +27,7 @@ const fetchMessages = async (socket,lastMessageId) => {
 
 
 //Send Message
-const send = async (io,socket,payload) => {
+const send = async (io, socket, payload) => {
     try{
         console.log("Message Payload: " + JSON.stringify(payload));
         console.log("Message Payload: " + socket.userId);
@@ -34,41 +36,43 @@ const send = async (io,socket,payload) => {
         let message = payload.message;
 
         //validate Message Object
-        if(message.from == null || message.content == null || message.type == null){
+        if(message.from == null || message.to == null || message.content == null || message.type == null){
             socket.emit(EMIT_ERROR,"One or More Fields is required");
             return;
         }
 
         //get user
-        let user = await userRepository.find(socket.userId);
-        if(!user){
+        let sender = await userRepository.find(message.from);
+        let receiver = await userRepository.find(message.to);
+        if(!sender){
             //if user is not found emit an error
-            socket.emit(EMIT_ERROR,"User Not Found");
+            socket.emit(EMIT_ERROR,"Sender Not Found");
             return;
         }
 
-        //replace from or to with system id
-        if(user.roleId !== userConstant.USER){
-            message.from = userConstant.SYSTEM;
-            message.agentId = user.id;
+        if(!receiver){
+            //if receiver is not found emit an error
+            socket.emit(EMIT_ERROR,"Receiver Not Found");
+            return;
         }
-        else{
-            message.to = userConstant.SYSTEM;
+
+        if(sender.roleId === receiver.roleId){
+            socket.emit(EMIT_ERROR,"You cant send message to someone of the same role type");
+            return;
         }
         //Save Message Object
-        let messageCreated = await messageRepository.create(message);
-        message = await messageRepository.findByMessageId(messageCreated.mid);
-        //if message was sent from a user
-        if(message.from !== userConstant.SYSTEM){
-            //emit data to all agents stream
-            disperseMessageToAllAgentAndAdmins(io, message);
-        }else{
-            //emit data to user if online
-            disperseMessageToUser(io,message)
-
-        }
+        message = await messageRepository.create(message);
+        message.sender = sender;
+        message.receiver = receiver;
+        if(message.type === messageConstant.TYPE_CARD)
+            message.card = await cardRepository.find(message.cardId);
+        // message = await messageRepository.findByMessageId(messageCreated.mid);
+        //emit data to user if online
+        disperseMessageToUser(io,message);
+        socket.emit(EMIT_MESSAGE_SENT,{message:message});
     }catch (e) {
         console.log("Error Handler: " + JSON.stringify(e));
+        socket.emit(EMIT_ERROR,JSON.stringify(e));
     }
 };
 
@@ -99,6 +103,8 @@ const disperseMessageToUser = async (io,message) => {
        console.log("User: " + JSON.stringify(user));
         emitMessage(io, user.socketId, message);
     });
+
+    //send onesignal integration
 };
 
 /**

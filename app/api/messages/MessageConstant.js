@@ -4,6 +4,7 @@ const STATUS_READ = 3;
 
 const TYPE_TEXT = "TEXT";
 const TYPE_IMAGE = "IMAGE";
+const TYPE_CARD = "CARD";
 
 
 
@@ -14,5 +15,6 @@ module.exports = {
   STATUS_READ,
 
   TYPE_TEXT,
-  TYPE_IMAGE
+  TYPE_IMAGE,
+  TYPE_CARD
 };

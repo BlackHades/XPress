@@ -40,17 +40,7 @@ const findByMessageId = (messageId) => {
     return Message.findOne({
       where:{
         mid:messageId
-      },
-      include:[{
-        model: User,
-        as: "sender"
-      },{
-        model: User,
-        as: "receiver"
-      },{
-        model: User,
-        as: "agent"
-      }]
+      }
     })
 };
 
