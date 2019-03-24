@@ -17,6 +17,7 @@ const cardsRouter = require('./routes/api/cards');
 const postRouter = require('./routes/api/posts');
 const transactionRouter = require('./routes/api/transactions');
 const pushRouter = require('./routes/api/pushs');
+const bitcoinRouter = require('./routes/api/bitcoins');
 const apiRouter = require('./routes/api');
 const errorHandler = require('./helpers/ErrorHandler');
 const app = express();
@@ -31,11 +32,11 @@ sequelize
     .authenticate()
     .then(() => {
       console.log('Connection has been established successfully.');
-
-      sequelize.sync({force: false}).then(() => {
-          // seeder();
-
-      });
+      //
+      // sequelize.sync({force: false}).then(() => {
+      //     // seeder();
+      //
+      // });
     })
     .catch(err => {
       console.error('Unable to connect to the database:', err);
@@ -67,6 +68,7 @@ app.use('/api/v1/passwords',passwordsRouter);
 app.use('/api/v1/posts',postRouter);
 app.use('/api/v1/transactions',transactionRouter);
 app.use('/api/v1/push-tokens',pushRouter);
+app.use('/api/v1/bitcoins',bitcoinRouter);
 
 
 // catch 404 and forward to error handler
