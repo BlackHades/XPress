@@ -18,6 +18,7 @@ const postRouter = require('./routes/api/posts');
 const transactionRouter = require('./routes/api/transactions');
 const pushRouter = require('./routes/api/pushs');
 const bitcoinRouter = require('./routes/api/bitcoins');
+const authRouter = require('./routes/api/auth');
 const apiRouter = require('./routes/api');
 const errorHandler = require('./helpers/ErrorHandler');
 const app = express();
@@ -69,6 +70,7 @@ app.use('/api/v1/posts',postRouter);
 app.use('/api/v1/transactions',transactionRouter);
 app.use('/api/v1/push-tokens',pushRouter);
 app.use('/api/v1/bitcoins',bitcoinRouter);
+app.use('/api/v1/auths',authRouter);
 
 
 // catch 404 and forward to error handler

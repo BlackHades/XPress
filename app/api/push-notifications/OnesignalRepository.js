@@ -1,8 +1,10 @@
 const OneSignal = require("onesignal-node");
 const log = require("../../../helpers/Logger");
+require('dotenv').config();
+
 const myClient = new OneSignal.Client({
     // note that "app" must have "appAuthKey" and "appId" keys
-    app: { appAuthKey: process.ENV.ONESIGNAL_API_KEY, appId: process.ENV.ONESIGNAL_APP_ID }
+    app: { appAuthKey: process.env.ONESIGNAL_API_KEY, appId: process.env.ONESIGNAL_APP_ID }
 });
 
 const sendNotificationToUser = (tokens = [], message, data) => {

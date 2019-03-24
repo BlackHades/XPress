@@ -124,10 +124,12 @@ const register = async (req, res, next) => {
 const refreshToken = async (req,res,next) => {
     log("User: " + JSON.stringify(req.user));
     let user = await find(req.userId);
+    log("User: " + JSON.stringify(user));
+
 
 
     const access = jwt.sign({ user: user }, process.env.SECURITY_KEY, {
-      expiresIn: isMobile ? (86400 * 30) : (86400 * 2) // expires in 48 hours if its not from a mobile device else 30 days
+      expiresIn: (86400 * 30) // expires in 48 hours if its not from a mobile device else 30 days
     });
 
     const refresh = jwt.sign({ userId: user.id  }, process.env.SECURITY_KEY, {

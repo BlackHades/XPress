@@ -14,8 +14,6 @@ router.post('/register', AuthValidator.register(), AuthController.register);
 
 
 
-router.use(refresh);
-router.get("/refresh-token",AuthController.refreshToken);
 
 
 

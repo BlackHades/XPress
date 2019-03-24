@@ -62,7 +62,7 @@ let refresh = (req,res,next) => {
 
     jwt.verify(token, process.env.SECURITY_KEY, function(err, decoded) {
         if (err) return createErrorResponse(res,'Failed to authenticate token.');
-        // console.log("User: " + JSON.stringify(decoded));
+        console.log("User: " + JSON.stringify(decoded));
         req.userId = decoded.userId;
         next();
     });
