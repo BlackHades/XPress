@@ -1,5 +1,7 @@
 const userRepository =  require("../users/UserRepository");
 const onlineUserRepository =  require("../online-users/OnlineUserRepository");
+const pushTokenRepository =  require("../push-notifications/PushTokenRepository");
+const onesignalRepository =  require("../push-notifications/OnesignalRepository");
 const cardRepository =  require("../cards/CardRepository");
 const {
     EMIT_RECEIVE_MESSAGE,
@@ -98,14 +100,24 @@ const disperseMessageToAllAgentAndAdmins = async (io,message) => {
     })
 };
 
-const disperseMessageToUser = async (io,message) => {
-    let onlineUsers = await onlineUserRepository.findByUserId(message.to);
-    onlineUsers.forEach(user => {
-       console.log("User: " + JSON.stringify(user));
-        emitMessage(io, user.socketId, message);
-    });
+const disperseMessageToUser = (io,message) => {
+    onlineUserRepository.findByUserId(message.to)
+        .then(onlineUsers => {
+            onlineUsers.forEach(user => {
+                console.log("User: " + JSON.stringify(user));
+                emitMessage(io, user.socketId, message);
+            });
+        }).catch(err => log(JSON.stringify(err)));
+
+
+
 
     //send onesignal integration
+    pushTokenRepository.fetchUserTokens(message.to,true)
+        .then(tokens => {
+            const message = `${message.sender.name}: ${message.content}`;
+            onesignalRepository.sendNotificationToUser(tokens,message,{notificationType:"MESSAGE",message:message})
+        }).catch(err => log(JSON.stringify(err)));
 };
 
 /**
