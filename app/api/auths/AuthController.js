@@ -40,7 +40,7 @@ const login = async (req, res, next) => {
     });
 
     const refresh = jwt.sign({ userId: user.id  }, process.env.SECURITY_KEY, {
-      expiresIn: (86400 * 30) // expires in 30days
+      expiresIn: isMobile ? (86400 * 365) : (86400 * 100) // expires in 30days
     });
 
     //delete password value

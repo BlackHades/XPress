@@ -1,8 +1,6 @@
 'use strict';
 const express = require('express');
 const router = express.Router();
-const app = express();
-
 //Middleware
 const {adminAuth} = require('../../app/middleware/ApiAuthMiddleware');
 
@@ -21,7 +19,7 @@ router.get('/show/:cardId', cardController.show);
 
 
 //Admin Routes Only
-app.use(adminAuth);
+router.use(adminAuth);
 router.post('/create', cardValidator.create(), cardController.create);
 router.delete('/delete/:cardId', cardController.destroy);
 router.post('/update/:cardId', cardValidator.update(), cardController.update);

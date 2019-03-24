@@ -1,5 +1,4 @@
 const express = require('express');
-const app = express();
 const router = express.Router();
 const {authenticate,agentAuth,adminAuth, refresh} = require('../../app/middleware/ApiAuthMiddleware');
 
@@ -15,7 +14,7 @@ router.post('/register', AuthValidator.register(), AuthController.register);
 
 
 
-app.use(refresh);
+router.use(refresh);
 router.get("/refresh-token",AuthController.refreshToken);
 
 

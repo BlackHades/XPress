@@ -16,6 +16,7 @@ const passwordsRouter = require('./routes/api/passwords');
 const cardsRouter = require('./routes/api/cards');
 const postRouter = require('./routes/api/posts');
 const transactionRouter = require('./routes/api/transactions');
+const pushRouter = require('./routes/api/pushs');
 const apiRouter = require('./routes/api');
 const errorHandler = require('./helpers/ErrorHandler');
 const app = express();
@@ -31,8 +32,8 @@ sequelize
     .then(() => {
       console.log('Connection has been established successfully.');
 
-      // sequelize.sync({force: true}).then(() => {
-      //     seeder();
+      // sequelize.sync({force: false}).then(() => {
+      //     // seeder();
       //
       // });
     })
@@ -65,6 +66,7 @@ app.use('/api/v1/cards',cardsRouter);
 app.use('/api/v1/passwords',passwordsRouter);
 app.use('/api/v1/posts',postRouter);
 app.use('/api/v1/transactions',transactionRouter);
+app.use('/api/v1/push-tokens',pushRouter);
 
 
 // catch 404 and forward to error handler

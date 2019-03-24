@@ -21,6 +21,7 @@ const OnlineUser = require('../app/api/online-users/OnlineUserModel')(sequelize,
 const Post = require('../app/api/posts/PostModel')(sequelize, Sequelize);
 const Comment = require("../app/api/comments/CommentModel")(sequelize, Sequelize);
 const Transaction = require("../app/api/transactions/TransactionModel")(sequelize, Sequelize);
+const PushToken = require("../app/api/push-notifications/PushTokenModel")(sequelize, Sequelize);
 
 /**
  * Relationships
@@ -99,6 +100,7 @@ module.exports = {
     OnlineUser,
     Post,
     Comment,
-    Transaction
+    Transaction,
+    PushToken
 };
 
