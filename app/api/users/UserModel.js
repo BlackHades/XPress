@@ -28,7 +28,11 @@ module.exports = (sequelize, type) => {
         },
         password: type.STRING,
         avatar: type.STRING,
-        lastSeen: type.DATE
+        lastSeen: type.DATE,
+        status:{
+            type: type.STRING,
+            defaultValue:"offline"
+        }
     },{
         defaultScope: {
             attributes: {

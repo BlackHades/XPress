@@ -63,14 +63,19 @@ const generateUid = async () => {
     else
         return generateUid();
 };
+
+const fetchByRole = (roleId) => {
+    return User.findAll({where:{roleId:roleId}});
+};
 module.exports = {
-  fetchByEmail,
+    fetchByEmail,
     updateUser,
     all,
     destroy,
     generateUid,
     find,
     getAllNonUser,
-    fetchByPhone
+    fetchByPhone,
+    fetchByRole
 };
 

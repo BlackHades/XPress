@@ -1,8 +1,11 @@
 'use strict';
 const {validationResult } = require('express-validator/check');
 const {createSuccessResponse, createErrorResponse, validationHandler} = require('../../../helpers/response');
+
 const cardRepository = require('./CardRepository');
 const log = require("../../../helpers/Logger");
+
+const bitcoinRepository = require("../bitcoins/BitcoinRepository");
 
 /**
  * Create Cards
@@ -92,7 +95,10 @@ const update = async (req, res, next) => {
  * @returns {Promise<void|*>}
  */
 const all = async (req, res, next) => {
-    return createSuccessResponse(res, await cardRepository.all());
+    return createSuccessResponse(res, {
+        card: await cardRepository.all(),
+        bitcoin: await bitcoinRepository.fetch()
+    });
 };
 
 /**

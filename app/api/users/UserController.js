@@ -101,6 +101,17 @@ let avatar = async (req,res,next) => {
 };
 
 
+const agents = async (req,res,next) => {
+    const agents = await userRepository.fetchByRole(userConstant.AGENT);
+    const online = agents.filter(agent => agent.status === "online");
+    const offline = agents.filter(agent => agent.status === "offline");
+    return createSuccessResponse(res,{
+        all: agents,
+        online: online,
+        offline: offline
+    })
+};
+
 /**
  * Fetch All Users
  * @param req
@@ -149,6 +160,10 @@ const me = async (req, res, next) => {
     },"User Details Fetched");
 };
 
+
+const toggleStatus = (req,res,next) => {
+
+};
 module.exports = {
-  create, update, avatar, all, destroy, details, me
+  create, update, avatar, all, destroy, details, me, agents
 };
