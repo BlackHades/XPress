@@ -22,6 +22,8 @@ router.get("/agents", userController.agents);
 
 router.use(agentAuth);
 router.get('/all', userController.all);
+router.get("/toggle/status/:status", userController.toggleStatus);
+
 
 //Administrator Only
 //Admin Middleware

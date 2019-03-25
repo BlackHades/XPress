@@ -6,6 +6,7 @@ const {User} = require('../../../database/sequelize');
 const userRepository = require('./UserRepository');
 const userConstant = require('./UserConstant');
 const transactionRepository = require("../transactions/TransactionRepository");
+const log = require("../../../helpers/Logger");
 
 
 /**
@@ -162,8 +163,14 @@ const me = async (req, res, next) => {
 
 
 const toggleStatus = (req,res,next) => {
-
+    userRepository.updateUser({
+        status: req.user.status === req.params.status || "offline"
+    },req.user.id)
+        .then(response => {
+            log("response: "+ response);
+            return createSuccessResponse(res, null,"Agent Status Toggled" )
+        }).catch(err => next(err));
 };
 module.exports = {
-  create, update, avatar, all, destroy, details, me, agents
+  create, update, avatar, all, destroy, details, me, agents, toggleStatus
 };
