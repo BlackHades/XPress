@@ -71,6 +71,7 @@ const transactions = async () => {
     for(let i = 0; i < 20; i++){
         Transaction.create({
             transactionId: await  transactionRepository.generateTransactionId(),
+            cardId:1,
             userId: 19,
             description: randomSentence({words: 1000}),
             createdBy: 2,
