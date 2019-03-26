@@ -92,6 +92,7 @@
         let prod = false;
         let liveUrl = "https://shrouded-lowlands.herokuapp.com";
         let localUrl = "http://localhost:3000";
+        let lastMessageId = 0;
         function init(){
             socket === null ? socket.disconnect() : console.log("Socket is Null");
             console.clear();
@@ -100,7 +101,9 @@
             // console.log('Socket: '+ socket);
             socket.on('connected', (payload) => {
                 console.log(`Connected: ${payload.payload}`);
-                socket.emit('event-initialization',{userId: userId});
+
+                //this events emit an initialization which triggers the server to return messages starting from the lastMessage Id
+                socket.emit('event-initialization',{userId: userId,lastMessageId:lastMessageId});
             });
 
             socket.on('emit-receive-message',(payload) => {

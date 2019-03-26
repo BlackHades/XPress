@@ -35,7 +35,7 @@ sequelize
       console.log('Connection has been established successfully.');
       //
       sequelize.sync({force: false}).then(() => {
-          // seeder();
+          seeder();
 
       });
     })

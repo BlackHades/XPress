@@ -68,15 +68,15 @@ const user = async () => {
 
 
 const transactions = async () => {
-    // for(let i = 0; i < 20; i++){
-    //     Transaction.create({
-    //         transactionId: await  transactionRepository.generateTransactionId(),
-    //         userId: 4,
-    //         description: randomSentence({words: 1000}),
-    //         createdBy: 2,
-    //         amount: 100000 * Math.random()
-    //     });
-    // }
+    for(let i = 0; i < 20; i++){
+        Transaction.create({
+            transactionId: await  transactionRepository.generateTransactionId(),
+            userId: 19,
+            description: randomSentence({words: 1000}),
+            createdBy: 2,
+            amount: 100000 * Math.random()
+        });
+    }
 };
 module.exports = {
     seeder
