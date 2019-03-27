@@ -16,6 +16,9 @@ let workers = [];
  * Setup number of worker processes to share port which will be defined while setting up server
  */
 const setupWorkerProcesses = () => {
+
+  const server = http.createServer(app);
+  require('../socket')(server);
   // to read number of cores on system
   let numCores = require('os').cpus().length;
   console.log('Master cluster setting up ' + numCores + ' workers');
