@@ -155,4 +155,4 @@ function onError(error, port) {
 }
 
 
-setupServer(true);
+setupServer(false);

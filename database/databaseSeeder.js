@@ -84,7 +84,7 @@ const transactions = async () => {
         Transaction.create({
             transactionId: await  transactionRepository.generateTransactionId(),
             cardId:1,
-            userId: i > 11,
+            userId: 11,
             transactionType:"CARD",
             description: randomSentence({words: 1000}),
             createdBy: 2,
