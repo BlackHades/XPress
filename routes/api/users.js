@@ -17,11 +17,12 @@ router.post('/avatar', userValidator.avatar(),  userController.avatar);
 router.get("/details/:userId", userController.details);
 router.get("/me", userController.me);
 router.get("/agents", userController.agents);
+router.get('/all', userController.all);
+
 
 //Agents And Above
 
 router.use(agentAuth);
-router.get('/all', userController.all);
 router.get("/toggle/status/:status", userController.toggleStatus);
 
 
