@@ -168,7 +168,7 @@ const toggleStatus = (req,res,next) => {
     },req.user.id)
         .then(response => {
             log("response: "+ response);
-            return createSuccessResponse(res, null,"Agent Status Toggled" )
+            return createSuccessResponse(res, null,`Agent is ${req.params.status}` )
         }).catch(err => next(err));
 };
 module.exports = {
