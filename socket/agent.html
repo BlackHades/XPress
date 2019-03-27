@@ -97,10 +97,12 @@
             socket === null ? socket.disconnect() : console.log("Socket is Null");
             console.clear();
             console.log("Message: Init");
-            socket = io.connect(prod ? liveUrl : localUrl);
+            socket = io.connect(prod ? liveUrl : localUrl,{
+                transports: [ 'websocket' ] // or [ 'websocket', 'polling' ], which is the same thing
+            });
             // io().on('connection',(payload) => {
             //      console.log('Connection Done');
-            // });
+            // });7
 
 
             // console.log('Socket: '+ socket);

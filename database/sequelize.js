@@ -31,6 +31,7 @@ const Bitcoin = require("../app/api/bitcoins/BitcoinModel")(sequelize, Sequelize
  * Transactions
  */
 Transaction.belongsTo(Card,{as: "card", foreignKey:"cardId"});
+Transaction.belongsTo(Bitcoin,{as: "bitcoin", foreignKey:"bitcoinId"});
 Transaction.belongsTo(User,{as: "user", foreignKey: "userId"});
 Transaction.belongsTo(User,{as: "agent", foreignKey: "createdBy"});
 

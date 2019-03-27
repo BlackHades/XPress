@@ -34,6 +34,8 @@ const messageController = require('../app/api/messages/MessageController');
 const ioEvents = (io) => {
     io.sockets.on(CONNECTION, (socket) => {
         console.log(socket.id + " is connected");
+        console.log(socket.id + " is connected to " + process.pid);
+
         socket.emit(CONNECTED,{payload: socket.id});
         socket.auth = false;
 

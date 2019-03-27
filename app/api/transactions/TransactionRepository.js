@@ -1,4 +1,4 @@
-const { Transaction, User, Card } = require("../../../database/sequelize");
+const { Transaction, User, Card, Bitcoin } = require("../../../database/sequelize");
 const randomstring = require("randomstring");
 
 
@@ -34,6 +34,9 @@ const getAllTransactions = () => {
         },{
             model: User,
             as: "agent",
+        },{
+            model: Bitcoin,
+            as: "bitcoin",
         }]
     });
 };
@@ -51,6 +54,9 @@ const getUserTransaction = (userId) => {
         },{
             model: User,
             as: "agent",
+        },{
+            model: Bitcoin,
+            as: "bitcoin",
         }]
     })
 };
@@ -68,6 +74,9 @@ const getAgentTransaction = (userId) => {
         },{
             model: User,
             as: "agent",
+        },{
+            model: Bitcoin,
+            as: "bitcoin",
         }]
     })
 };
@@ -84,6 +93,9 @@ const find = (transactionId) => {
         },{
             model: User,
             as: "agent",
+        },{
+            model: Bitcoin,
+            as: "bitcoin",
         }]
     });
 };
