@@ -3,8 +3,11 @@
 const {createSuccessResponse, createErrorResponse, validationHandler} = require('../../../helpers/response'),
     {validationResult } = require('express-validator/check'),
     transactionRepository = require("./TransactionRepository"),
+    transactionConstant = require("./TransactionConstant"),
     log = require("../../../helpers/Logger"),
-    role = require("../../api/users/UserConstant");
+    role = require("../../api/users/UserConstant"),
+    cardRepository = require('../cards/CardRepository'),
+    bitcoinRepository = require('../bitcoins/BitcoinRepository');
 /**
  * Create Transactions
  * @param req
@@ -24,11 +27,37 @@ const create = async (req, res, next) => {
             return createErrorResponse(res,validationHandler(valFails), valFails.array);
 
         //Extract Data
+        // return createSuccessResponse(res,req.body);
+
+
+        //check for bitcoin or cardId
         let creatorId = req.user.id;
         let payload = req.body;
+        let card,bitcoin;
+
+        //If transaction is a card transaction
+        if(payload.transactionType === transactionConstant.TYPE_CARD){
+            if(!payload.cardId)
+                return createErrorResponse(res,"Card Id Is Required");
+            card = await cardRepository.find(payload.cardId);
+            if(!card || !card.isAvailable)
+                return createErrorResponse(res,"Card Not Found or Card Is Not Available");
+        }
+
+        //If transaction is a bitcoin transaction
+        if(payload.transactionType === transactionConstant.TYPE_BITCOIN){
+            if(!payload.bitcoinId)
+                return createErrorResponse(res,"Bitcoin Id Is Required");
+            bitcoin = await bitcoinRepository.find(payload.bitcoinId);
+            if(!bitcoin)
+                return createErrorResponse(res,"Bitcoin Not Found");
+        }
+
         payload.createdBy = creatorId;
         payload.transactionId = await transactionRepository.generateTransactionId();
         const transaction = await transactionRepository.create(payload);
+        transaction.dataValues.bitcoin = bitcoin;
+        transaction.dataValues.card = card;
         log("Transactions: " + JSON.stringify(transaction));
         return createSuccessResponse(res, transaction, "Transaction Completed");
     } catch (e) {

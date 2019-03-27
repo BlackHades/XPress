@@ -11,9 +11,18 @@ module.exports = (queryInterface, Sequelize) => {
             type:Sequelize.STRING,
             unique: true
         },
+        transactionType:{
+            allowNull: false,
+            type:Sequelize.STRING,
+            defaultValue:"CARD"
+        },
         cardId:{
             type: Sequelize.INTEGER,
-            allowNull: false
+            allowNull: true
+        },
+        bitcoinId:{
+            allowNull: true,
+            type:Sequelize.INTEGER,
         },
         userId: Sequelize.INTEGER,
         amount: Sequelize.STRING,
