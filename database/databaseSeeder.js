@@ -71,8 +71,21 @@ const transactions = async () => {
     for(let i = 0; i < 20; i++){
         Transaction.create({
             transactionId: await  transactionRepository.generateTransactionId(),
+            bitcoinId:1,
+            userId: i > 10 ? 19 : 11,
+            transactionType:"BITCOIN",
+            description: randomSentence({words: 1000}),
+            createdBy: 2,
+            amount: 100000 * Math.random()
+        });
+    }
+
+    for(let i = 0; i < 20; i++){
+        Transaction.create({
+            transactionId: await  transactionRepository.generateTransactionId(),
             cardId:1,
-            userId: 19,
+            userId: i > 11,
+            transactionType:"CARD",
             description: randomSentence({words: 1000}),
             createdBy: 2,
             amount: 100000 * Math.random()
