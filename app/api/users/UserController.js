@@ -66,6 +66,7 @@ let update = async (req, res, next) => {
 
         //Update User
         await userRepository.updateUser({name: payload.name, email:payload.email,phone:payload.phone},req.user.id);
+        user = userRepository.find(user.id);
         return createSuccessResponse(res, user, "User Profile Updated");
     }catch (e) {
         // handler(e);
@@ -166,9 +167,9 @@ const toggleStatus = (req,res,next) => {
     userRepository.updateUser({
         status: req.user.status === req.params.status || "offline"
     },req.user.id)
-        .then(response => {
-            log("response: "+ response);
-            return createSuccessResponse(res, null,`Agent is ${req.params.status}` )
+        .then(async response => {
+            log("response: " + response);
+            return createSuccessResponse(res, await userRepository.find(req.user.id), `Agent is ${req.params.status}`)
         }).catch(err => next(err));
 };
 module.exports = {
