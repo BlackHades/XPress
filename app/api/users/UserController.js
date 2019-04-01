@@ -164,12 +164,14 @@ const me = async (req, res, next) => {
 
 
 const toggleStatus = (req,res,next) => {
+    console.log(req.params.status);
     userRepository.updateUser({
-        status: req.user.status === req.params.status || "offline"
+        status: req.params.status.toString() !== "online" ? "offline" :"online"
     },req.user.id)
         .then(async response => {
             log("response: " + response);
-            return createSuccessResponse(res, await userRepository.find(req.user.id), `Agent is ${req.params.status}`)
+            // console.log("user: " + JSON.stringify(user));
+            return createSuccessResponse(res, await userRepository.find(req.user.id) , `Agent is ${req.params.status}`)
         }).catch(err => next(err));
 };
 module.exports = {
