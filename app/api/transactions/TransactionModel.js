@@ -34,6 +34,10 @@ module.exports = (queryInterface, Sequelize) => {
             type: Sequelize.TEXT,
             allowNull:true
         },
+        status:{
+            type: Sequelize.TEXT,
+            defaultValue:"PENDING"
+        },
         createdBy:Sequelize.INTEGER
     },{
         paranoid:true

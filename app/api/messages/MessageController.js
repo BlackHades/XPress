@@ -72,6 +72,8 @@ const send = async (io, socket, payload) => {
 
         console.log("Message: " +JSON.stringify(newMessage));
         disperseMessageToUser(io,newMessage);
+
+        //Emit Message Sent
         socket.emit(EMIT_MESSAGE_SENT,{message:newMessage});
     }catch (e) {
         console.log("Error Handler: " + JSON.stringify(e));
