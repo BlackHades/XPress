@@ -7,7 +7,7 @@ const storage = multer.diskStorage({
         cb(null, 'public/uploads')
     },
     filename: (req, file, callback) => {
-        crypto.pseudoRandomBytes(16, function(err, raw) {
+        crypto.pseudoRandomBytes(16, (err, raw) => {
             if (err) return callback(err);
             let temp =  file.originalname.toString().split(".");
             callback(null, raw.toString('hex') + "." + temp[temp.length - 1]);
@@ -24,6 +24,7 @@ const fileController = require('../../app/api/files/FileController');
 //Route
 router.get('/check/:checksum', fileController.check);
 router.post('/upload',upload.single('file'), fileController.upload);
+router.post('/mobile/upload', fileController.uploadFromMobile);
 
 
 

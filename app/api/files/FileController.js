@@ -33,6 +33,7 @@ const upload = async (req,res,next) => {
     const path = "./public/uploads/" + file.filename;
     const filePath = req.file.path;
 
+    console.log("Here");
     cloudinary.config({
       cloud_name: process.env.CLOUDINARY_CLOUD_NAME,
       api_key: process.env.CLOUDINARY_API_KEY,
@@ -59,7 +60,6 @@ const upload = async (req,res,next) => {
     return createSuccessResponse(res, newFile[0],"Upload Successful");
     // return createSuccessResponse(res, new,"Upload Successful");
   }catch (e) {
-
     return createErrorResponse(res,"An Error Occurred " + JSON.stringify(e));
   }
 };
@@ -91,10 +91,62 @@ const checksum = async (req,res,next) => {
 };
 
 
+const uploadFromMobile = async (req, res, next) =>{
+    const payload = req.body;
+    if(payload.file == undefined || payload.file == null || payload.file == "")
+        return createErrorResponse(res,"File is empty");
+
+    const path = `./public/uploads/${payload.filename || Math.random().toString().concat(".jpg")}`;
+    const bitmap = new Buffer(payload.file, 'base64');
+
+    // console.log("buffer:", JSON.stringify(bitmap));
+    // write buffer to file
+    fs.writeFileSync(path, bitmap);
+
+    console.log('******** File created from base64 encoded string ********');
+
+
+    console.log("Here");
+    cloudinary.config({
+        cloud_name: process.env.CLOUDINARY_CLOUD_NAME,
+        api_key: process.env.CLOUDINARY_API_KEY,
+        api_secret: process.env.CLOUDINARY_API_SECRET
+    });
+    //calculate Checksum
+    const checksum = await calculateCheckSum(path);
+
+    let image =  await cloudinary.uploader.upload(path,{
+        public_id:checksum
+    });
+
+    log("Upload Response: " + JSON.stringify(image));
+
+    // Save File in to Database
+    let newFile = await File.findOrCreate({where:{checksum:checksum}, defaults: {
+            checksum:checksum,
+            url: image.secure_url || image.url,
+            mimeType: payload.filename.split(".")[1],
+            extras: JSON.stringify(image)
+        }});
+    fs.unlinkSync(path);
+    //Image: id, checksum, url;
+    return createSuccessResponse(res, newFile[0],"Upload Successful");
+
+
+    // return createSuccessResponse(res,payload,"Image Uploaded");
+    //convert back to file
+    //calculate checksum
+    //upload to cloudinary
+    //create Record
+    //return res
+};
+
 
 //Export
 module.exports = {
-  check,
-  upload,
-  checksum
+
+    check,
+    upload,
+    checksum,
+    uploadFromMobile
 };
