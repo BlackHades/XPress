@@ -19,6 +19,7 @@ const {
     EMIT_MESSAGE,
     EMIT_ERROR
 } = require('./constants');
+
 const init = (server) => {
     let io = require('socket.io')(server);
     ioEvents(io);
