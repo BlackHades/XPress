@@ -33,7 +33,6 @@ const upload = async (req,res,next) => {
     const path = "./public/uploads/" + file.filename;
     const filePath = req.file.path;
 
-    console.log("Here");
     cloudinary.config({
       cloud_name: process.env.CLOUDINARY_CLOUD_NAME,
       api_key: process.env.CLOUDINARY_API_KEY,
@@ -46,7 +45,7 @@ const upload = async (req,res,next) => {
       public_id:checksum
     });
 
-    log("Upload Response: " + JSON.stringify(image));
+    // log("Upload Response: " + JSON.stringify(image));
 
     // Save File in to Database
     let newFile = await File.findOrCreate({where:{checksum:checksum}, defaults: {
