@@ -1,4 +1,4 @@
-const {Message, User} = require("../../../database/sequelize");
+const {Message, User, Card} = require("../../../database/sequelize");
 const Sequelize = require('sequelize');
 const Op = Sequelize.Op;
 const create = (payload) => {
@@ -32,6 +32,9 @@ const fetchMessage = (userId,lastMessageId) => {
       },{
         model: User,
         as: "agent"
+      },{
+        model: Card,
+        as: "card"
       }]
     });
 };

@@ -14,6 +14,7 @@ const usersRouter = require('./routes/api/users');
 const filesRouter = require('./routes/api/files');
 const passwordsRouter = require('./routes/api/passwords');
 const cardsRouter = require('./routes/api/cards');
+const messageRouter = require('./routes/api/messages');
 const postRouter = require('./routes/api/posts');
 const transactionRouter = require('./routes/api/transactions');
 const pushRouter = require('./routes/api/pushs');
@@ -65,6 +66,7 @@ app.use('/api/v1/passwords',passwordsRouter);
 app.use('/api/v1/posts',postRouter);
 app.use('/api/v1/transactions',transactionRouter);
 app.use('/api/v1/push-tokens',pushRouter);
+app.use('/api/v1/messages',messageRouter);
 app.use('/api/v1/bitcoins',bitcoinRouter);
 app.use('/api/v1/auths',authRouter);
 

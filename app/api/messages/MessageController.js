@@ -14,6 +14,7 @@ const messageRepository = require("./MessageRepository");
 const messageConstant = require("./MessageConstant");
 
 const log = require("../../../helpers/Logger");
+const {createSuccessResponse} =  require("../../../helpers/response");
 
 /**
  * Fetch Recent Messaged
@@ -25,6 +26,11 @@ const fetchMessages = async (socket,lastMessageId) => {
     messages.forEach(message => {
         socket.emit(EMIT_RECEIVE_MESSAGE,{message:message});
     });
+};
+
+
+const fetchMessagesRequest = async (req,res,next) => {
+    return createSuccessResponse(res, await messageRepository.fetchMessage(req.user.id,req.body.lastMessageId || 0));
 };
 
 
@@ -144,5 +150,6 @@ const markAsDelivered = async (payload) => {
 module.exports = {
     fetchMessages,
     send,
-    markAsDelivered
+    markAsDelivered,
+    fetchMessagesRequest
 };
