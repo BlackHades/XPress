@@ -23,10 +23,12 @@ const fetchMessage = (userId,lastMessageId) => {
           [Op.gt]:lastMessageId
         }
       },
-      include:[{
+      include:[
+          {
         model: User,
         as: "sender"
-      },{
+      },
+        {
         model: User,
         as: "receiver"
       },{
@@ -35,7 +37,9 @@ const fetchMessage = (userId,lastMessageId) => {
       },{
         model: Card,
         as: "card"
-      }]
+      }
+      ],
+      order: [['id', 'DESC']]
     });
 };
 

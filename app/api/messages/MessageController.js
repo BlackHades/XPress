@@ -30,6 +30,7 @@ const fetchMessages = async (socket,lastMessageId) => {
 
 
 const fetchMessagesRequest = async (req,res,next) => {
+    log(req.body.lastMessageId);
     return createSuccessResponse(res, await messageRepository.fetchMessage(req.user.id,req.body.lastMessageId || 0));
 };
 
