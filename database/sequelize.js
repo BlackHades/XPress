@@ -9,6 +9,10 @@ const sequelize = new Sequelize(process.env.DB_NAME, process.env.DB_USERNAME, pr
         acquire: 30000,
         idle: 10000
     },
+    define: {
+        charset: 'utf8',
+        collate: 'utf8_general_ci',
+    },
     operatorsAliases: false
 });
 

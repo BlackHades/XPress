@@ -44,7 +44,9 @@ let agentAuth = (req,res,next) => {
 
 
 let adminAuth = (req,res,next) => {
-    if(req.user && req.user.roleId === roles.ADMINISTRATOR)
+    console.log("User: ", JSON.stringify(req.user));
+    console.log("User: ", roles.ADMINISTRATOR);
+    if(req.user && req.user.roleId == roles.ADMINISTRATOR)
         next();
     else
         return createErrorResponse(res,"Unauthorized");

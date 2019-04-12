@@ -24,6 +24,8 @@ const login = async (req, res, next) => {
       return createErrorResponse(res,validationHandler(valFails), valFails.array);
 
     let payload = req.body;
+
+    // return createSuccessResponse(res, req.body);
     //Fetch User By Email
     let user = await fetchByEmail(payload.email, true);
 

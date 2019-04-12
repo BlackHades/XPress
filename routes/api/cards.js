@@ -2,7 +2,7 @@
 const express = require('express');
 const router = express.Router();
 //Middleware
-const {adminAuth} = require('../../app/middleware/ApiAuthMiddleware');
+const {authenticate, adminAuth} = require('../../app/middleware/ApiAuthMiddleware');
 
 //Controllers
 const cardController = require('../../app/api/cards/CardController');
@@ -19,7 +19,7 @@ router.get('/show/:cardId', cardController.show);
 
 
 //Admin Routes Only
-router.use(adminAuth);
+router.use(authenticate,adminAuth);
 router.post('/create', cardValidator.create(), cardController.create);
 router.delete('/delete/:cardId', cardController.destroy);
 router.post('/update/:cardId', cardValidator.update(), cardController.update);
