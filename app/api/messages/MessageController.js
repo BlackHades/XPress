@@ -128,7 +128,7 @@ const disperseMessageToUser = (io,message) => {
             const message = `${message.sender.name}: ${message.content}`;
             const data = {notificationType:"MESSAGE",message:message};
             onesignalRepository.sendNotificationToUser(tokens,message,data)
-        }).catch(err => log(JSON.stringify(err)));
+        }).catch(err => log("pusherror: " + JSON.stringify(err)));
 };
 
 /**

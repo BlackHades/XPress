@@ -6,7 +6,7 @@ const createOrUpdate = (userId, pushToken) => {
 
 const fetchUserTokens = (userId,onlyToken = false) =>{
       if(onlyToken)
-          return PushToken.findAll({attributes:["token"],where:{userId:userId}});
+          return PushToken.findAll({attributes:["token"], where:{userId:userId}});
       else
           return PushToken.findAll({where:{userId:userId}});
 
