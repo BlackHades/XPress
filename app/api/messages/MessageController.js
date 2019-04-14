@@ -116,7 +116,8 @@ const disperseMessageToUser = (io,message) => {
                 console.log("User: " + JSON.stringify(user));
                 emitMessage(io, user.socketId, message);
             });
-        }).catch(err => log(err));
+        })
+        .catch(err => log(err));
 
 
 
@@ -127,7 +128,9 @@ const disperseMessageToUser = (io,message) => {
             log("tokens: " + JSON.stringify(tokens));
             log("messages: " + JSON.stringify(message));
             const snippet = `${message.sender.name}: ${message.content}`;
+            log("snippet: " + JSON.stringify(snippet));
             const data = {notificationType:"MESSAGE",message: message};
+            log("data: " + JSON.stringify(data));
             onesignalRepository.sendNotificationToUser(tokens,snippet,data)
         }).catch(err => log("pusherror: " + err));
 };
