@@ -124,9 +124,9 @@ const disperseMessageToUser = (io,message) => {
     //send onesignal integration
     pushTokenRepository.fetchUserTokens(message.to,true)
         .then(tokens => {
-            log("tokens: " + JSON.stringify(token));
+            log("tokens: " + JSON.stringify(tokens));
             const message = `${message.sender.name}: ${message.content}`;
-            const data = {notificationType:"MESSAGE",message:message};
+            const data = {notificationType:"MESSAGE",message: message};
             onesignalRepository.sendNotificationToUser(tokens,message,data)
         }).catch(err => log("pusherror: " + err));
 };
