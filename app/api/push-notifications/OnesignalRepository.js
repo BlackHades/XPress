@@ -9,12 +9,15 @@ const myClient = new OneSignal.Client({
     app: { appAuthKey: process.env.ONESIGNAL_API_KEY, appId: process.env.ONESIGNAL_APP_ID }
 });
 
-const sendNotificationToUser = (tokens = [], message, data) => {
+const sendNotificationToUser = (tokens = [], title, message, data) => {
 
     if(!tokens || tokens.length === 0)
         return;
 
     const notification = new OneSignal.Notification({
+        headings:{
+            en: title
+        },
         contents: {
             en: message,
         },
