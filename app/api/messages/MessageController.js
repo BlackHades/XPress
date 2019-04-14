@@ -116,7 +116,7 @@ const disperseMessageToUser = (io,message) => {
                 console.log("User: " + JSON.stringify(user));
                 emitMessage(io, user.socketId, message);
             });
-        }).catch(err => log(JSON.stringify(err)));
+        }).catch(err => log(err));
 
 
 
