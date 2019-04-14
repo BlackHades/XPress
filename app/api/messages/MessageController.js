@@ -71,10 +71,11 @@ const send = async (io, socket, payload) => {
         }
         //Save Message Object
         let newMessage = await messageRepository.create(message);
-        newMessage.dataValues.sender = sender;
-        newMessage.dataValues.receiver = receiver;
-        if(newMessage.type === messageConstant.TYPE_CARD)
-            newMessage.dataValues.card = await cardRepository.find(newMessage.cardId);
+        // newMessage.dataValues.sender = sender;
+        // newMessage.dataValues.receiver = receiver;
+        // if(newMessage.type === messageConstant.TYPE_CARD)
+        //     newMessage.dataValues.card = await cardRepository.find(newMessage.cardId);
+        newMessage = await messageRepository.findByMessageId(newMessage.mid);
 
 
         console.log("Message: " +JSON.stringify(newMessage));
@@ -125,8 +126,11 @@ const disperseMessageToUser = (io,message) => {
     //send onesignal integration
     pushTokenRepository.fetchUserTokens(message.to,true)
         .then(tokens => {
-            log("tokens: " + JSON.stringify(tokens));
             log("messages: " + JSON.stringify(message));
+            if(tokens.length === 0)
+                return;
+            tokens = tokens.map(t => t.token);
+            log("tokens: " + JSON.stringify(tokens));
             const snippet = `${message.sender.name}: ${message.content}`;
             log("snippet: " + JSON.stringify(snippet));
             const data = {notificationType:"MESSAGE",message: message};
