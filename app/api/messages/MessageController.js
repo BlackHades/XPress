@@ -130,11 +130,11 @@ const disperseMessageToUser = (io,message) => {
             if(tokens.length === 0)
                 return;
             tokens = tokens.map(t => t.token);
-            log("tokens: " + JSON.stringify(tokens));
+            // log("tokens: " + JSON.stringify(tokens));
             const snippet = `${message.sender.name}: ${message.content}`;
-            log("snippet: " + JSON.stringify(snippet));
+            // log("snippet: " + JSON.stringify(snippet));
             const data = {notificationType:"MESSAGE",message: message};
-            log("data: " + JSON.stringify(data));
+            // log("data: " + JSON.stringify(data));
             onesignalRepository.sendNotificationToUser(tokens,snippet,data)
         }).catch(err => log("pusherror: " + err));
 };
