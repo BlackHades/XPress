@@ -5,7 +5,7 @@
  * @param message
  */
 module.exports = (message) => {
-    console.debug(message)
+    console.debug("Push Notification: " + JSON.stringify(message));
     if(process.env.APP_ENV === "local" || process.env.APP_ENV === "development"){
         console.debug(message)
     }
