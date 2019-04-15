@@ -1,7 +1,7 @@
 const {PushToken} = require("../../../database/sequelize");
 
 const createOrUpdate = (userId, pushToken) => {
-    return PushToken.findOrCreate({where:{token:pushToken},defaults:{userId:userId}})
+    return PushToken.findOrCreate({where:{token:pushToken},defaults:{userId:userId, token:pushToken}})
 };
 
 const fetchUserTokens = (userId,onlyToken = false) =>{
