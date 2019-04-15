@@ -2,6 +2,7 @@
 const {createSuccessResponse, createErrorResponse, validationHandler} = require('../../../helpers/response');
 const {validationResult } = require('express-validator/check');
 const {createOrUpdate, upsert} =  require("./PushTokenRepository");
+const log = require("../../../helpers/Logger");
 
 /**
  * Register user token
@@ -20,6 +21,7 @@ let register = async (req,res,next) => {
         let token = await upsert(req.user.id,req.body.token);
 
         console.log("token: " + JSON.stringify(token));
+        log("TOKEN: " + JSON.stringify(token));
         //create token
 
         return createSuccessResponse(res, token,"Token Registered Successful" )
