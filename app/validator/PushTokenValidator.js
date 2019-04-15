@@ -6,6 +6,7 @@ const { check } = require('express-validator/check');
 let register = () => {
     return [
         check('token', 'OneSignal User Id is required').exists(),
+        check('token', 'OneSignal User Id is required').not().isEmpty(),
     ];
 };
 
