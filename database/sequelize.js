@@ -27,6 +27,7 @@ const Comment = require("../app/api/comments/CommentModel")(sequelize, Sequelize
 const Transaction = require("../app/api/transactions/TransactionModel")(sequelize, Sequelize);
 const PushToken = require("../app/api/push-notifications/PushTokenModel")(sequelize, Sequelize);
 const Bitcoin = require("../app/api/bitcoins/BitcoinModel")(sequelize, Sequelize);
+const Contact = require("../app/api/contact-us/ContactModel")(sequelize, Sequelize);
 /**
  * Relationships
  */
@@ -108,6 +109,7 @@ module.exports = {
     Comment,
     Transaction,
     PushToken,
-    Bitcoin
+    Bitcoin,
+    Contact
 };
 
