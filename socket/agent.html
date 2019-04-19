@@ -92,7 +92,7 @@
         let userId = prod ? 3 : 2;
         let socket;
         let liveUrl = "https://shrouded-lowlands.herokuapp.com";
-        let localUrl = "http://localhost:3002";
+        let localUrl = "http://localhost:3000";
         function init(){
             socket === null ? socket.disconnect() : console.log("Socket is Null");
             console.clear();
@@ -100,15 +100,11 @@
             socket = io.connect(prod ? liveUrl : localUrl,{
                 transports: [ 'websocket' ] // or [ 'websocket', 'polling' ], which is the same thing
             });
-            // io().on('connection',(payload) => {
-            //      console.log('Connection Done');
-            // });7
-
 
             // console.log('Socket: '+ socket);
             socket.on('connected', (payload) => {
                 console.log(`Connected: ${payload.payload}`);
-                const pay = {userId: userId, lastMessageId: 170};
+                const pay = {userId: userId, lastMessageId: 0};
                 socket.emit('event-initialization',pay);
             });
 

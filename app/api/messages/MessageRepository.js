@@ -1,4 +1,4 @@
-const {Message, User, Card} = require("../../../database/sequelize");
+const {Message, User, Card, Bitcoin} = require("../../../database/sequelize");
 const Sequelize = require('sequelize');
 const Op = Sequelize.Op;
 const create = (payload) => {
@@ -37,7 +37,10 @@ const fetchMessage = (userId,lastMessageId) => {
       },{
         model: Card,
         as: "card"
-      }
+      },{
+          model: Bitcoin,
+          as: "bitcoin"
+        }
       ],
       order: [['id', 'DESC']]
     });
@@ -61,6 +64,9 @@ const findByMessageId = (messageId) => {
         },{
           model: Card,
           as: "card"
+        },{
+          model: Bitcoin,
+          as: "bitcoin"
         }
       ],
     })

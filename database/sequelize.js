@@ -59,6 +59,7 @@ Message.belongsTo(User,{as:"agent", foreignKey:"agentId"});
 Message.belongsTo(User,{as:"sender", foreignKey:"from"});
 Message.belongsTo(User,{as:"receiver", foreignKey:"to"});
 Message.belongsTo(Card,{as:"card", foreignKey:"cardId"});
+Message.belongsTo(Bitcoin,{as:"bitcoin", foreignKey:"bitcoinId"});
 //Users
 // User.hasMany(Message,{ as: "sentMessages", foreignKey: "from",  targetKey: "id"});
 // User.hasMany(Message,{as: "receivedMessages", foreignKey: "to", targetKey:"id"});

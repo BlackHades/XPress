@@ -17,6 +17,9 @@ module.exports = (sequelize, type) => {
         cardId:{
             type: type.INTEGER,
             allowNull:true
+        },bitcoinId:{
+            type: type.INTEGER,
+            allowNull:true
         },
         content: type.TEXT,
         type: type.STRING,
