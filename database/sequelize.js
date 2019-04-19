@@ -28,6 +28,7 @@ const Transaction = require("../app/api/transactions/TransactionModel")(sequeliz
 const PushToken = require("../app/api/push-notifications/PushTokenModel")(sequelize, Sequelize);
 const Bitcoin = require("../app/api/bitcoins/BitcoinModel")(sequelize, Sequelize);
 const Contact = require("../app/api/contact-us/ContactModel")(sequelize, Sequelize);
+const Utility = require("../app/api/utilities/UtilityModel")(sequelize, Sequelize);
 /**
  * Relationships
  */
@@ -111,6 +112,7 @@ module.exports = {
     Transaction,
     PushToken,
     Bitcoin,
-    Contact
+    Contact,
+    Utility
 };
 

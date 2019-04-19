@@ -21,6 +21,7 @@ const pushRouter = require('./routes/api/pushs');
 const bitcoinRouter = require('./routes/api/bitcoins');
 const authRouter = require('./routes/api/auth');
 const contactRouter = require('./routes/api/contacts');
+const utilityRouter = require('./routes/api/utilities');
 const apiRouter = require('./routes/api');
 const errorHandler = require('./helpers/ErrorHandler');
 const app = express();
@@ -33,9 +34,9 @@ sequelize
     .then(() => {
       console.log('Connection has been established successfully.');
       //
-      // sequelize.sync({force: false}).then(() => {
-      //     seeder();
-      // });
+      sequelize.sync({force: false}).then(() => {
+          // seeder();
+      });
 
     })
     .catch(err => {
@@ -72,6 +73,7 @@ app.use('/api/v1/messages',messageRouter);
 app.use('/api/v1/bitcoins',bitcoinRouter);
 app.use('/api/v1/auths',authRouter);
 app.use('/api/v1/contacts',contactRouter);
+app.use('/api/v1/utilities',utilityRouter);
 
 
 // catch 404 and forward to error handler
