@@ -7,7 +7,7 @@ let seeder = () => {
     admin();
     agent();
     user();
-    transactions();
+    // transactions();
 };
 
 
