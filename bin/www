@@ -11,6 +11,7 @@ const cluster = require("cluster");
 
 
 let workers = [];
+let numCores = require('os').cpus().length;
 
 /**
  * Setup number of worker processes to share port which will be defined while setting up server
@@ -20,7 +21,6 @@ const setupWorkerProcesses = () => {
   const server = http.createServer(app);
   require('../socket')(server);
   // to read number of cores on system
-  let numCores = require('os').cpus().length;
   console.log('Master cluster setting up ' + numCores + ' workers');
 
   // iterate on number of cores need to be utilized by an application
@@ -155,11 +155,10 @@ function onError(error, port) {
 }
 
 
-//run cluster mode in production
-if(process.env.APP_ENV == "production"){
-  // The request handler must be the first middleware on the app
+//Digital only
+
+if(numCores > 1){
   setupServer(true);
 }else{
   setupServer(false);
 }
-
