@@ -155,4 +155,11 @@ function onError(error, port) {
 }
 
 
-setupServer(false);
+//run cluster mode in production
+if(process.env.APP_ENV == "production"){
+  // The request handler must be the first middleware on the app
+  setupServer(true);
+}else{
+  setupServer(false);
+}
+
