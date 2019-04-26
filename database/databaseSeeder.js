@@ -2,7 +2,7 @@ const bcrypt = require('bcryptjs');
 const {User, Transaction} = require('../database/sequelize');
 const {fetchByEmail, generateUid} = require('../app/api/users/UserRepository');
 const transactionRepository = require('../app/api/transactions/TransactionRepository');
-const     randomSentence = require("random-sentence");
+const randomSentence = require("random-sentence");
 let seeder = () => {
     admin();
     agent();

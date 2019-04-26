@@ -8,7 +8,7 @@ const fs = require('fs');
 const expressValidator = require('express-validator');
 const cors = require('cors');
 const morgan = require('morgan');
-
+const Sentry = require('@sentry/node');
 const indexRouter = require('./routes/index');
 const usersRouter = require('./routes/api/users');
 const filesRouter = require('./routes/api/files');
@@ -28,6 +28,13 @@ const app = express();
 const {sequelize} = require('./database/sequelize');
 const {seeder} = require('./database/databaseSeeder');
 
+Sentry.init({ dsn: 'https://780ec425d68046ab8edabc8a37fa1597@sentry.io/1447209' });
+
+//sentry only enabled in production
+if(process.env.APP_ENV == "production"){
+    // The request handler must be the first middleware on the app
+    app.use(Sentry.Handlers.requestHandler());
+}
 
 sequelize
     .authenticate()
@@ -60,7 +67,7 @@ try {
 }
 
 //Routes
-// app.use('/', indexRouter);
+app.use('/', indexRouter);
 app.use('/api/v1',apiRouter);
 app.use('/api/v1/users',usersRouter);
 app.use('/api/v1/files',filesRouter);
@@ -75,6 +82,12 @@ app.use('/api/v1/auths',authRouter);
 app.use('/api/v1/contacts',contactRouter);
 app.use('/api/v1/utilities',utilityRouter);
 
+
+//sentry only enabled in production
+if(process.env.APP_ENV == "production"){
+    // The request handler must be the first middleware on the app
+    app.use(Sentry.Handlers.errorHandler());
+}
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {

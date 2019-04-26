@@ -14,6 +14,8 @@ let handler = (err, req, res, next) => {
 
     // res.locals.message = err.message;
     // res.locals.error = req.app.get('env') === 'development' ? err : {};
+    res.statusCode = 500;
+    // res.end(res.sentry + '\n');
     log(err.message);
     createErrorResponse(res,err.message, err);
 };
