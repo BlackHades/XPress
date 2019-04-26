@@ -28,10 +28,10 @@ const app = express();
 const {sequelize} = require('./database/sequelize');
 const {seeder} = require('./database/databaseSeeder');
 
-Sentry.init({ dsn: 'https://780ec425d68046ab8edabc8a37fa1597@sentry.io/1447209' });
 
 //sentry only enabled in production
 if(process.env.APP_ENV == "production"){
+    Sentry.init({ dsn: 'https://780ec425d68046ab8edabc8a37fa1597@sentry.io/1447209' });
     // The request handler must be the first middleware on the app
     app.use(Sentry.Handlers.requestHandler());
 }
