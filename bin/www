@@ -157,8 +157,12 @@ function onError(error, port) {
 
 //Digital only
 
-if(numCores > 1){
-  setupServer(true);
+if(process.env.APP_ENV == "production"){
+  if(numCores > 1){
+    setupServer(true);
+  }else{
+    setupServer(false);
+  }
 }else{
   setupServer(false);
 }

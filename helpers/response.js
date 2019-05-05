@@ -12,5 +12,6 @@ const validationHandler = result => {
 
 module.exports = {
   createSuccessResponse,
-  createErrorResponse, validationHandler
+  createErrorResponse,
+    validationHandler
 };
