@@ -16,6 +16,8 @@ const transactionValidator  = require('../../app/validator/TransactionValidator'
 router.use(authenticate);
 router.get("/all",transactionController.all);
 router.get("/show/:transactionId", transactionController.show);
+router.get("/details", transactionController.details);
+
 //Agents And Above
 router.use(agentAuth);
 router.post("/create",transactionValidator.create(),transactionController.create);
@@ -23,7 +25,6 @@ router.post("/create",transactionValidator.create(),transactionController.create
 
 router.use(adminAuth);
 router.delete("/delete/:transactionId", transactionController.destroy);
-router.get("/details", transactionController.details);
 
 
 

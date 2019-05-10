@@ -105,7 +105,16 @@ const show = (req, res, next) => {
 
 const details = async (req,res,next) => {
     try{
-        const transactions = await transactionRepository.getAllTransactions();
+
+        
+        if(req.user.roleId === role.ADMINISTRATOR)
+        transactions = await transactionRepository.getAllTransactions();
+        if(req.user.roleId === role.AGENT)
+            transactions = await transactionRepository.getAgentTransaction(req.user.id);
+        if(req.user.roleId === role.USER)
+            transactions = await transactionRepository.getUserTransaction(req.user.id);
+
+        
         const response = {};
 
         const success = _.filter(transactions, (transaction) => transaction.status == "SUCCESSFUL");
