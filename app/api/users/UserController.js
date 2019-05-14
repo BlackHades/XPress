@@ -40,6 +40,7 @@ let create = async (req, res, next) => {
             phone:payload.phone,
             password: hashedPassword
         });
+        delete user.dataValues.password;
         return createSuccessResponse(res, user, "User Created");
     }catch (e) {
         // handler(e);
