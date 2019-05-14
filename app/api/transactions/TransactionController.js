@@ -105,10 +105,9 @@ const show = (req, res, next) => {
 
 const details = async (req,res,next) => {
     try{
-
-        
+        let transactions = {};
         if(req.user.roleId === role.ADMINISTRATOR)
-        transactions = await transactionRepository.getAllTransactions();
+            transactions = await transactionRepository.getAllTransactions();
         if(req.user.roleId === role.AGENT)
             transactions = await transactionRepository.getAgentTransaction(req.user.id);
         if(req.user.roleId === role.USER)
