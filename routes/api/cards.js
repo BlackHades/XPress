@@ -13,6 +13,7 @@ const cardValidator  = require('../../app/validator/CardValidator');
 
 router.get('/all', cardController.all);
 router.get('/all/name', cardController.groupCardsByName);
+router.get("/available", cardController.available);
 router.get('/show/:cardId', cardController.show);
 
 

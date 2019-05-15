@@ -88,7 +88,7 @@ const update = async (req, res, next) => {
 };
 
 /**
- * Fetch All Users
+ * Fetch All Cards
  * @param req
  * @param res
  * @param next
@@ -101,6 +101,19 @@ const all = async (req, res, next) => {
     });
 };
 
+/**
+ * Fetch All Available Cards
+ * @param req
+ * @param res
+ * @param next
+ * @returns {Promise<void|*>}
+ */
+const available = async (req, res, next) => {
+    return createSuccessResponse(res, {
+        card: await cardRepository.available(),
+        bitcoin: await bitcoinRepository.fetch()
+    });
+};
 /**
  * Get Card By ID
  * @param req
@@ -127,7 +140,7 @@ const groupCardsByName = async (req,res,next) => {
     try{
         //get all cards/
         //loop through and put new data in an array
-        const result = await cardRepository.all();
+        const result = await cardRepository.available();
         let cards = {};
         for(let i = result.length; i > 0; i--){
             let j = i-1;
@@ -169,5 +182,5 @@ const toggleAvailability = async (req, res, next) =>{
     }
 };
 module.exports = {
-  create, destroy, update, all, show, groupCardsByName, toggleAvailability
+  create, destroy, update, all, show, groupCardsByName, toggleAvailability, available
 };

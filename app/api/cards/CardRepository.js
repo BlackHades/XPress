@@ -5,6 +5,10 @@ const all = () => {
     return Card.findAll();
 };
 
+const available = () => {
+    return Card.findAll({where:{isAvailable:1}});
+}
+
 const fetchByName = (name) => {
     return Card.findOne({where:{name:name}});
 };
@@ -40,5 +44,6 @@ module.exports = {
     update,
     destroy,
     find,
-    groupByName
+    groupByName,
+    available
 };
