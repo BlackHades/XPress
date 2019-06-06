@@ -66,7 +66,7 @@ let update = async (req, res, next) => {
         let user = req.user;
 
         //Update User
-        await userRepository.updateUser({name: payload.name, email:payload.email,phone:payload.phone},req.user.id);
+        await userRepository.updateUser({name: payload.name, email:payload.email,phone:payload.phone, isActive: payload.isActive || true},req.user.id);
         user = userRepository.find(user.id);
         return createSuccessResponse(res, user, "User Profile Updated");
     }catch (e) {
@@ -175,6 +175,17 @@ const toggleStatus = (req,res,next) => {
             return createSuccessResponse(res, await userRepository.find(req.user.id) , `Agent is ${req.params.status}`)
         }).catch(err => next(err));
 };
+
+const toggleIsActive = (req,res, next) => {
+    console.log("param",req.body);
+    userRepository.updateUser({
+        isActive: req.body.isActive ? true :false
+    },req.body.userId)
+        .then(async response => {
+            log("response: " + response);
+            return createSuccessResponse(res, await userRepository.find(req.body.userId) ,  "User Record Is Updated")
+        }).catch(err => next(err));
+};
 module.exports = {
-  create, update, avatar, all, destroy, details, me, agents, toggleStatus
+  create, update, avatar, all, destroy, details, me, agents, toggleStatus, toggleIsActive
 };

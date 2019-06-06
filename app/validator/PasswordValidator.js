@@ -1,5 +1,6 @@
 const { check } = require('express-validator/check');
 const {fetchByEmail} = require('../api/users/UserRepository');
+const jwt = require('jsonwebtoken');
 
 let change = () => {
     return [
@@ -12,13 +13,7 @@ let change = () => {
 let reset = () => {
     return [
         check('newPassword','New Password is Required').exists(),
-        check('email').custom(value => {
-            return fetchByEmail(value).then(user => {
-                if(!user){
-                    return Promise.reject('Email Not Found');
-                }
-            })
-        })
+        check('token').not().isEmpty()
     ];
 };
 

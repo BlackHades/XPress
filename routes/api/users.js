@@ -10,6 +10,8 @@ const userController = require('../../app/api/users/UserController');
 //Validators
 const userValidator  = require('../../app/validator/UserValidator');
 
+
+
 //General Auth
 router.use(authenticate);
 router.post('/update', userValidator.update(),  userController.update);
@@ -22,6 +24,7 @@ router.get('/all', userController.all);
 
 //Agents And Above
 
+
 router.use(agentAuth);
 router.get("/toggle/status/:status", userController.toggleStatus);
 
@@ -33,6 +36,6 @@ router.get("/toggle/status/:status", userController.toggleStatus);
 router.use(adminAuth);
 router.post('/create', userValidator.create(), userController.create);
 router.delete('/delete/:userId', userValidator.destroy(), userController.destroy);
-
+router.post("/update/is/active", userController.toggleIsActive);
 module.exports = router;
 

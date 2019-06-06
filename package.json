@@ -6,6 +6,7 @@
     "start": "node ./bin/www"
   },
   "dependencies": {
+    "@sendgrid/mail": "^6.4.0",
     "@sentry/node": "latest",
     "bcryptjs": "^2.4.3",
     "cloudinary": "^1.13.2",

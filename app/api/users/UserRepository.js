@@ -13,7 +13,7 @@ const uuid = require("uuid");
  */
 const fetchByEmail =  (email, withPassword = false) => {
     if(withPassword)
-        return User.scope("withPassword").findOne({where:{email:email}});
+        return User.scope("withPassword","active").findOne({where:{email:email}});
     else
         return User.findOne({where:{email:email}});
 };

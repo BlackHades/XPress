@@ -32,6 +32,10 @@ module.exports = (sequelize, type) => {
         status:{
             type: type.STRING,
             defaultValue:"offline"
+        },
+        isActive:{
+            type: type.BOOLEAN,
+            defaultValue: true
         }
     },{
         defaultScope: {
@@ -42,6 +46,11 @@ module.exports = (sequelize, type) => {
             withPassword: {
                 attributes:{
                     include: ["password"]
+                }
+            },
+            active:{
+                where:{
+                    isActive: true
                 }
             }
         }

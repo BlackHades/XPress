@@ -11,7 +11,8 @@ const passwordController = require('../../app/api/passwords/PasswordController')
 const passwordValidator  = require('../../app/validator/PasswordValidator');
 
 //Reset Password
-router.post('/reset', passwordController.reset);
+router.post('/reset', passwordValidator.reset(), passwordController.reset);
+router.get('/reset', passwordController.send);
 
 //Auth
 router.use(authenticate);

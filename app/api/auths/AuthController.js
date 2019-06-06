@@ -29,6 +29,8 @@ const login = async (req, res, next) => {
     //Fetch User By Email
     let user = await fetchByEmail(payload.email, true);
 
+    if(!user.isActive)
+      return createErrorResponse(res,"Your Account is Inactive. Kindly Contact Your The Admin");
     //Compare Password
     if(!bcrypt.compareSync(payload.password,user.password))
       return createErrorResponse(res,"Invalid Credentials",);
@@ -60,8 +62,8 @@ const login = async (req, res, next) => {
     return createSuccessResponse(res,{
       user:user,
       token:{
-        access:access,
-        refresh:refresh
+        access,
+        refresh
       }},"Login Successful" )
   }catch (e) {
      next(e);
