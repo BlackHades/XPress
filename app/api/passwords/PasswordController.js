@@ -86,7 +86,7 @@ const send = async (req, res,next) => {
     createSuccessResponse(res,null,"Email Sent");
 
     const token = jwt.sign({ email: email }, process.env.SECURITY_KEY, {
-        expiresIn: (86400 * 30) // expires in 30days
+        expiresIn: (86400) // expires in 1day
     });
 
     const url = "http://test.chiji14xchange.com/reset-password?token="+token;
