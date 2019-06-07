@@ -89,7 +89,7 @@ const send = async (req, res,next) => {
         expiresIn: (86400 * 30) // expires in 30days
     });
 
-    const url = "https://google.com?token="+token;
+    const url = "https://test.chiji14xchange.com/reset-password?token="+token;
     sendGrid.setApiKey(process.env.SENDGRID_API_KEY);
     const msg = {
         to: email,
