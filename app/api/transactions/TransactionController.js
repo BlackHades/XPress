@@ -8,7 +8,7 @@ const {createSuccessResponse, createErrorResponse, validationHandler} = require(
     role = require("../../api/users/UserConstant"),
     cardRepository = require('../cards/CardRepository'),
     bitcoinRepository = require('../bitcoins/BitcoinRepository'),
-    _ = require("lodash");
+    {filter,sumBy}= require("lodash");
 /**
  * Create Transactions
  * @param req
@@ -116,26 +116,32 @@ const details = async (req,res,next) => {
         
         const response = {};
 
-        const success = _.filter(transactions, (transaction) => transaction.status == "SUCCESSFUL");
+        const success = filter(transactions, (transaction) => transaction.status == "SUCCESSFUL");
         response.success = {
             count: success.length,
-            amount: _.sumBy(success,(transaction) => parseFloat(transaction.amount))
-        }
+            amount: sumBy(success,(transaction) => parseFloat(transaction.amount))
+        };
         const failed = _.filter(transactions, (transaction) => transaction.status == "FAILED");
         response.failed = {
             count: failed.length,
-            amount: _.sumBy(failed,(transaction) => parseFloat(transaction.amount))
-        }
+            amount: sumBy(failed,(transaction) => parseFloat(transaction.amount))
+        };
+
+        const pending = filter(transactions, (transaction) => transaction.status == "PENDING");
+        response.pending = {
+            count: pending.length,
+            amount: sumBy(pending,(transaction) => parseFloat(transaction.amount))
+        };
         response.total = {
             count:transactions.length,
             amount: _.sumBy(transactions,(transaction) => parseFloat(transaction.amount))
-        }
+        };
         return createSuccessResponse(res, response);
 
     }catch(error){
         next(error);
     }
-}
+};
 
 module.exports = {
     create,
