@@ -121,7 +121,7 @@ const details = async (req,res,next) => {
             count: success.length,
             amount: sumBy(success,(transaction) => parseFloat(transaction.amount))
         };
-        const failed = _.filter(transactions, (transaction) => transaction.status == "FAILED");
+        const failed = filter(transactions, (transaction) => transaction.status == "FAILED");
         response.failed = {
             count: failed.length,
             amount: sumBy(failed,(transaction) => parseFloat(transaction.amount))
@@ -134,8 +134,9 @@ const details = async (req,res,next) => {
         };
         response.total = {
             count:transactions.length,
-            amount: _.sumBy(transactions,(transaction) => parseFloat(transaction.amount))
+            amount: sumBy(transactions,(transaction) => parseFloat(transaction.amount))
         };
+        console.log("total", response);
         return createSuccessResponse(res, response);
 
     }catch(error){

@@ -13,7 +13,8 @@ const sequelize = new Sequelize(process.env.DB_NAME, process.env.DB_USERNAME, pr
         charset: 'utf8',
         collate: 'utf8_general_ci',
     },
-    operatorsAliases: false
+    operatorsAliases: false,
+    logging:false
 });
 
 
