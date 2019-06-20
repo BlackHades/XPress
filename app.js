@@ -55,7 +55,7 @@ app.set('view engine', 'jade');
 
 app.use(cors());
 app.use(morgan('combined'));
-app.use(express.json({ limit: '10mb' }));
+app.use(express.json({ limit: '20mb' }));
 app.use(expressValidator());
 app.use(express.urlencoded({ extended: true }));
 app.use(express.static(path.resolve('./public')));

@@ -71,6 +71,7 @@ const setupExpress = () => {
   const port = normalizePort(process.env.PORT || '3000');
   app.set('port', port);
 
+  console.log("Port", port);
 
   /**
    * Listen on provided port, on all network interfaces.
