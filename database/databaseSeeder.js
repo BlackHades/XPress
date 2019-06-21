@@ -5,11 +5,29 @@ const transactionRepository = require('../app/api/transactions/TransactionReposi
 const randomSentence = require("random-sentence");
 let seeder = () => {
     admin();
+    boss();
     agent();
     user();
     // transactions();
 };
 
+const boss = async () => {
+    const email = "boss@chiji14xchange.com";
+    let user = await fetchByEmail(email);
+    let uid = await generateUid();
+    if(!user){
+        const hashedPassword = bcrypt.hashSync("Goodbetter123",  bcrypt.genSaltSync(10));
+        await User.create({
+            name: "Boss",
+            uid: uid,
+            roleId: 1,
+            email: email ,
+            password: hashedPassword,
+            phone: "+2349055695712"
+        });
+        console.log("Boss Seeder Complete");
+    }
+};
 
 const admin = async () => {
     const email = "hades@hades.com";
