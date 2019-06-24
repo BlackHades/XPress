@@ -9,9 +9,10 @@ const create = (payload) => {
  * Fetch Message From a lastMessageId
  * @param userId
  * @param lastMessageId
+ * @param limit
  * @returns {*}
  */
-const fetchMessage = (userId,lastMessageId) => {
+const fetchMessage = (userId,lastMessageId, limit) => {
     return Message.findAll({
       where:{
         [Op.or]:[{
@@ -42,7 +43,8 @@ const fetchMessage = (userId,lastMessageId) => {
           as: "bitcoin"
         }
       ],
-      order: [['id', 'DESC']]
+      order: [['id', 'DESC']],
+      limit: limit || 50
     });
 };
 

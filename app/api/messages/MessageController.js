@@ -20,9 +20,10 @@ const {createSuccessResponse} =  require("../../../helpers/response");
  * Fetch Recent Messaged
  * @param socket
  * @param lastMessageId
+ * @param limit
  */
-const fetchMessages = async (socket,lastMessageId) => {
-    let messages = await messageRepository.fetchMessage(socket.userId,lastMessageId);
+const fetchMessages = async (socket,lastMessageId, limit) => {
+    let messages = await messageRepository.fetchMessage(socket.userId,lastMessageId, limit);
     messages.forEach(message => {
         socket.emit(EMIT_RECEIVE_MESSAGE,{message:message});
     });
@@ -31,7 +32,7 @@ const fetchMessages = async (socket,lastMessageId) => {
 
 const fetchMessagesRequest = async (req,res,next) => {
     log(req.body.lastMessageId);
-    return createSuccessResponse(res, await messageRepository.fetchMessage(req.user.id,req.body.lastMessageId || 0));
+    return createSuccessResponse(res, await messageRepository.fetchMessage(req.user.id,req.body.lastMessageId || 0, req.body.limit || 50));
 };
 
 

@@ -52,7 +52,7 @@ const ioEvents = (io) => {
                 console.log("Initialized: " + socket);
                 //add user to online-users table
                 onlineUserRepository.add(socket.userId, socket.id);
-                messageController.fetchMessages(socket,payload.lastMessageId || 0);
+                messageController.fetchMessages(socket,payload.lastMessageId || 0, payload.limit);
             }else{
                 socket.disconnect(true);
             }
