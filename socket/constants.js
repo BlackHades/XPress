@@ -11,6 +11,7 @@ const EVENT_MARK_MESSAGE_AS_DELIVERED = "event-mark-message-as-delivered";
 const EMIT_ERROR = "emit-error";
 const EMIT_AUTHENTICATED = "emit-authenticated";
 const EMIT_RECEIVE_MESSAGE = "emit-receive-message";
+const EMIT_MESSAGE_IN_BULK = "emit-receive-message-in-bulk";
 const EMIT_MESSAGE_SENT = "emit-message-sent";
 module.exports = {
     CONNECTION,
@@ -29,4 +30,5 @@ module.exports = {
     EMIT_AUTHENTICATED,
     EMIT_RECEIVE_MESSAGE,
     EMIT_MESSAGE_SENT,
+    EMIT_MESSAGE_IN_BULK
 };

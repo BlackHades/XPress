@@ -6,6 +6,7 @@ const cardRepository =  require("../cards/CardRepository");
 const {
     EMIT_RECEIVE_MESSAGE,
     EMIT_MESSAGE_SENT,
+    EMIT_MESSAGE_IN_BULK,
     EMIT_ERROR
 } = require("../../../socket/constants");
 
@@ -24,9 +25,65 @@ const {createSuccessResponse} =  require("../../../helpers/response");
  */
 const fetchMessages = async (socket,lastMessageId, limit) => {
     let messages = await messageRepository.fetchMessage(socket.userId,lastMessageId, limit);
-    messages.forEach(message => {
-        socket.emit(EMIT_RECEIVE_MESSAGE,{message:message});
+
+    let list = [];
+    messages.map(message => {
+        list = createChatList(message, message.from === socket.userId ? "sent" : "received", list);
     });
+    socket.emit(EMIT_MESSAGE_IN_BULK,{list});
+};
+
+
+const createChatList = (message, type, list = []) => {
+
+    let user;
+    if (type === 'received') {
+        for (let i = 0; i < list.length; i++) {
+            //check list and match a record to the message sender
+            if (list[i].id === message.from) {
+                user = list[i];
+                //splice
+                list.splice(i, 1);
+                break;
+            }
+        }
+    } else {
+        for (let i = 0; i < list.length; i++) {
+            if (list[i].id === message.to) {
+                user = list[i];
+                list.splice(i, 1);
+                break;
+            }
+        }
+    }
+    if (user) {
+        const matchedMessages = user.messages.filter(m => message.mid === m.mid);
+        if (matchedMessages.length === 0) {
+            user.messages.unshift(message);
+        }
+    } else {
+        if (message) {
+            if (type === "received") {
+                user = {
+                    id: message.sender.id,
+                    name: message.sender.name,
+                    avatar: message.sender.avatar,
+                    roleId: message.sender.roleId,
+                    messages: [message],
+                }
+            } else {
+                user = {
+                    id: message.receiver.id,
+                    name: message.receiver.name,
+                    avatar: message.receiver.avatar,
+                    roleId: message.receiver.roleId,
+                    messages: [message],
+                }
+            }
+        }
+    }
+    list.unshift(user);
+    return list;
 };
 
 

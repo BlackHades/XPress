@@ -43,7 +43,7 @@ const fetchMessage = (userId,lastMessageId, limit) => {
           as: "bitcoin"
         }
       ],
-      order: [['id', 'DESC']]
+      order: [['id', 'ASC']]
       // limit: limit || 50
     });
 };
