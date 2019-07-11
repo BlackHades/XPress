@@ -1,5 +1,5 @@
 const { check } = require('express-validator/check');
-const {fetchByEmail} = require('../api/users/UserRepository');
+const {fetchByEmail} = require('../users/UserRepository');
 const jwt = require('jsonwebtoken');
 
 let change = () => {

@@ -18,7 +18,7 @@ const upload = multer({storage: storage});
 
 
 //Controllers
-const fileController = require('../../app/api/files/FileController');
+const fileController = require('../../app/files/FileController');
 
 
 //Route

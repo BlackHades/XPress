@@ -1,5 +1,5 @@
 const { check } = require('express-validator/check');
-const {fetchByEmail,fetchByPhone} = require('../api/users/UserRepository');
+const {fetchByEmail,fetchByPhone} = require('../users/UserRepository');
 
 let login = () => {
     return [

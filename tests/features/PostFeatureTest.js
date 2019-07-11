@@ -6,7 +6,7 @@ const app = require('../../app'),
 
 const  expect = chai.expect;
 
-const {destroy,find} = require("../../app/api/users/UserRepository");
+const {destroy,find} = require("../../app/users/UserRepository");
 
 describe('Posts API Integration Tests', function() {
 

@@ -18,18 +18,18 @@ const sequelize = new Sequelize(process.env.DB_NAME, process.env.DB_USERNAME, pr
 });
 
 
-const User = require('../app/api/users/UserModel')(sequelize, Sequelize);
-const File = require('../app/api/files/FileModel')(sequelize, Sequelize);
-const Card = require('../app/api/cards/CardModel')(sequelize, Sequelize);
-const Message = require('../app/api/messages/MessageModel')(sequelize, Sequelize);
-const OnlineUser = require('../app/api/online-users/OnlineUserModel')(sequelize, Sequelize);
-const Post = require('../app/api/posts/PostModel')(sequelize, Sequelize);
-const Comment = require("../app/api/comments/CommentModel")(sequelize, Sequelize);
-const Transaction = require("../app/api/transactions/TransactionModel")(sequelize, Sequelize);
-const PushToken = require("../app/api/push-notifications/PushTokenModel")(sequelize, Sequelize);
-const Bitcoin = require("../app/api/bitcoins/BitcoinModel")(sequelize, Sequelize);
-const Contact = require("../app/api/contact-us/ContactModel")(sequelize, Sequelize);
-const Utility = require("../app/api/utilities/UtilityModel")(sequelize, Sequelize);
+const User = require('../app/users/UserModel')(sequelize, Sequelize);
+const File = require('../app/files/FileModel')(sequelize, Sequelize);
+const Card = require('../app/cards/CardModel')(sequelize, Sequelize);
+const Message = require('../app/messages/MessageModel')(sequelize, Sequelize);
+const OnlineUser = require('../app/online-users/OnlineUserModel')(sequelize, Sequelize);
+const Post = require('../app/posts/PostModel')(sequelize, Sequelize);
+const Comment = require("../app/comments/CommentModel")(sequelize, Sequelize);
+const Transaction = require("../app/transactions/TransactionModel")(sequelize, Sequelize);
+const PushToken = require("../app/push-notifications/PushTokenModel")(sequelize, Sequelize);
+const Bitcoin = require("../app/bitcoins/BitcoinModel")(sequelize, Sequelize);
+const Contact = require("../app/contact-us/ContactModel")(sequelize, Sequelize);
+const Utility = require("../app/utilities/UtilityModel")(sequelize, Sequelize);
 /**
  * Relationships
  */

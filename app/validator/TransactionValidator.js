@@ -1,11 +1,11 @@
 'use strict';
 
-const { check } = require('express-validator/check'), role = require("../api/users/UserConstant");
-const transactionRepository = require('../api/transactions/TransactionRepository');
-const transactionConstant = require('../api/transactions/TransactionConstant');
-const cardRepository = require('../api/cards/CardRepository');
-const bitcoinRepository = require('../api/bitcoins/BitcoinRepository');
-const userRepository = require('../api/users/UserRepository');
+const { check } = require('express-validator/check'), role = require("../users/UserConstant");
+const transactionRepository = require('../transactions/TransactionRepository');
+const transactionConstant = require('../transactions/TransactionConstant');
+const cardRepository = require('../cards/CardRepository');
+const bitcoinRepository = require('../bitcoins/BitcoinRepository');
+const userRepository = require('../users/UserRepository');
 
 let create = () => {
     return [

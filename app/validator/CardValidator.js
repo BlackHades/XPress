@@ -1,6 +1,6 @@
 'use strict';
 const { check } = require('express-validator/check');
-const {fetchByName} = require('../api/cards/CardRepository');
+const {fetchByName} = require('../cards/CardRepository');
 
 let create = () => {
     return [

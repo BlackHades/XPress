@@ -1,6 +1,6 @@
 'use strict';
 const {authenticate} = require("../app/middleware/SocketMiddleware");
-const onlineUserRepository= require("../app/api/online-users/OnlineUserRepository");
+const onlineUserRepository= require("../app/online-users/OnlineUserRepository");
 const {
 
     //Events
@@ -26,7 +26,7 @@ const init = (server) => {
 };
 
 //Controller
-const messageController = require('../app/api/messages/MessageController');
+const messageController = require('../app/messages/MessageController');
 
 /**
  * This Methods handles all events and emitters of the socket

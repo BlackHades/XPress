@@ -6,7 +6,7 @@ const app = require('../../app'),
 
 
 const  expect = chai.expect;
-const {find} = require('../../app/api/users/UserRepository');
+const {find} = require('../../app/users/UserRepository');
 
 describe("CardController Test", () => {
     // const user = await find(1);

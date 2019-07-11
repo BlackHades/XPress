@@ -1,5 +1,5 @@
 const { check, param, query } = require('express-validator/check');
-const {fetchByEmail} = require('../api/users/UserRepository');
+const {fetchByEmail} = require('../users/UserRepository');
 
 
 /**

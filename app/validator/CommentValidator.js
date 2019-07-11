@@ -1,8 +1,8 @@
 'use strict';
 const { check } = require('express-validator/check');
-const {find} = require('../api/users/UserRepository');
+const {find} = require('../users/UserRepository');
 
-const postRepository = require('../api/posts/PostRepository');
+const postRepository = require('../posts/PostRepository');
 
 
 const create = () => {

@@ -5,7 +5,7 @@ const router = express.Router();
 const {authenticate, adminAuth} = require('../../app/middleware/ApiAuthMiddleware');
 
 //Controllers
-const cardController = require('../../app/api/cards/CardController');
+const cardController = require('../../app/cards/CardController');
 
 //Validators
 const cardValidator  = require('../../app/validator/CardValidator');

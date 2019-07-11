@@ -5,7 +5,7 @@ const router = express.Router();
 const {authenticate} = require('../../app/middleware/ApiAuthMiddleware');
 
 //Controllers
-const passwordController = require('../../app/api/passwords/PasswordController');
+const passwordController = require('../../app/passwords/PasswordController');
 
 //Validators
 const passwordValidator  = require('../../app/validator/PasswordValidator');

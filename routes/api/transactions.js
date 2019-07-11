@@ -6,7 +6,7 @@ const router = express.Router();
 const {authenticate, adminAuth, agentAuth} = require('../../app/middleware/ApiAuthMiddleware');
 
 //Controllers
-const transactionController = require('../../app/api/transactions/TransactionController');
+const transactionController = require('../../app/transactions/TransactionController');
 
 //Validators
 const transactionValidator  = require('../../app/validator/TransactionValidator');

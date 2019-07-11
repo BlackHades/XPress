@@ -1,6 +1,6 @@
 const jwt = require('jsonwebtoken');
 const config = require('../../config/config');
-const roles = require('../api/users/UserConstant');
+const roles = require('../users/UserConstant');
 
 const {createErrorResponse} = require('../../helpers/response');
 

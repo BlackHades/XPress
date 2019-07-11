@@ -5,7 +5,7 @@ const router = express.Router();
 const {authenticate,adminAuth} = require('../../app/middleware/ApiAuthMiddleware');
 
 //Controllers
-const bitcoinController = require('../../app/api/bitcoins/BitcoinController');
+const bitcoinController = require('../../app/bitcoins/BitcoinController');
 
 //Validators
 const bitcoinValidator  = require('../../app/validator/BitcoinValidator');
