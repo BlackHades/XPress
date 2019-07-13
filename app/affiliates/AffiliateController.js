@@ -84,11 +84,11 @@ exports.status = async (req,res) => {
     createSuccessResponse(res, affiliate, "Status Successfully Changed");
 
     if(affiliate.status == "approved"){
-        emailService.send(affiliate.email, messages.affiliateEmailApproval(), affiliate.username, "Account Approval")
+        emailService.send(affiliate.email, message || messages.affiliateEmailApproval(), affiliate.username, "Account Approval")
             .then(res => debug("Res", res))
             .catch(err => debug(err));
     }else{
-        emailService.send(affiliate.email, messages.affiliateEmailRejection(), affiliate.username, "Account Rejection", )
+        emailService.send(affiliate.email, message || messages.affiliateEmailRejection(), affiliate.username, "Account Rejection", )
             .then(res => debug("Res", res))
             .catch(err => debug(err));
     }

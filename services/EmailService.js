@@ -39,7 +39,7 @@ class EmailService {
                         <body>
                             <div>
                                 <h3>Dear ${name},</h3>
-                                <p>${message}</p>
+                                <p>${text}</p>
                                 <br>
                                 <p>Cheers!</p>
                             </div>
