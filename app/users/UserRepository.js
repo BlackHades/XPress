@@ -13,6 +13,7 @@ class UserRepository extends Repository{
         this.fetchByEmail = this.fetchByEmail.bind(this);
         this.fetchByPhone = this.fetchByPhone.bind(this);
         this.destroy = this.destroy.bind(this);
+        this.fetchByRole = this.fetchByRole.bind(this);
     }
     async generateUid(){
         let uid = uuid.v4();
@@ -49,9 +50,9 @@ class UserRepository extends Repository{
             return this.all({where: {roleId: {[Op.ne]: userConstant.USER}}});
     }
 
-    fetchByRole = (roleId) => {
+    fetchByRole(roleId){
         return this.all({where:{roleId:roleId}});
-    };
+    }
 }
 
 module.exports = (new UserRepository());

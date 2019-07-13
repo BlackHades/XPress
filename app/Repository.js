@@ -11,6 +11,7 @@ class Repository{
         this.create = this.create.bind(this);
         this.destroy = this.destroy.bind(this);
         this.truncate = this.truncate.bind(this);
+        this.bulkCreate = this.bulkCreate.bind(this);
     }
     create(payload){
         return this.Model.create(payload);
@@ -38,6 +39,10 @@ class Repository{
 
     truncate(condition){
         return this.Model.truncate({where:condition});
+    }
+
+    bulkCreate(payload = []){
+        return this.Model.bulkCreate(payload);
     }
 
     getModel(){

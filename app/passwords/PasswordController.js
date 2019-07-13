@@ -1,3 +1,4 @@
+"use strict";
 const {createSuccessResponse, createErrorResponse, validationHandler} = require('../../helpers/response');
 const {validationResult } = require('express-validator/check');
 const bcrypt = require('bcryptjs');
@@ -77,6 +78,7 @@ let reset = async (req, res, next) => {
 
 const send = async (req, res,next) => {
     const email = req.query.email;
+    const redirectUrl = req.query.redirectUrl;
     if(!email)
         return createErrorResponse(res, "Email Not Found");
     const user = await fetchByEmail(email);
@@ -89,13 +91,14 @@ const send = async (req, res,next) => {
         expiresIn: (86400) // expires in 1day
     });
 
-    const url = "http://test.chiji14xchange.com/reset-password?token="+token;
+    let url = "http://chiji14xchange.com/reset-password?token=";
+    url = (redirectUrl || url) + token;
     sendGrid.setApiKey(process.env.SENDGRID_API_KEY);
     const msg = {
         to: email,
         from: 'no-reply@chiji14xchange.com',
         subject: 'Password Reset',
-        text: `Dear ${user.name},\nYou requested for a password reset, kindly click on ${url} to reset your password`,
+        text: `Dear ${user.name},\nYou requested for a password reset, kindly click on ${redirectUrl || url} to reset your password`,
         html: `<!DOCTYPE html>
 <html>
 
