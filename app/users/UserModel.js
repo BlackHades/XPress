@@ -37,6 +37,14 @@ module.exports = (sequelize, type) => {
         isActive:{
             type: type.BOOLEAN,
             defaultValue: true
+        },
+        emailVerifiedAt:{
+            type: type.DATE,
+            allowNull: true,
+        },
+        phoneVerifiedAt:{
+            type: type.DATE,
+            allowNull: true,
         }
     },{
         defaultScope: {

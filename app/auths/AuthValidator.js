@@ -1,6 +1,6 @@
 "use strict";
 const { check } = require('express-validator/check');
-const {fetchByEmail,fetchByPhone} = require('../users/UserRepository');
+const {fetchByEmail,fetchByPhone, truncate} = require('../users/UserRepository');
 
 let login = () => {
     return [
@@ -12,11 +12,11 @@ let login = () => {
 
 let register = () => {
     return [
-        check('name','Name is required').exists(),
-        check('password','Password is required').exists(),
-        check('email','Email is required').exists(),
-        check('phone','Phone number is required').exists(),
-        check('email').custom(value => {
+        check('name','Name is required').not().isEmpty(),
+        check('password','Password is required').not().isEmpty(),
+        check('email','Email is required').not().isEmpty(),
+        check('phone','Phone number is required').not().isEmpty(),
+        check('email').custom(async value => {
             return fetchByEmail(value).then(user => {
                 if(user){
                     return Promise.reject('Email has been taken');

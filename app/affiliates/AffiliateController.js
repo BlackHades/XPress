@@ -17,6 +17,7 @@ exports.create = async (req, res, next) => {
             return createErrorResponse(res,validationHandler(valFails), valFails.array);
 
         let payload = req.body;
+        payload.username = `_${payload.username}`;
         payload.phoneNumber = formatPhone(payload.phoneNumber);
         payload.password = bcrypt.hashSync(payload.password, bcrypt.genSaltSync(10));
         let affiliate =  await affiliateRepository.create(payload);

@@ -17,7 +17,7 @@ class UserRepository extends Repository{
     }
     async generateUid(){
         let uid = uuid.v4();
-        let user = await this.findOne({where:{uid:uid}});
+        let user = await this.findOne({uid:uid});
         if(user == null)
             return uid;
         else
