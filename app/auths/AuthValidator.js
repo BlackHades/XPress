@@ -4,15 +4,7 @@ const {fetchByEmail,fetchByPhone} = require('../users/UserRepository');
 let login = () => {
     return [
         check('email','email is required').exists(),
-        check('password','password is required').exists(),
-        check('email','email has been taken').custom(value => {
-            return fetchByEmail(value).then(user => {
-                // console.log("Validation-Email: " + user);
-                if(!user){
-                    return Promise.reject('Invalid Email');
-                }
-            })
-        })
+        check('password','password is required').exists()
     ];
 };
 

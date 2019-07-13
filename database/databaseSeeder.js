@@ -9,7 +9,7 @@ let seeder = () => {
     // boss();
     // agent();
     // user();
-    seedUsername();
+    // seedUsername();
 };
 
 // const boss = async () => {

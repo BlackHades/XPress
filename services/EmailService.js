@@ -18,12 +18,12 @@ class EmailService {
         }));
     }
 
-    send(to, msg, name = "User", subject){
-        const payload = this.formatTextToEmail(to,msg, name, subject);
+    send(to, msg, name = "User", subject,  from = "no-reply@chiji14xchange.com"){
+        const payload = this.formatTextToEmail(to,msg, name, subject, from);
         return sendGrid.send(payload);
     }
 
-    formatTextToEmail(email, text, name, subject, from = "no-reply@chiji14xchange.com'"){
+    formatTextToEmail(email, text, name, subject,from){
         return {
             to: email,
             from ,
@@ -39,7 +39,7 @@ class EmailService {
                         <body>
                             <div>
                                 <h3>Dear ${name},</h3>
-                                <p>${message}</p>
+                                <p>${text}</p>
                                 <br>
                                 <p>Cheers!</p>
                             </div>

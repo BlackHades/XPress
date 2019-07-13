@@ -22,7 +22,7 @@ class Repository{
     }
 
     findOne(condition){
-        return this.Model.findOne({where:condition});
+        return this.Model.findOne({where: condition});
     }
 
     update(condition, update){

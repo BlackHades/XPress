@@ -9,6 +9,7 @@ const AuthValidator  = require('../../app/auths/AuthValidator');
 
 
 router.post('/login', AuthValidator.login(), AuthController.login);
+router.post('/login/affiliates', AuthValidator.login(), AuthController.affiliates);
 router.post('/register', AuthValidator.register(), AuthController.register);
 
 

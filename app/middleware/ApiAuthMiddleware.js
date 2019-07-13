@@ -24,7 +24,9 @@ let authenticate = (req,res,next) => {
         if (err) return createErrorResponse(res,'Failed to authenticate token.');
         // console.log("User: " + JSON.stringify(decoded));
         let user = decoded.user;
+        let affiliate = decoded.affiliate;
         req.user = user;
+        req.affiliate = affiliate;
         if(user.roleId === roles.AGENT)
             req.agent = user;
         if(user.roleId === roles.ADMINISTRATOR)

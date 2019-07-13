@@ -9,6 +9,8 @@ const emailService = require("../../services/EmailService");
 const verificationRepository = require("../verifications/VerificationRepository");
 const smsService = require("../../services/SMSService");
 const messages =  require("../../helpers/Messages");
+const jwt = require('jsonwebtoken');
+
 exports.create = async (req, res, next) => {
     try{
         const valFails = validationResult(req);
@@ -18,8 +20,24 @@ exports.create = async (req, res, next) => {
         let payload = req.body;
         payload.phoneNumber = formatPhone(payload.phoneNumber);
         payload.password = bcrypt.hashSync(payload.password, bcrypt.genSaltSync(10));
-        let affiliates =  await affiliateRepository.create(payload);
-        createSuccessResponse(res, affiliates);
+        let affiliate =  await affiliateRepository.create(payload);
+        const access = jwt.sign({affiliate}, process.env.SECURITY_KEY, {
+            expiresIn: 86400 * 2 // expires in 48 hours if its not from a mobile device else 30 days
+        });
+
+        const refresh = jwt.sign({affiliateId: affiliate.id}, process.env.SECURITY_KEY, {
+            expiresIn: 86400 * 100 // expires in 30days
+        });
+
+        delete affiliate.dataValues.password;
+
+        createSuccessResponse(res, {
+            affiliate,
+            token: {
+                access: access,
+                refresh: refresh
+            }
+        }, "Application Submitted Successfully");
 
 
         const emailVerification = {
@@ -42,7 +60,7 @@ exports.create = async (req, res, next) => {
             phoneVerification
         ],{returning: true});
 
-        emailService.send(emailVerification.value, messages.affiliateEmailVerification(emailVerification.code), affiliates.name, "Confirm Your Email")
+        emailService.send(emailVerification.value, messages.affiliateEmailVerification(emailVerification.code), affiliate.name, "Confirm Your Email")
             .then(res => debug(res))
             .catch(err => {
                 debug("Err");
@@ -51,20 +69,19 @@ exports.create = async (req, res, next) => {
             });
 
 
-        let phoneMessage = messages.phoneNumberVerification(affiliates.username, phoneVerification.code);
-        smsService.send(affiliates.phoneNumber, phoneMessage)
+        let phoneMessage = messages.phoneNumberVerification(affiliate.username, phoneVerification.code);
+        smsService.send(affiliate.phoneNumber, phoneMessage)
             .then(res => debug("RES", res))
             .catch(err => debug("Err", err));
 
-        
+
         //send email code and sms code
     }catch (e) {
+        debug("Error", e);
         // handler(e);
         next(e);
     }
 };
-
-
 exports.status = async (req,res) => {
     let allStatus = ["rejected","approved"];
     const {status, affiliateId, message} = req.query;
@@ -86,11 +103,11 @@ exports.status = async (req,res) => {
     if(affiliate.status == "approved"){
         emailService.send(affiliate.email, messages.affiliateEmailApproval(), affiliate.username, "Account Approval")
             .then(res => debug("Res", res))
-            .catch(err => debug(err));
+            .catch(err => debug("Error", err));
     }else{
         emailService.send(affiliate.email, messages.affiliateEmailRejection(), affiliate.username, "Account Rejection", )
             .then(res => debug("Res", res))
-            .catch(err => debug(err));
+            .catch(err => debug("Err", err));
     }
 };
 
