@@ -39,11 +39,11 @@ module.exports = (sequelize, type) => {
             defaultValue: true
         },
         affiliateCode:{
-            type: Sequelize.STRING,
+            type: type.STRING,
             allowNull: true,
         },
         referralCode:{
-            type: Sequelize.STRING,
+            type: type.STRING,
             allowNull: true,
         },
         emailVerifiedAt:{

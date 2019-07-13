@@ -101,6 +101,7 @@ exports.status = async (req,res) => {
         return createSuccessResponse(res, affiliate, "Status Successfully Changed");
 
     affiliate.status = status.toLowerCase();
+    affiliate.approvedBy = req.user.id;
     affiliate = await affiliate.save();
     createSuccessResponse(res, affiliate, "Status Successfully Changed");
 
@@ -114,10 +115,14 @@ exports.status = async (req,res) => {
             .catch(err => debug("Err", err));
     }
 };
+
+
 exports.me = async (req,res) => {
     const affiliate = await affiliateRepository.find(req.affiliate.id);
     return createSuccessResponse(res, affiliate);
 };
+
+
 exports.all = async (req, res) => {
     const affiliates = await  affiliateRepository.all();
     return createSuccessResponse(res, affiliates);
