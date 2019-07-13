@@ -18,12 +18,12 @@ class EmailService {
         }));
     }
 
-    send(to, msg, name = "User", subject){
-        const payload = this.formatTextToEmail(to,msg, name, subject);
+    send(to, msg, name = "User", subject, from = "no-reply@chiji14xchange.com"){
+        const payload = this.formatTextToEmail(to,msg, name, subject, from);
         return sendGrid.send(payload);
     }
 
-    formatTextToEmail(email, text, name, subject, from = "no-reply@chiji14xchange.com'"){
+    formatTextToEmail(email, text, name, subject, from){
         return {
             to: email,
             from ,

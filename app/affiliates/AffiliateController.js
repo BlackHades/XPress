@@ -42,7 +42,11 @@ exports.create = async (req, res, next) => {
             phoneVerification
         ],{returning: true});
 
-        emailService.send(emailVerification.value, messages.affiliateEmailVerification(emailVerification.code), affiliates.name, "Confirm Your Email")
+        emailService.send(
+            emailVerification.value,
+            messages.affiliateEmailVerification(emailVerification.code),
+            affiliates.name,
+            "Confirm Your Email")
             .then(res => debug(res))
             .catch(err => {
                 debug("Err");
