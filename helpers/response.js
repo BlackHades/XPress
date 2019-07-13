@@ -7,7 +7,7 @@ let createErrorResponse = (res, message = "Oops. An Error Occurred", data) => {
 };
 
 const validationHandler = result => {
-    return result.array().map(i => `${i.msg}`).join('. ')
+    return result.array().map(i => `${i.msg}`).join('.\n')
 };
 
 module.exports = {

@@ -1,4 +1,5 @@
 'use strict';
+process.env.DEBUG="app:debug";
 const createError = require('http-errors');
 const express = require('express');
 const path = require('path');
@@ -22,13 +23,13 @@ const bitcoinRouter = require('./routes/api/bitcoins');
 const authRouter = require('./routes/api/auth');
 const contactRouter = require('./routes/api/contacts');
 const utilityRouter = require('./routes/api/utilities');
+const affiliateRouter = require('./routes/api/affiliates');
 const apiRouter = require('./routes/api');
 const errorHandler = require('./helpers/ErrorHandler');
 const app = express();
 const {sequelize} = require('./database/sequelize');
 const {seeder} = require('./database/databaseSeeder');
-
-
+require("express-async-errors");
 //sentry only enabled in production
 if(process.env.APP_ENV == "production"){
     Sentry.init({ dsn: 'https://780ec425d68046ab8edabc8a37fa1597@sentry.io/1447209' });
@@ -40,12 +41,7 @@ sequelize
     .authenticate()
     .then(() => {
       console.log('Connection has been established successfully.');
-      // //
-      sequelize.sync({force: false}).then(() => {
-          //this seeder checks and create the default admins
-          seeder();
-      });
-
+      seeder();
     })
     .catch(err => {
       console.error('Unable to connect to the database:', err);
@@ -82,6 +78,7 @@ app.use('/api/v1/bitcoins',bitcoinRouter);
 app.use('/api/v1/auths',authRouter);
 app.use('/api/v1/contacts',contactRouter);
 app.use('/api/v1/utilities',utilityRouter);
+app.use('/api/v1/affiliates', affiliateRouter);
 
 
 //sentry only enabled in production

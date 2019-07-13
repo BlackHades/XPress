@@ -1,13 +1,15 @@
 const bcrypt = require('bcryptjs');
 const {User, Transaction} = require('../database/sequelize');
-const {fetchByEmail, generateUid} = require('../app/users/UserRepository');
+const {fetchByEmail, generateUid, all, updateUser} = require('../app/users/UserRepository');
 const transactionRepository = require('../app/transactions/TransactionRepository');
 const randomSentence = require("random-sentence");
+const randomString = require("randomstring");
 let seeder = () => {
-    admin();
-    boss();
-    agent();
-    user();
+    // admin();
+    // boss();
+    // agent();
+    // user();
+    // seedUsername();
     // transactions();
 };
 
@@ -109,6 +111,35 @@ const transactions = async () => {
             amount: 100000 * Math.random()
         });
     }
+};
+
+
+const seedUsername = () => {
+    all()
+        .then(users =>{
+            console.log("Users", users.length);
+            const res = users.map(async user => {
+                if(user.username == null || user.username == ""){
+                    let username = `${user.name.substr(0,3)}${randomString.generate({
+                        charset: "numeric",
+                        length: 3
+                    })}`;
+                    // let u = await user.save();
+                    // console.log("u", u.username);
+                    // user.update({username: user.username});
+                    // console.log("username", user.username);
+                    updateUser({username: username}, user.id)
+                        .then(res => {
+                            console.log("Ress",res);
+                        }).catch(err => {
+                        console.log("Inner Error", err);
+                    });
+
+                    return await user.save();
+                }
+            });
+            console.log("Res", res);
+        }).catch(err => console.log(err));
 };
 module.exports = {
     seeder

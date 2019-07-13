@@ -9,7 +9,7 @@ const {authenticate, adminAuth, agentAuth} = require('../../app/middleware/ApiAu
 const transactionController = require('../../app/transactions/TransactionController');
 
 //Validators
-const transactionValidator  = require('../../app/validator/TransactionValidator');
+const transactionValidator  = require('../../app/transactions/TransactionValidator');
 
 
 //General Auth

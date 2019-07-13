@@ -6,6 +6,8 @@ const jwt = require('jsonwebtoken');
 const {fetchByEmail, updateUser} = require('../users/UserRepository');
 const sendGrid = require("@sendgrid/mail");
 const debug = require("debug")("app:debug");
+
+
 let change = async (req, res, next) => {
     try{
         const valFails = validationResult(req);
@@ -33,8 +35,6 @@ let change = async (req, res, next) => {
         next(e);
     }
 };
-
-
 let reset = async (req, res, next) => {
     try{
         const valFails = validationResult(req);

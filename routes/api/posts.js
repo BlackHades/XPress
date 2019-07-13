@@ -11,7 +11,7 @@ const postController = require('../../app/posts/PostController');
 const commentController = require('../../app/comments/CommentController');
 
 //Validators
-const postValidator  = require('../../app/validator/PostValidator');
+const postValidator  = require('../../app/posts/PostValidator');
 
 
 //No Auth

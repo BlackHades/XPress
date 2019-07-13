@@ -8,7 +8,7 @@ const {authenticate} = require('../../app/middleware/ApiAuthMiddleware');
 const passwordController = require('../../app/passwords/PasswordController');
 
 //Validators
-const passwordValidator  = require('../../app/validator/PasswordValidator');
+const passwordValidator  = require('../../app/passwords/PasswordValidator');
 
 //Reset Password
 router.post('/reset', passwordValidator.reset(), passwordController.reset);

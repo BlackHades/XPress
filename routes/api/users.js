@@ -8,7 +8,7 @@ const {authenticate,agentAuth,adminAuth} = require('../../app/middleware/ApiAuth
 const userController = require('../../app/users/UserController');
 
 //Validators
-const userValidator  = require('../../app/validator/UserValidator');
+const userValidator  = require('../../app/users/UserValidator');
 
 
 

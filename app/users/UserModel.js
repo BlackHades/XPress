@@ -1,4 +1,4 @@
-
+"use strict";
 const roles = require('./UserConstant');
 
 module.exports = (sequelize, type) => {
@@ -18,6 +18,7 @@ module.exports = (sequelize, type) => {
             defaultValue: roles.USER,
         },
         name: type.STRING,
+        username: type.STRING,
         email: {
             type: type.STRING,
             unique: true,

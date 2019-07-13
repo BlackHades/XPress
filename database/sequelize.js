@@ -14,7 +14,7 @@ const sequelize = new Sequelize(process.env.DB_NAME, process.env.DB_USERNAME, pr
         collate: 'utf8_general_ci',
     },
     operatorsAliases: false,
-    logging:false
+    logging: process.env.APP_ENV == "development"  ? true : false
 });
 
 
@@ -30,6 +30,7 @@ const PushToken = require("../app/push-notifications/PushTokenModel")(sequelize,
 const Bitcoin = require("../app/bitcoins/BitcoinModel")(sequelize, Sequelize);
 const Contact = require("../app/contact-us/ContactModel")(sequelize, Sequelize);
 const Utility = require("../app/utilities/UtilityModel")(sequelize, Sequelize);
+const Affiliate = require("../app/affiliates/AffiliateModel")(sequelize, Sequelize);
 /**
  * Relationships
  */
@@ -114,6 +115,7 @@ module.exports = {
     PushToken,
     Bitcoin,
     Contact,
-    Utility
+    Utility,
+    Affiliate
 };
 

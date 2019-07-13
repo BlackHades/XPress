@@ -8,7 +8,7 @@ const {authenticate, adminAuth} = require('../../app/middleware/ApiAuthMiddlewar
 const cardController = require('../../app/cards/CardController');
 
 //Validators
-const cardValidator  = require('../../app/validator/CardValidator');
+const cardValidator  = require('../../app/cards/CardValidator');
 
 
 router.get('/all', cardController.all);
