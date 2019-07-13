@@ -9,7 +9,7 @@ let seeder = () => {
     // boss();
     // agent();
     // user();
-    seedUsername();
+    // seedUsername();
 };
 
 // const boss = async () => {
@@ -95,6 +95,7 @@ const seedUsername = () => {
                         charset: "numeric",
                         length: 3
                     })}`;
+                    user.username = username;
                     // let u = await user.save();
                     // console.log("u", u.username);
                     // user.update({username: user.username});
@@ -106,7 +107,7 @@ const seedUsername = () => {
                         console.log("Inner Error", err);
                     });
 
-                    return await user.save();
+                    // return await user.save();
                 }
             });
             console.log("Res", res);
