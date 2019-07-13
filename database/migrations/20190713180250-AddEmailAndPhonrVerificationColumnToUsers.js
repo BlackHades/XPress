@@ -11,16 +11,21 @@ module.exports = {
         */
 
         try {
-            await queryInterface.addColumn('users', 'emailVerifiedAt', {
-                type: Sequelize.DATE,
+            await queryInterface.addColumn('users', 'affiliateCode', {
+                type: Sequelize.STRING,
                 allowNull: true,
                 after: "isActive"
+            });
+            await queryInterface.addColumn('users', 'referralCode', {
+                type: Sequelize.STRING,
+                allowNull: true,
+                after: "affiliateCode"
             });
 
             await queryInterface.addColumn('users', 'phoneVerifiedAt', {
                 type: Sequelize.DATE,
                 allowNull: true,
-                after: "emailVerifiedAt"
+                after: "referralCode"
             });
             return Promise.resolve();
         } catch (e) {

@@ -38,6 +38,14 @@ module.exports = (sequelize, type) => {
             type: type.BOOLEAN,
             defaultValue: true
         },
+        affiliateCode:{
+            type: Sequelize.STRING,
+            allowNull: true,
+        },
+        referralCode:{
+            type: Sequelize.STRING,
+            allowNull: true,
+        },
         emailVerifiedAt:{
             type: type.DATE,
             allowNull: true,
