@@ -17,7 +17,6 @@ class EmailService {
                 .catch(err => reject(err));
         }));
     }
-
     send(to, msg, name = "User", subject,  from = "no-reply@chiji14xchange.com"){
         const payload = this.formatTextToEmail(to,msg, name, subject, from);
         return sendGrid.send(payload);

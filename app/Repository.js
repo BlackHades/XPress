@@ -38,7 +38,9 @@ class Repository{
     }
 
     truncate(condition){
-        return this.Model.truncate({where:condition});
+        if(process.env.APP_ENV == "development"){
+            return this.Model.truncate({where:condition});
+        }
     }
 
     bulkCreate(payload = []){
