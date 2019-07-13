@@ -2,11 +2,10 @@
 const {createSuccessResponse, createErrorResponse, validationHandler, formatPhone} = require('../../helpers/response');
 const {validationResult } = require('express-validator/check');
 const bcrypt = require('bcryptjs');
-const log = require("../../helpers/Logger");
 const debug = require("debug")("app:debug");
 const affiliateRepository = require("./AffiliateRepository");
-const emailService = require("../../services/EmailService");
 const verificationRepository = require("../verifications/VerificationRepository");
+const emailService = require("../../services/EmailService");
 const smsService = require("../../services/SMSService");
 const messages =  require("../../helpers/Messages");
 const jwt = require('jsonwebtoken');
@@ -114,5 +113,11 @@ exports.status = async (req,res) => {
             .catch(err => debug("Err", err));
     }
 };
-
-
+exports.me = async (req,res) => {
+    const affiliate = await affiliateRepository.find(req.affiliate.id);
+    return createSuccessResponse(res, affiliate);
+};
+exports.all = async (req, res) => {
+    const affiliates = await  affiliateRepository.all();
+    return createSuccessResponse(res, affiliates);
+};

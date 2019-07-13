@@ -1,3 +1,4 @@
+"use strict";
 const { check } = require('express-validator/check');
 const {fetchByEmail,fetchByPhone} = require('../users/UserRepository');
 

@@ -1,3 +1,4 @@
+"use strict";
 const {User} = require('../../database/sequelize');
 const roles = require('../users/UserConstant');
 const {createSuccessResponse, createErrorResponse, validationHandler} = require('../../helpers/response');

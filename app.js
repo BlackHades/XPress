@@ -24,6 +24,7 @@ const authRouter = require('./routes/api/auth');
 const contactRouter = require('./routes/api/contacts');
 const utilityRouter = require('./routes/api/utilities');
 const affiliateRouter = require('./routes/api/affiliates');
+const verificationRouter = require('./routes/api/verifications');
 const apiRouter = require('./routes/api');
 const errorHandler = require('./helpers/ErrorHandler');
 const app = express();
@@ -79,6 +80,7 @@ app.use('/api/v1/auths',authRouter);
 app.use('/api/v1/contacts',contactRouter);
 app.use('/api/v1/utilities',utilityRouter);
 app.use('/api/v1/affiliates', affiliateRouter);
+app.use('/api/v1/verifications', verificationRouter);
 
 
 //sentry only enabled in production

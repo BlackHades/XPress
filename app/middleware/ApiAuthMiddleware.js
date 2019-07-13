@@ -27,10 +27,12 @@ let authenticate = (req,res,next) => {
         let affiliate = decoded.affiliate;
         req.user = user;
         req.affiliate = affiliate;
-        if(user.roleId === roles.AGENT)
-            req.agent = user;
-        if(user.roleId === roles.ADMINISTRATOR)
-            req.admin = user;
+       if(req.user){
+           if(user.roleId === roles.AGENT)
+               req.agent = user;
+           if(user.roleId === roles.ADMINISTRATOR)
+               req.admin = user;
+       }
         next();
     });
 };

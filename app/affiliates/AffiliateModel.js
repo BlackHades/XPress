@@ -86,5 +86,11 @@ module.exports = (sequelize, type) => {
             type: type.INTEGER,
             allowNull:true
         }
+    },{
+        defaultScope: {
+            attributes: {
+                exclude: ["password"]
+            }
+        }
     });
 };
