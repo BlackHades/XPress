@@ -77,9 +77,6 @@ exports.create = async (req, res, next) => {
         smsService.send(affiliate.phoneNumber, phoneMessage)
             .then(res => debug("RES", res))
             .catch(err => debug("Err", err));
-
-
-        //send email code and sms code
     }catch (e) {
         debug("Error", e);
         // handler(e);

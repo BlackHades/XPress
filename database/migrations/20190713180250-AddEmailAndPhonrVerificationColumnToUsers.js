@@ -27,6 +27,12 @@ module.exports = {
                 allowNull: true,
                 after: "referralCode"
             });
+
+            await queryInterface.addColumn('users', 'emailVerifiedAt', {
+                type: Sequelize.DATE,
+                allowNull: true,
+                after: "phoneVerifiedAt"
+            });
             return Promise.resolve();
         } catch (e) {
             return Promise.reject(e);

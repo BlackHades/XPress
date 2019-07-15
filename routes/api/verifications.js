@@ -15,7 +15,7 @@ const verificationValidator  = require("../../app/verifications/VerificationVali
 router.use(authenticate);
 //Register Token
 router.post("/", verificationValidator.verify(),verificationController.verify);
-
+router.get("/resend", verificationController.resend);
 
 
 module.exports = router;

@@ -10,6 +10,7 @@ const debug = require("debug")("app:debug");
 const moment = require("moment");
 const Op = Sequelize.Op;
 const {createErrorResponse, createSuccessResponse, validationHandler} = require("../../helpers/response");
+const messages =  require("../../helpers/Messages");
 exports.verify = async (req, res) => {
     //code and token
 
@@ -75,8 +76,42 @@ exports.verify = async (req, res) => {
 };
 
 
-exports.resend = (req, res) => {
+exports.resend = async (req, res) => {
 
+    const type = req.query.type;
+    const userType = req.user ? "user" : "affiliate";
+    let value;
+    if(userType == "user"){
+        value = type == "email" ? req.user.email : req.user.phone;
+    }else{
+        value = type == "email" ? req.affiliate.email : req.affiliate.phoneNumber;
+    }
+    const verification = {
+        code: verificationRepository.generateCode(),
+        type,
+        userType,
+        value
+    };
+    await verificationRepository.create(verification);
+    createSuccessResponse(res);
+    if(type == "email")
+    emailService.send(
+        verification.value,
+        userType == "user" ? messages.affiliateEmailVerification(verification.code) : messages.affiliateEmailVerification(verification.code),
+        userType == "user" ? req.user.name : req.affiliate.name,
+        "Confirm Your Email")
+        .then(res => debug(res))
+        .catch(err => {
+            debug("Err");
+            debug("Err", err.response.body);
+        });
+    else
+        smsService.send(
+            userType == "user" ? req.user.phone : req.affiliate.phoneNumber,
+                messages.phoneNumberVerification(userType == "user" ?  req.user.name : req.affiliate.name, verification.code)
+            )
+            .then(res => debug("Response", res))
+            .catch(err => debug("Error", err));
 };
 
 
