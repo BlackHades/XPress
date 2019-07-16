@@ -33,6 +33,11 @@ exports.create = () => {
                     return Promise.reject('Username is not available');
                 }
             })
-        })
+        }),
+        check('phoneNumber').custom(async value => {
+            return affiliateRepository.findOne({phoneNumber: value}).then(affiliate => {
+                if(affiliate) return Promise.reject('Phone number has been taken');
+            })
+        }),
     ];
 };
