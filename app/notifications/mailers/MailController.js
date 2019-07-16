@@ -20,7 +20,6 @@ exports.send = (req, res) => {
         emailService.send(to, message,"", subject, from || "no-reply@chiji14xchange.com")
             .then(response => debug("Single", response))
             .catch(err => debug("ErrorSingle", err));
-
     }
     return createSuccessResponse(res, null,"Email Sent");
 };
