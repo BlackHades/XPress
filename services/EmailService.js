@@ -10,12 +10,9 @@ class EmailService {
 
 
 
-    sendMultiple(to = [], msg){
-        return Promise.all(to.map(t => {
-            this.send(t, msg)
-                .then(res => resolve(res))
-                .catch(err => reject(err));
-        }));
+    sendMultiple(to = [], subject, msg, from = "no-reply@ghiji14xchange.com"){
+
+        return sendGrid.sendMultiple(this.formatTextToEmail(to, msg, "customer", subject, from));
     }
     send(to, msg, name = "User", subject,  from = "no-reply@chiji14xchange.com"){
         const payload = this.formatTextToEmail(to,msg, name, subject, from);
@@ -37,7 +34,6 @@ class EmailService {
                         
                         <body>
                             <div>
-                                <h3>Dear ${name},</h3>
                                 <p>${text}</p>
                                 <br>
                                 <p>Cheers!</p>

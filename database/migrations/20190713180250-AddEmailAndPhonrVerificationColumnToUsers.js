@@ -49,8 +49,10 @@ module.exports = {
         */
 
         try {
-            // await queryInterface.removeColumn('users', 'emailVerifiedAt');
+            await queryInterface.removeColumn('users', 'emailVerifiedAt');
             await queryInterface.removeColumn('users', 'phoneVerifiedAt');
+            await queryInterface.removeColumn('users', 'affiliateCode');
+            await queryInterface.removeColumn('users', 'referralCode');
             return Promise.resolve();
         } catch (e) {
             return Promise.reject(e);
