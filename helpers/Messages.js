@@ -20,3 +20,8 @@ exports.phoneNumberVerification = (name, code) => {
 exports.userEmailVerification = (code) => {
     return `Hello and welcome to chiji14xchange!<br/> We’re excited to start trading with you. Use the code below to confirm your email and activate your account.<br/><br/><br/> <b style="font-family: 'Nunito', sans-serif; font-size: 50px; align-content: center">${code}</b>`
 };
+
+
+exports.passwordReset = (url) => {
+    return `You requested for a password reset, kindly use this <a href="${url}">link</a> to reset your password`;
+};
