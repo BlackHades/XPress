@@ -1,6 +1,5 @@
 "use strict";"use strict";
-const { check, param } = require('express-validator/check');
-const userRepository = require('../users/UserRepository');
+const { check } = require('express-validator/check');
 const affiliateRepository = require("./AffiliateRepository");
 
 /**

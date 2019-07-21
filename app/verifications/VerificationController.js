@@ -13,7 +13,6 @@ const {createErrorResponse, createSuccessResponse, validationHandler} = require(
 const messages =  require("../../helpers/Messages");
 exports.verify = async (req, res) => {
     //code and token
-
     const valFails = validationResult(req);
     if(!valFails.isEmpty())
         return createErrorResponse(res,validationHandler(valFails), valFails.array);
@@ -34,7 +33,6 @@ exports.verify = async (req, res) => {
     }
 
     const t30 = moment().utc().subtract(30, "minute").toISOString();
-    debug("Timestamp", t30);
     const verification = await verificationRepository.findOne({
         code,
         type,
@@ -46,7 +44,7 @@ exports.verify = async (req, res) => {
     if(!verification)
         return createErrorResponse(res, "Invalid Verification Code");
 
-    await verification.destroy();
+    // await verification.destroy();
 
     let query,user;
     if(type == "email")
@@ -70,8 +68,8 @@ exports.verify = async (req, res) => {
     else
         user.phoneVerifiedAt = moment.now();
 
-    user = await user.save();
 
+    user = await user.save();
     return createSuccessResponse(res, user);
 };
 
@@ -86,6 +84,12 @@ exports.resend = async (req, res) => {
     }else{
         value = type == "email" ? req.affiliate.email : req.affiliate.phoneNumber;
     }
+
+    await  verificationRepository.destroy({
+        value,
+        userType
+    });
+
     const verification = {
         code: verificationRepository.generateCode(),
         type,

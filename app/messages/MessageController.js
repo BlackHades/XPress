@@ -1,8 +1,8 @@
-const userRepository =  require("../users/UserRepository");
-const onlineUserRepository =  require("../online-users/OnlineUserRepository");
-const pushTokenRepository =  require("../push-notifications/PushTokenRepository");
-const onesignalRepository =  require("../push-notifications/OnesignalRepository");
-const cardRepository =  require("../cards/CardRepository");
+const userRepository = require("../users/UserRepository");
+const onlineUserRepository = require("../online-users/OnlineUserRepository");
+const pushTokenRepository = require("../push-notifications/PushTokenRepository");
+const onesignalRepository = require("../push-notifications/OnesignalRepository");
+const cardRepository = require("../cards/CardRepository");
 const {
     EMIT_RECEIVE_MESSAGE,
     EMIT_MESSAGE_SENT,
@@ -15,7 +15,7 @@ const messageRepository = require("./MessageRepository");
 const messageConstant = require("./MessageConstant");
 
 const log = require("../../helpers/Logger");
-const {createSuccessResponse} =  require("../../helpers/response");
+const {createSuccessResponse} = require("../../helpers/response");
 
 /**
  * Fetch Recent Messaged
@@ -23,14 +23,14 @@ const {createSuccessResponse} =  require("../../helpers/response");
  * @param lastMessageId
  * @param limit
  */
-const fetchMessages = async (socket,lastMessageId, limit) => {
-    let messages = await messageRepository.fetchMessage(socket.userId,lastMessageId, limit);
+const fetchMessages = async (socket, lastMessageId, limit) => {
+    let messages = await messageRepository.fetchMessage(socket.userId, lastMessageId, limit);
 
     let list = [];
     messages.map(message => {
         list = createChatList(message, message.from === socket.userId ? "sent" : "received", list);
     });
-    socket.emit(EMIT_MESSAGE_IN_BULK,{list});
+    socket.emit(EMIT_MESSAGE_IN_BULK, {list});
 };
 
 
@@ -87,15 +87,15 @@ const createChatList = (message, type, list = []) => {
 };
 
 
-const fetchMessagesRequest = async (req,res,next) => {
+const fetchMessagesRequest = async (req, res) => {
     log(req.body.lastMessageId);
-    return createSuccessResponse(res, await messageRepository.fetchMessage(req.user.id,req.body.lastMessageId || 0, req.body.limit || 50));
+    return createSuccessResponse(res, await messageRepository.fetchMessage(req.user.id, req.body.lastMessageId || 0, req.body.limit || 50));
 };
 
 
 //Send Message
 const send = async (io, socket, payload) => {
-    try{
+    try {
         console.log("Message Payload: " + JSON.stringify(payload));
         console.log("Message Payload: " + socket.userId);
         console.log("Message Payload: " + socket.id);
@@ -103,28 +103,28 @@ const send = async (io, socket, payload) => {
         let message = payload.message;
 
         //validate Message Object
-        if(message.from == null || message.to == null || message.content == null || message.type == null){
-            socket.emit(EMIT_ERROR,"One or More Fields is required");
+        if (message.from == null || message.to == null || message.content == null || message.type == null) {
+            socket.emit(EMIT_ERROR, "One or More Fields is required");
             return;
         }
 
         //get user
         let sender = await userRepository.find(message.from);
         let receiver = await userRepository.find(message.to);
-        if(!sender){
+        if (!sender) {
             //if user is not found emit an error
-            socket.emit(EMIT_ERROR,"Sender Not Found");
+            socket.emit(EMIT_ERROR, "Sender Not Found");
             return;
         }
 
-        if(!receiver){
+        if (!receiver) {
             //if receiver is not found emit an error
-            socket.emit(EMIT_ERROR,"Receiver Not Found");
+            socket.emit(EMIT_ERROR, "Receiver Not Found");
             return;
         }
 
-        if(sender.roleId === receiver.roleId){
-            socket.emit(EMIT_ERROR,"You cant send message to someone of the same role type");
+        if (sender.roleId === receiver.roleId) {
+            socket.emit(EMIT_ERROR, "You cant send message to someone of the same role type");
             return;
         }
         //Save Message Object
@@ -136,39 +136,38 @@ const send = async (io, socket, payload) => {
         newMessage = await messageRepository.findByMessageId(newMessage.mid);
 
 
-        console.log("Message: " +JSON.stringify(newMessage));
-        disperseMessageToUser(io,newMessage);
+        console.log("Message: " + JSON.stringify(newMessage));
+        disperseMessageToUser(io, newMessage);
 
         //Emit Message Sent
-        socket.emit(EMIT_MESSAGE_SENT,{message:newMessage});
-    }catch (e) {
+        socket.emit(EMIT_MESSAGE_SENT, {message: newMessage});
+    } catch (e) {
         console.log("Error Handler: " + JSON.stringify(e));
-        socket.emit(EMIT_ERROR,JSON.stringify(e));
+        socket.emit(EMIT_ERROR, JSON.stringify(e));
     }
 };
 
 
-
-const emitMessage = (io,socketId,message) => {
-    io.to(socketId).emit(EMIT_RECEIVE_MESSAGE,{message:message})
+const emitMessage = (io, socketId, message) => {
+    io.to(socketId).emit(EMIT_RECEIVE_MESSAGE, {message: message})
 };
 
 
-const disperseMessageToAllAgentAndAdmins = async (io,message) => {
+const disperseMessageToAllAgentAndAdmins = async (io, message) => {
     let nonUsers = await userRepository.getAllNonUser(true);
     let nonUserIds = [];
-    for(let i = 0; i < nonUsers.length; i++){
+    for (let i = 0; i < nonUsers.length; i++) {
         nonUserIds[i] = nonUsers[i].id;
     }
 
-    let onlineUsers = await onlineUserRepository.getMultipleOnlineUsersById(nonUserIds,true);
+    let onlineUsers = await onlineUserRepository.getMultipleOnlineUsersById(nonUserIds, true);
     onlineUsers.forEach(user => {
         console.log("socketId: " + user.socketId);
         emitMessage(io, user.socketId, message);
     })
 };
 
-const disperseMessageToUser = (io,message) => {
+const disperseMessageToUser = (io, message) => {
     onlineUserRepository.findByUserId(message.to)
         .then(onlineUsers => {
             onlineUsers.forEach(user => {
@@ -179,18 +178,16 @@ const disperseMessageToUser = (io,message) => {
         .catch(err => log(err));
 
 
-
-
     //send onesignal integration
-    pushTokenRepository.fetchUserTokens(message.to,true)
+    pushTokenRepository.fetchUserTokens(message.to, true)
         .then(tokens => {
             log("messages: " + JSON.stringify(message));
-            if(tokens.length === 0)
+            if (tokens.length === 0)
                 return;
             tokens = tokens.map(t => t.token);
-            const data = {notificationType:"MESSAGE",message: message};
-            log("data: " + JSON.stringify({data:data, tokens: tokens,message:message}));
-            onesignalRepository.sendNotificationToUser(tokens,message.sender.name,message.content,data)
+            const data = {notificationType: "MESSAGE", message: message};
+            log("data: " + JSON.stringify({data: data, tokens: tokens, message: message}));
+            onesignalRepository.sendNotificationToUser(tokens, message.sender.name, message.content, data)
         }).catch(err => log("pusherror: " + err));
 };
 
@@ -203,8 +200,8 @@ const markAsDelivered = async (payload) => {
     let message = await messageRepository.findByMessageId(payload.mid);
     console.clear();
     log("Message: " + JSON.stringify(message));
-    if(message.status < 2)
-        messageRepository.update(payload.mid,{
+    if (message.status < 2)
+        messageRepository.update(payload.mid, {
             status: 2
         }).then(data => {
             log("delivered: " + JSON.stringify(data));
