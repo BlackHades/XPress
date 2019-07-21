@@ -173,11 +173,15 @@ const toggleStatus = async (req,res,next) => {
     let user =  req.user;
     user.status = status;
     user  = await user.save();
-    io.emit(EMIT_AGENT_STATUS,{
-        userId: user.id,
-        status: status,
-        user: user
-    });
+    try{
+        io.emit(EMIT_AGENT_STATUS,{
+            userId: user.id,
+            status: status,
+            user: user
+        });
+    }catch (e) {
+        debug(e);
+    }
     return createSuccessResponse(res, user , `Agent is ${status}`)
 };
 
