@@ -33,9 +33,7 @@ const fetchMessages = async (socket, lastMessageId, limit) => {
     socket.emit(EMIT_MESSAGE_IN_BULK, {list});
 };
 
-
 const createChatList = (message, type, list = []) => {
-
     let user;
     if (type === 'received') {
         for (let i = 0; i < list.length; i++) {
@@ -85,7 +83,6 @@ const createChatList = (message, type, list = []) => {
     list.unshift(user);
     return list;
 };
-
 
 const fetchMessagesRequest = async (req, res) => {
     log(req.body.lastMessageId);

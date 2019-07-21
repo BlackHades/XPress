@@ -44,7 +44,7 @@ exports.verify = async (req, res) => {
     if(!verification)
         return createErrorResponse(res, "Invalid Verification Code");
 
-    // await verification.destroy();
+    await verification.destroy();
 
     let query,user;
     if(type == "email")
@@ -96,6 +96,7 @@ exports.resend = async (req, res) => {
         userType,
         value
     };
+
     await verificationRepository.create(verification);
     createSuccessResponse(res);
     if(type == "email")

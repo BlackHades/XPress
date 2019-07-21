@@ -39,11 +39,9 @@ const ioEvents = (io) => {
 
         socket.emit(CONNECTED,{payload: socket.id});
         socket.auth = false;
-
         /**
          * Initialization Event
          */
-
         socket.on(EVENT_INITIALIZATION,(payload) => {
             console.log("Init: " + JSON.stringify(payload));
             if(payload.userId !== undefined || payload.user !== null){
