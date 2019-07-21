@@ -1,6 +1,7 @@
 'use strict';
 const {authenticate} = require("../app/middleware/SocketMiddleware");
 const onlineUserRepository= require("../app/online-users/OnlineUserRepository");
+const debug = require("debug")("app:debug");
 const {
 
     //Events
@@ -20,9 +21,10 @@ const {
     EMIT_ERROR
 } = require('./constants');
 
-const init = (server) => {
-    let io = require('socket.io')(server);
+const init = (io) => {
+    // let io = require('socket.io')(server);
     ioEvents(io);
+    return io;
 };
 
 //Controller
@@ -34,7 +36,7 @@ const messageController = require('../app/messages/MessageController');
  */
 const ioEvents = (io) => {
     io.sockets.on(CONNECTION, (socket) => {
-        console.log(socket.id + " is connected");
+        debug(socket.id + " is connected");
         console.log(socket.id + " is connected to " + process.pid);
 
         socket.emit(CONNECTED,{payload: socket.id});
@@ -76,5 +78,6 @@ const ioEvents = (io) => {
     });
 };
 
-module.exports= init;
-
+module.exports={
+    init
+};

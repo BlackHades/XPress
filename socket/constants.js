@@ -13,6 +13,7 @@ const EMIT_AUTHENTICATED = "emit-authenticated";
 const EMIT_RECEIVE_MESSAGE = "emit-receive-message";
 const EMIT_MESSAGE_IN_BULK = "emit-receive-message-in-bulk";
 const EMIT_MESSAGE_SENT = "emit-message-sent";
+const EMIT_AGENT_STATUS = "emit-agent-status";
 module.exports = {
     CONNECTION,
     CONNECTED,
@@ -30,5 +31,6 @@ module.exports = {
     EMIT_AUTHENTICATED,
     EMIT_RECEIVE_MESSAGE,
     EMIT_MESSAGE_SENT,
-    EMIT_MESSAGE_IN_BULK
+    EMIT_MESSAGE_IN_BULK,
+    EMIT_AGENT_STATUS
 };

@@ -21,7 +21,7 @@ exports.change = async (req, res, next) => {
         let user = req.user;
 
         //Compare oldPassword to Users Password
-        if(!bcrypt.compareSync(payload.oldPassword,user.password))
+        if(!bcrypt.compareSync(payload.oldPassword, user.password))
             return createErrorResponse(res,"Current Password is invalid");
 
         //Hash New Password

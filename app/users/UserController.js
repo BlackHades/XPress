@@ -7,7 +7,10 @@ const userRepository = require('./UserRepository');
 const userConstant = require('./UserConstant');
 const transactionRepository = require("../transactions/TransactionRepository");
 const log = require("../../helpers/Logger");
-
+const debug = require("debug")("app:debug");
+const {
+    EMIT_AGENT_STATUS
+} = require('../../socket/constants');
 
 /**
  * Create User
@@ -164,16 +167,18 @@ const me = async (req, res, next) => {
 };
 
 
-const toggleStatus = (req,res,next) => {
+const toggleStatus = async (req,res,next) => {
     console.log(req.params.status);
-    userRepository.updateUser({
-        status: req.params.status.toString() !== "online" ? "offline" :"online"
-    },req.user.id)
-        .then(async response => {
-            log("response: " + response);
-            // console.log("user: " + JSON.stringify(user));
-            return createSuccessResponse(res, await userRepository.find(req.user.id) , `Agent is ${req.params.status}`)
-        }).catch(err => next(err));
+    const status = req.params.status.toString() !== "online" ? "offline" : "online";
+    let user =  req.user;
+    user.status = status;
+    user  = await user.save();
+    io.emit(EMIT_AGENT_STATUS,{
+        userId: user.id,
+        status: status,
+        user: user
+    });
+    return createSuccessResponse(res, user , `Agent is ${status}`)
 };
 
 const toggleIsActive = (req,res, next) => {

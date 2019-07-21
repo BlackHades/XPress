@@ -5,6 +5,7 @@ const express = require('express');
 const path = require('path');
 require('dotenv').config();
 const fs = require('fs');
+const http = require("http");
 // const cookieParser = require('cookie-parser');
 const expressValidator = require('express-validator');
 const cors = require('cors');
@@ -31,6 +32,7 @@ const errorHandler = require('./helpers/ErrorHandler');
 const app = express();
 const {sequelize} = require('./database/sequelize');
 const {seeder} = require('./database/databaseSeeder');
+const debug = require("debug")("app:debug");
 require("express-async-errors");
 //sentry only enabled in production
 if(process.env.APP_ENV == "production"){
@@ -84,6 +86,24 @@ app.use('/api/v1/affiliates', affiliateRouter);
 app.use('/api/v1/verifications', verificationRouter);
 app.use('/api/v1/notifications', notificationRouter);
 
+/**
+ * Create HTTP server.
+ */
+
+const server = http.createServer(app);
+// const io = require('./socket')(server);
+let io = require('socket.io')(server);
+require("./socket").init(io);
+
+global.io = io;
+// debug("IOB", io);
+app.use((req, res, next, err) => {
+    debug("io", io, err);
+    res.io = io;
+    next();
+});
+
+app.server = server;
 
 //sentry only enabled in production
 if(process.env.APP_ENV == "production"){
