@@ -48,6 +48,44 @@ const fetchMessage = (userId,lastMessageId, limit) => {
     });
 };
 
+const fetchMessageBySenderAndRecipient = (from,to, lastMessageId, limit = 20) => {
+  return Message.findAll({
+    where:{
+      [Op.or]:[{
+        from:from,
+        to: to
+      },{
+        to:from,
+        from: to
+      }],
+      id:{
+        [Op.gt]:lastMessageId
+      }
+    },
+    include:[
+      {
+        model: User,
+        as: "sender"
+      },
+      {
+        model: User,
+        as: "receiver"
+      },{
+        model: User,
+        as: "agent"
+      },{
+        model: Card,
+        as: "card"
+      },{
+        model: Bitcoin,
+        as: "bitcoin"
+      }
+    ],
+    order: [['id', 'ASC']],
+    limit
+  });
+};
+
 const findByMessageId = (messageId) => {
     return Message.findOne({
       where:{
@@ -82,5 +120,6 @@ module.exports = {
   create,
   fetchMessage,
   update,
-  findByMessageId
+  findByMessageId,
+  fetchMessageBySenderAndRecipient
 };

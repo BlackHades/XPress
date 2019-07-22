@@ -8,17 +8,12 @@ const {
     CONNECTION,
     CONNECTED,
     EVENT_INITIALIZATION,
-    EVENT_AUTHENTICATION,
-    EVENT_USER_INFO,
     EVENT_SEND_MESSAGE,
-    EVENT_FETCH_MESSAGE,
     EVENT_MARK_MESSAGE_AS_DELIVERED,
+    EVENT_SAVE_USER_CHAT,
     DISCONNECTED,
 
     //Emissions
-    EMIT_AUTHENTICATED,
-    EMIT_MESSAGE,
-    EMIT_ERROR
 } = require('./constants');
 
 const init = (io) => {
@@ -51,7 +46,9 @@ const ioEvents = (io) => {
                 socket.userId = payload.userId;
                 console.log("Initialized: " + socket);
                 //add user to online-users table
-                onlineUserRepository.add(socket.userId, socket.id);
+                onlineUserRepository.add(socket.userId, socket.id)
+                    .then(res => null)
+                    .catch(err => debug("Err", err));
                 messageController.fetchMessages(socket,payload.lastMessageId || 0, payload.limit);
             }else{
                 socket.disconnect(true);
@@ -65,6 +62,12 @@ const ioEvents = (io) => {
         socket.on(EVENT_MARK_MESSAGE_AS_DELIVERED, (payload) => {
             console.log("payload: ", JSON.stringify(payload));
            messageController.markAsDelivered(payload);
+        });
+
+        socket.on(EVENT_SAVE_USER_CHAT, (payload) => {
+            //payload.userId
+            //payload.chatList
+            messageController.saveUserChats(payload);
         });
 
         /**

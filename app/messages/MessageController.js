@@ -3,6 +3,7 @@ const onlineUserRepository = require("../online-users/OnlineUserRepository");
 const pushTokenRepository = require("../push-notifications/PushTokenRepository");
 const onesignalRepository = require("../push-notifications/OnesignalRepository");
 const cardRepository = require("../cards/CardRepository");
+const userChatRepository = require("../user-chats/UserChatRepository");
 const {
     EMIT_RECEIVE_MESSAGE,
     EMIT_MESSAGE_SENT,
@@ -16,22 +17,34 @@ const messageConstant = require("./MessageConstant");
 
 const log = require("../../helpers/Logger");
 const {createSuccessResponse} = require("../../helpers/response");
+const debug = require("debug")("app:debug");
 
-/**
- * Fetch Recent Messaged
- * @param socket
- * @param lastMessageId
- * @param limit
- */
+
+
 const fetchMessages = async (socket, lastMessageId, limit) => {
-    let messages = await messageRepository.fetchMessage(socket.userId, lastMessageId, limit);
-
+    let userChatList = await userChatRepository.findOne({userId: socket.userId});
     let list = [];
-    messages.map(message => {
-        list = createChatList(message, message.from === socket.userId ? "sent" : "received", list);
-    });
-    socket.emit(EMIT_MESSAGE_IN_BULK, {list});
+    if(!userChatList || userChatList.chatList.length == 0){
+        let messages = await messageRepository.fetchMessage(socket.userId, lastMessageId, limit);
+        let list = [];
+        await Promise.all(messages.map(message => {
+            list = createChatList(message, message.from === socket.userId ? "sent" : "received", list);
+        }));
+        debug("All List", list.length);
+        debug("Here All");
+        socket.emit(EMIT_MESSAGE_IN_BULK, {list});
+    }else{
+        let chatList = JSON.parse(userChatList.chatList);
+        for(let ch of chatList){
+            ch.messages = await messageRepository.fetchMessageBySenderAndRecipient(socket.userId, ch.id,lastMessageId);
+            list.push(ch);
+        }
+        debug("Here Chatlist", list.length, list[0]);
+        socket.emit(EMIT_MESSAGE_IN_BULK, {list});
+    }
 };
+
+
 
 const createChatList = (message, type, list = []) => {
     let user;
@@ -45,7 +58,8 @@ const createChatList = (message, type, list = []) => {
                 break;
             }
         }
-    } else {
+    }
+    else {
         for (let i = 0; i < list.length; i++) {
             if (list[i].id === message.to) {
                 user = list[i];
@@ -56,9 +70,8 @@ const createChatList = (message, type, list = []) => {
     }
     if (user) {
         const matchedMessages = user.messages.filter(m => message.mid === m.mid);
-        if (matchedMessages.length === 0) {
+        if (matchedMessages.length === 0)
             user.messages.unshift(message);
-        }
     } else {
         if (message) {
             if (type === "received") {
@@ -85,7 +98,6 @@ const createChatList = (message, type, list = []) => {
 };
 
 const fetchMessagesRequest = async (req, res) => {
-    log(req.body.lastMessageId);
     return createSuccessResponse(res, await messageRepository.fetchMessage(req.user.id, req.body.lastMessageId || 0, req.body.limit || 50));
 };
 
@@ -93,10 +105,6 @@ const fetchMessagesRequest = async (req, res) => {
 //Send Message
 const send = async (io, socket, payload) => {
     try {
-        console.log("Message Payload: " + JSON.stringify(payload));
-        console.log("Message Payload: " + socket.userId);
-        console.log("Message Payload: " + socket.id);
-
         let message = payload.message;
 
         //validate Message Object
@@ -207,9 +215,30 @@ const markAsDelivered = async (payload) => {
         })
 };
 
+
+
+const saveUserChats = async  ({userId, chatList}) => {
+
+    debug("cht", chatList.length);
+    let userChatList = await userChatRepository.findOne({userId});
+    if(!userChatList){
+        userChatList = await userChatRepository.create({
+            userId,
+            chatList
+        });
+    }else{
+        userChatList.chatList = chatList;
+        userChatList = await userChatList.save();
+    }
+
+
+    debug("UserChatList", userChatList.chatList[0]);
+};
+
 module.exports = {
     fetchMessages,
     send,
     markAsDelivered,
-    fetchMessagesRequest
+    fetchMessagesRequest,
+    saveUserChats
 };

@@ -5,7 +5,7 @@ const randomString = require("randomstring");
 class VerificationRepository extends Repository{
     constructor(){
         super(Verification);
-        this.generateCode = this.generateCode.bind();
+        this.generateCode = this.generateCode.bind(this);
     }
 
 

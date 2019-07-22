@@ -96,13 +96,6 @@ let io = require('socket.io')(server);
 require("./socket").init(io);
 
 global.io = io;
-// debug("IOB", io);
-app.use((req, res, next, err) => {
-    debug("io", io, err);
-    res.io = io;
-    next();
-});
-
 app.server = server;
 
 //sentry only enabled in production
