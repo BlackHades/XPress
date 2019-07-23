@@ -17,7 +17,7 @@ module.exports = {
         autoIncrement: true
       },
       to: type.STRING,
-      message: type.STRING,
+      message: type.TEXT,
       createdAt: {
         type: type.DATE,
         defaultValue: Date.now

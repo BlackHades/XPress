@@ -22,7 +22,7 @@ module.exports = {
                 allowNull: true
             },
             subject: type.STRING,
-            message: type.STRING,
+            message: type.TEXT,
             createdAt: {
                 type: type.DATE,
                 defaultValue: Date.now
