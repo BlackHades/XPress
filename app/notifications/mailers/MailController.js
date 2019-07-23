@@ -26,7 +26,11 @@ exports.send = async (req, res) => {
 
         emailService.sendMultiple(to, subject, message, from)
             .then(response => debug("Multiple", response))
-            .catch(err => debug("ErrorMultile", err));
+            .catch(err => {
+                debug("ErrorMultiple", {err});
+                debug("ErrorMultiple", JSON.stringify(err));
+                debug("ErrorMultiple", err.response.body.errors);
+            });
     }else{
         if(!to)
             return createErrorResponse(res, "At least one recipient is required");
