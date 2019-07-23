@@ -5,9 +5,16 @@ const add = async (userId, socketId) => {
 
     //just truncate for now
     // await OnlineUser.truncate();
-    return OnlineUser.create({
-        userId:userId,
-        socketId:socketId
+    return OnlineUser.findOrCreate({
+        where:{
+            userId:userId,
+            socketId:socketId
+        },
+        defaults:{
+            userId:userId,
+            socketId:socketId
+        }
+
     });
 };
 

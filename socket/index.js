@@ -43,7 +43,9 @@ const ioEvents = (io) => {
                     socket.auth = true;
                     socket.userId = payload.userId;
                     //add user to online-users table
-                    onlineUserRepository.add(socket.userId, socket.id);
+                    onlineUserRepository.add(socket.userId, socket.id)
+                        .then(res => null)
+                        .catch(err => debug(""));
                     messageController.fetchMessages(socket,payload.lastMessageId || 0, payload.limit);
                 }else{
                     socket.disconnect(true);
