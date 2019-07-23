@@ -8,8 +8,6 @@ class EmailService {
         this.formatTextToEmail = this.formatTextToEmail.bind(this);
     }
 
-
-
     sendMultiple(to = [], subject, msg, from = "no-reply@ghiji14xchange.com"){
 
         return sendGrid.sendMultiple(this.formatTextToEmail(to, msg, "customer", subject, from));
@@ -25,24 +23,7 @@ class EmailService {
             from ,
             subject,
             text,
-            html: `<!DOCTYPE html>
-                        <html>
-                        
-                        <head>
-                            <title>${subject}</title>
-                        </head>
-                        
-                        <body>
-                            <div>
-                                <p>${text}</p>
-                                <br>
-                                <p>Cheers!</p>
-                            </div>
-                           
-                        </body>
-                        
-                        </html>
-                        `,
+            html: require("../app/notifications/mailers/MailerHtml")(subject, text)
         };
     }
 }

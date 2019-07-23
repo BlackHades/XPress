@@ -13,6 +13,7 @@ class Repository{
         this.truncate = this.truncate.bind(this);
         this.bulkCreate = this.bulkCreate.bind(this);
         this.upsert = this.upsert.bind(this);
+        this.paginate = this.paginate.bind(this);
     }
     create(payload){
         return this.Model.create(payload);
@@ -50,6 +51,19 @@ class Repository{
 
     upsert(payload){
         return this.Model.upsert(payload, {returning: true});
+    }
+
+    paginate(condition = {}, page, limit){
+        const offset = limit * (page - 1);
+        const query = {};
+        if(offset && offset > 0)
+            query.offset = offset;
+        query.limit = limit;
+        return this.Model.findAll({
+            where: condition,
+            order: [['id', 'DESC']],
+            ...query
+        });
     }
 
     getModel(){

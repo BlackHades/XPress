@@ -14,7 +14,7 @@ const sequelize = new Sequelize(process.env.DB_NAME, process.env.DB_USERNAME, pr
         collate: 'utf8_general_ci',
     },
     operatorsAliases: false,
-    logging: process.env.APP_ENV != "development"  ? true : false,
+    logging: process.env.APP_ENV == "development"  ? true : false,
     timezone: "+01:00", //for writing to database
 });
 
@@ -34,6 +34,8 @@ const Utility = require("../app/utilities/UtilityModel")(sequelize, Sequelize);
 const Affiliate = require("../app/affiliates/AffiliateModel")(sequelize, Sequelize);
 const Verification = require("../app/verifications/VerificationModel")(sequelize, Sequelize);
 const UserChat = require("../app/user-chats/UserChatModel")(sequelize, Sequelize);
+const Mailer = require("../app/notifications/mailers/MailModel")(sequelize, Sequelize);
+const SMS = require("../app/notifications/sms/SMSModel")(sequelize, Sequelize);
 /**
  * Relationships
  */
@@ -84,6 +86,8 @@ module.exports = {
     Utility,
     Affiliate,
     Verification,
-    UserChat
+    UserChat,
+    Mailer,
+    SMS
 };
 
