@@ -22,22 +22,26 @@ const debug = require("debug")("app:debug");
 
 
 const fetchMessages = async (socket, lastMessageId, limit) => {
-    let userChatList = await userChatRepository.findOne({userId: socket.userId});
-    let list = [];
-    if(!userChatList || userChatList.chatList.length == 0){
-        let messages = await messageRepository.fetchMessage(socket.userId, lastMessageId, limit);
+    try{
+        let userChatList = await userChatRepository.findOne({userId: socket.userId});
         let list = [];
-        await Promise.all(messages.map(message => {
-            list = createChatList(message, message.from === socket.userId ? "sent" : "received", list);
-        }));
-        socket.emit(EMIT_MESSAGE_IN_BULK, {list});
-    }else{
-        let chatList = JSON.parse(userChatList.chatList);
-        for(let ch of chatList){
-            ch.messages = await messageRepository.fetchMessageBySenderAndRecipient(socket.userId, ch.id,lastMessageId);
-            list.push(ch);
+        if(!userChatList || userChatList.chatList.length == 0){
+            let messages = await messageRepository.fetchMessage(socket.userId, lastMessageId, limit);
+            let list = [];
+            await Promise.all(messages.map(message => {
+                list = createChatList(message, message.from === socket.userId ? "sent" : "received", list);
+            }));
+            socket.emit(EMIT_MESSAGE_IN_BULK, {list});
+        }else{
+            let chatList = JSON.parse(userChatList.chatList);
+            for(let ch of chatList){
+                ch.messages = await messageRepository.fetchMessageBySenderAndRecipient(socket.userId, ch.id,lastMessageId);
+                list.push(ch);
+            }
+            socket.emit(EMIT_MESSAGE_IN_BULK, {list});
         }
-        socket.emit(EMIT_MESSAGE_IN_BULK, {list});
+    }catch (e) {
+        debug("FATAL ERROR", e);
     }
 };
 

@@ -37,14 +37,19 @@ const ioEvents = (io) => {
          * Initialization Event
          */
         socket.on(EVENT_INITIALIZATION,(payload) => {
-            console.log("Init: " + JSON.stringify(payload));
-            if(payload.userId !== undefined || payload.user !== null){
-                socket.auth = true;
-                socket.userId = payload.userId;
-                //add user to online-users table
-                onlineUserRepository.add(socket.userId, socket.id);
-                messageController.fetchMessages(socket,payload.lastMessageId || 0, payload.limit);
-            }else{
+            try{
+                console.log("Init: " + JSON.stringify(payload));
+                if(payload.userId !== undefined || payload.user !== null){
+                    socket.auth = true;
+                    socket.userId = payload.userId;
+                    //add user to online-users table
+                    onlineUserRepository.add(socket.userId, socket.id);
+                    messageController.fetchMessages(socket,payload.lastMessageId || 0, payload.limit);
+                }else{
+                    socket.disconnect(true);
+                }
+            }catch (e) {
+                debug("FATAL ERROR", e);
                 socket.disconnect(true);
             }
         });
