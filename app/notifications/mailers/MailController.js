@@ -18,7 +18,7 @@ exports.send = async (req, res) => {
                to: t,
                from: from,
                subject: subject || "No Subject",
-               message: message
+               message: JSON.stringify(message)
            }
         });
 
@@ -35,7 +35,7 @@ exports.send = async (req, res) => {
             to: to,
             from: from,
             subject: subject || "No Subject",
-            message: message
+            message: JSON.stringify(message)
         });
         emailService.send(to, message,"", subject, from)
             .then(response => debug("Single", response))
