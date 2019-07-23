@@ -295,7 +295,7 @@ module.exports = (subject, text) => {
                               align="left">
                               <div style="color: #000; line-height: 160%; word-wrap: break-word;">
                                 <p style="font-size: 14px; line-height: 160%;">
-                                  message body
+                                    ${text}
                                 </p>
                               </div>
 
