@@ -14,7 +14,8 @@ const sequelize = new Sequelize(process.env.DB_NAME, process.env.DB_USERNAME, pr
         collate: 'utf8mb4_general_ci',
     },
     operatorsAliases: false,
-    timezone: "+01:00", //for writing to database
+    timezone: "+01:00", //for writing to database,
+    logging: false
 });
 
 

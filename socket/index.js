@@ -31,9 +31,6 @@ const messageController = require('../app/messages/MessageController');
  */
 const ioEvents = (io) => {
     io.sockets.on(CONNECTION, (socket) => {
-        debug(socket.id + " is connected");
-        console.log(socket.id + " is connected to " + process.pid);
-
         socket.emit(CONNECTED,{payload: socket.id});
         socket.auth = false;
         /**
@@ -44,11 +41,8 @@ const ioEvents = (io) => {
             if(payload.userId !== undefined || payload.user !== null){
                 socket.auth = true;
                 socket.userId = payload.userId;
-                console.log("Initialized: " + socket);
                 //add user to online-users table
-                onlineUserRepository.add(socket.userId, socket.id)
-                    .then(res => null)
-                    .catch(err => debug("Err", err));
+                onlineUserRepository.add(socket.userId, socket.id);
                 messageController.fetchMessages(socket,payload.lastMessageId || 0, payload.limit);
             }else{
                 socket.disconnect(true);
@@ -60,13 +54,10 @@ const ioEvents = (io) => {
         });
 
         socket.on(EVENT_MARK_MESSAGE_AS_DELIVERED, (payload) => {
-            console.log("payload: ", JSON.stringify(payload));
            messageController.markAsDelivered(payload);
         });
 
         socket.on(EVENT_SAVE_USER_CHAT, (payload) => {
-            //payload.userId
-            //payload.chatList
             messageController.saveUserChats(payload);
         });
 
@@ -74,9 +65,7 @@ const ioEvents = (io) => {
          * Disconnect User and Remove from Online users
          */
         socket.on(DISCONNECTED, () => {
-            //remove user from online-users table
             onlineUserRepository.remove(socket.userId, socket.id);
-            console.log(socket.id + " is disconnected");
         });
     });
 };

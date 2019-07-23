@@ -30,8 +30,6 @@ const fetchMessages = async (socket, lastMessageId, limit) => {
         await Promise.all(messages.map(message => {
             list = createChatList(message, message.from === socket.userId ? "sent" : "received", list);
         }));
-        debug("All List", list.length);
-        debug("Here All");
         socket.emit(EMIT_MESSAGE_IN_BULK, {list});
     }else{
         let chatList = JSON.parse(userChatList.chatList);
@@ -39,7 +37,6 @@ const fetchMessages = async (socket, lastMessageId, limit) => {
             ch.messages = await messageRepository.fetchMessageBySenderAndRecipient(socket.userId, ch.id,lastMessageId);
             list.push(ch);
         }
-        debug("Here Chatlist", list.length, list[0]);
         socket.emit(EMIT_MESSAGE_IN_BULK, {list});
     }
 };
