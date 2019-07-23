@@ -293,10 +293,9 @@ module.exports = (subject, text) => {
                             <td
                               style="overflow-wrap:break-word;word-break:break-word;padding:20px;font-family:'Lato',sans-serif;"
                               align="left">
-
-                              <div style="color: #000; line-height: 160%; text-align: center; word-wrap: break-word;">
+                              <div style="color: #000; line-height: 160%; word-wrap: break-word;">
                                 <p style="font-size: 14px; line-height: 160%;">
-                                  ${text}
+                                  message body
                                 </p>
                               </div>
 
