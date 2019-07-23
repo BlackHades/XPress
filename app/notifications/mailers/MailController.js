@@ -39,7 +39,11 @@ exports.send = async (req, res) => {
         });
         emailService.send(to, message,"", subject, from)
             .then(response => debug("Single", response))
-            .catch(err => debug("ErrorSingle", err));
+            .catch(err => {
+                debug("ErrorSingle", err);
+                debug("ErrorSingle", JSON.stringify(err));
+                debug("ErrorSingle", err.response.body.errors)
+            });
     }
     return createSuccessResponse(res, null,"Email Sent");
 };
