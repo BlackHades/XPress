@@ -34,9 +34,6 @@ const messageController = require('../app/api/messages/MessageController');
  */
 const ioEvents = (io) => {
     io.sockets.on(CONNECTION, (socket) => {
-        console.log(socket.id + " is connected");
-        console.log(socket.id + " is connected to " + process.pid);
-
         socket.emit(CONNECTED,{payload: socket.id});
         socket.auth = false;
 
@@ -63,7 +60,6 @@ const ioEvents = (io) => {
         });
 
         socket.on(EVENT_MARK_MESSAGE_AS_DELIVERED, (payload) => {
-            console.log("payload: ", JSON.stringify(payload));
            messageController.markAsDelivered(payload);
         });
 
@@ -71,9 +67,13 @@ const ioEvents = (io) => {
          * Disconnect User and Remove from Online users
          */
         socket.on(DISCONNECTED, () => {
-            //remove user from online-users table
-            onlineUserRepository.remove(socket.userId, socket.id);
-            console.log(socket.id + " is disconnected");
+           try{
+               //remove user from online-users table
+               onlineUserRepository.remove(socket.userId, socket.id);
+               console.log(socket.id + " has disconnected");
+           }catch (e) {
+               socket.disconnect(true);
+           }
         });
     });
 };

@@ -33,7 +33,7 @@ const fetchMessages = async (socket,lastMessageId, limit) => {
         });
         socket.emit(EMIT_MESSAGE_IN_BULK,{list});
     }catch (e) {
-        console.log(e);
+        console.log("FATAL ERROR", e);
     }
 };
 
@@ -100,10 +100,6 @@ const fetchMessagesRequest = async (req,res,next) => {
 //Send Message
 const send = async (io, socket, payload) => {
     try{
-        console.log("Message Payload: " + JSON.stringify(payload));
-        console.log("Message Payload: " + socket.userId);
-        console.log("Message Payload: " + socket.id);
-
         let message = payload.message;
 
         //validate Message Object
@@ -140,7 +136,6 @@ const send = async (io, socket, payload) => {
         newMessage = await messageRepository.findByMessageId(newMessage.mid);
 
 
-        console.log("Message: " +JSON.stringify(newMessage));
         disperseMessageToUser(io,newMessage);
 
         //Emit Message Sent

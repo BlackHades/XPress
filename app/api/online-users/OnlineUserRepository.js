@@ -5,29 +5,35 @@ const add = async (userId, socketId) => {
 
     //just truncate for now
     // await OnlineUser.truncate();
-    return OnlineUser.create({
-        userId:userId,
-        socketId:socketId
+    return OnlineUser.findOrCreate({
+        where: {
+            userId: userId,
+            socketId: socketId
+        }
+        , defaults: {
+            userId: userId,
+            socketId: socketId
+        }
     });
 };
 
 
 const remove = (userId, socketId) => {
-    return OnlineUser.destroy({where:{userId:userId,socketId:socketId}});
+    return OnlineUser.destroy({where: {userId: userId, socketId: socketId}});
 };
 
 
-const getMultipleOnlineUsersById = (userIds,onlySocketId = false) => {
-    if(onlySocketId){
+const getMultipleOnlineUsersById = (userIds, onlySocketId = false) => {
+    if (onlySocketId) {
         return OnlineUser.findAll({
-            where:{
-                userId:{[Op.in]:userIds}
-            },attributes:["socketId"]
+            where: {
+                userId: {[Op.in]: userIds}
+            }, attributes: ["socketId"]
         });
-    }else
+    } else
         return OnlineUser.findAll({
-            where:{
-                id:{[Op.in]:userIds}
+            where: {
+                id: {[Op.in]: userIds}
             }
         });
 };
@@ -35,18 +41,18 @@ const getMultipleOnlineUsersById = (userIds,onlySocketId = false) => {
 
 const findByUserId = (userId, onlySocketId) => {
 
-    if(onlySocketId){
+    if (onlySocketId) {
         return OnlineUser.findAll({
-            where:{userId:userId},
-            attributes:["socketId"]
+            where: {userId: userId},
+            attributes: ["socketId"]
         })
-    }else{
+    } else {
         return OnlineUser.findAll({
-            where:{userId:userId}
+            where: {userId: userId}
         })
     }
 };
 
 module.exports = {
-  add, remove, getMultipleOnlineUsersById,findByUserId
+    add, remove, getMultipleOnlineUsersById, findByUserId
 };
