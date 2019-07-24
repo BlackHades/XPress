@@ -24,13 +24,17 @@ const {createSuccessResponse} =  require("../../../helpers/response");
  * @param limit
  */
 const fetchMessages = async (socket,lastMessageId, limit) => {
-    let messages = await messageRepository.fetchMessage(socket.userId,lastMessageId, limit);
+    try{
+        let messages = await messageRepository.fetchMessage(socket.userId,lastMessageId, limit);
 
-    let list = [];
-    messages.map(message => {
-        list = createChatList(message, message.from === socket.userId ? "sent" : "received", list);
-    });
-    socket.emit(EMIT_MESSAGE_IN_BULK,{list});
+        let list = [];
+        messages.map(message => {
+            list = createChatList(message, message.from === socket.userId ? "sent" : "received", list);
+        });
+        socket.emit(EMIT_MESSAGE_IN_BULK,{list});
+    }catch (e) {
+        console.log(e);
+    }
 };
 
 
