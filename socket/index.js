@@ -11,6 +11,7 @@ const {
     EVENT_SEND_MESSAGE,
     EVENT_MARK_MESSAGE_AS_DELIVERED,
     EVENT_SAVE_USER_CHAT,
+    EVENT_GET_OLDER_MESSAGE,
     DISCONNECTED,
 
     //Emissions
@@ -32,7 +33,6 @@ const messageController = require('../app/messages/MessageController');
 const ioEvents = (io) => {
     io.sockets.on(CONNECTION, (socket) => {
         socket.emit(CONNECTED,{payload: socket.id});
-        socket.auth = false;
         /**
          * Initialization Event
          */
@@ -66,6 +66,10 @@ const ioEvents = (io) => {
 
         socket.on(EVENT_SAVE_USER_CHAT, (payload) => {
             messageController.saveUserChats(payload);
+        });
+
+        socket.on(EVENT_GET_OLDER_MESSAGE, ({startMessageId, recipient, limit}) => {
+            messageController.fetchOldMessages(socket,recipient,startMessageId,limit);
         });
 
         /**

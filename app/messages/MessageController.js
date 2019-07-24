@@ -36,7 +36,7 @@ const fetchMessages = async (socket, lastMessageId, limit) => {
             let chatList = JSON.parse(userChatList.chatList);
             for(let ch of chatList){
                 ch.messages = await messageRepository.fetchMessageBySenderAndRecipient(socket.userId, ch.id,lastMessageId);
-                list.push(ch);
+                list.push(ch.messages.reverse());
             }
             socket.emit(EMIT_MESSAGE_IN_BULK, {list});
         }
@@ -45,7 +45,11 @@ const fetchMessages = async (socket, lastMessageId, limit) => {
     }
 };
 
+const fetchOldMessages = async (socket, recipient, startMessageId,limit) => {
+    const messages = await messageRepository.fetchMessageBySenderAndRecipientReverse(socket.userId, recipient,startMessageId, limit || 20);
+    socket.emit(EMIT_MESSAGE_IN_BULK, {recipient, list: messages.reverse()});
 
+};
 
 const createChatList = (message, type, list = []) => {
     let user;
@@ -231,9 +235,6 @@ const saveUserChats = async  ({userId, chatList}) => {
         userChatList.chatList = chatList;
         userChatList = await userChatList.save();
     }
-
-
-    debug("UserChatList", userChatList.chatList[0]);
 };
 
 module.exports = {
@@ -241,5 +242,6 @@ module.exports = {
     send,
     markAsDelivered,
     fetchMessagesRequest,
-    saveUserChats
+    saveUserChats,
+    fetchOldMessages
 };

@@ -8,6 +8,7 @@ const EVENT_SEND_MESSAGE = "event-send-message";
 const EVENT_FETCH_MESSAGE = "event-fetch-message";
 const EVENT_MARK_MESSAGE_AS_DELIVERED = "event-mark-message-as-delivered";
 const EVENT_SAVE_USER_CHAT = "event-save-user-chat";
+const EVENT_GET_OLDER_MESSAGE = "event-get-older-message-between-you-and-another-user";
 //Emissions
 const EMIT_ERROR = "emit-error";
 const EMIT_AUTHENTICATED = "emit-authenticated";
@@ -26,6 +27,7 @@ module.exports = {
     EVENT_FETCH_MESSAGE,
     EVENT_MARK_MESSAGE_AS_DELIVERED,
     EVENT_SAVE_USER_CHAT,
+    EVENT_GET_OLDER_MESSAGE,
 
 
     //Emissions
