@@ -17,6 +17,7 @@ const verificationRouter = require('./api/verifications');
 const notificationRouter = require('./api/notifications');
 const walletRouter = require('./api/wallet');
 const bankAccountRouter = require('./api/bankAccount');
+const withdrawalRouter = require('./api/withdrawals');
 const apiRouter = require('./api');
 module.exports = (app) => {
     //Routes
@@ -39,4 +40,5 @@ module.exports = (app) => {
     app.use('/api/v1/notifications', notificationRouter);
     app.use('/api/v1/wallets', walletRouter);
     app.use('/api/v1/bank-accounts', bankAccountRouter);
+    app.use('/api/v1/withdrawals', withdrawalRouter);
 };

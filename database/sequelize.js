@@ -39,6 +39,7 @@ const SMS = require("../app/notifications/sms/SMSModel")(sequelize, Sequelize);
 const Wallet = require("../app/wallets/WalletModel")(sequelize, Sequelize);
 const WalletLog = require("../app/wallet-logs/WalletLogModel")(sequelize, Sequelize);
 const BankAccount = require("../app/bank-accounts/BankAccountModel")(sequelize, Sequelize);
+const Withdrawal = require("../app/withdrawals/WithdrawalModel")(sequelize, Sequelize);
 /**
  * Relationships
  */
@@ -94,6 +95,7 @@ module.exports = {
     SMS,
     Wallet,
     WalletLog,
-    BankAccount
+    BankAccount,
+    Withdrawal
 };
 

@@ -16,7 +16,15 @@ exports.fetch = async (req, res) => {
         };
 
         wallet = await walletRepository.findOne(query);
-    }else{
+    }else if(req.user && req.user.roleId == 3){
+        query = {
+            userId: req.user.id,
+            userType: "user"
+        };
+
+        wallet = await walletRepository.findOne(query);
+    }
+    else{
         wallet = await walletRepository.paginate(query, req.query.page || 1, req.query.limit || 100);
     }
     return createSuccessResponse(res, wallet);
@@ -30,6 +38,11 @@ exports.logs = async  (req, res) => {
         query = {
             userId: req.affiliate.id,
             userType: "affiliate"
+        };
+    }else if(req.user && req.user.roleId == 3){
+        query = {
+            userId: req.user.id,
+            userType: "user"
         };
     }
     logs = await walletLogRepository.paginate(query, req.query.page || 1, req.query.limit || 100);
