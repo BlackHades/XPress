@@ -31,7 +31,9 @@ const create = async (req,res,next) => {
             country:payload.country.toUpperCase(),
             type:payload.type,
             priceRange: payload.priceRange,
-            amount: payload.amount
+            amount: payload.amount,
+            affiliateCharge: payload.affiliateCharge,
+            superAffiliateCharge: payload.superAffiliateCharge
         });
         log("Card: " + JSON.stringify(card));
         return createSuccessResponse(res, card, "Card Created");
