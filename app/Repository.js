@@ -39,6 +39,9 @@ class Repository{
         return this.Model.update(update,{where:condition})
     }
 
+    findAll(condition){
+        return this.Model.findAll({where:condition})
+    }
     all(condition){
         return this.Model.findAll(condition);
     };

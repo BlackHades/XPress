@@ -15,6 +15,7 @@ const affiliateValidator  = require('../../app/affiliates/AffiliateValidator');
 router.post('/', affiliateValidator.create(),  affiliateController.create);
 router.use(authenticate);
 router.get('/me',affiliateController.me);
+router.get('/users',affiliateController.users);
 
 router.use(adminAuth);
 router.get('/all', affiliateController.all);

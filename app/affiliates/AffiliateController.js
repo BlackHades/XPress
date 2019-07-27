@@ -9,6 +9,8 @@ const emailService = require("../../services/EmailService");
 const smsService = require("../../services/SMSService");
 const messages =  require("../../helpers/Messages");
 const jwt = require('jsonwebtoken');
+const userRepository = require("../users/UserRepository");
+const transactionRepository = require("../transactions/TransactionRepository");
 
 exports.create = async (req, res, next) => {
     try{
@@ -134,6 +136,7 @@ exports.changeAffiliateActiveStatus = async (req, res) => {
     affiliate = await affiliate.save();
     return createSuccessResponse(res, affiliate, "Process Completed");
 };
+
 exports.changeAffiliateType = async (req, res) => {
     const typeOption = ["normal","super"];
     const { affiliateId, type} = req.body;
@@ -153,8 +156,26 @@ exports.me = async (req,res) => {
     return createSuccessResponse(res, affiliate);
 };
 
-
 exports.all = async (req, res) => {
     const affiliates = await  affiliateRepository.all();
     return createSuccessResponse(res, affiliates);
+};
+
+exports.users = async (req, res) => {
+    const affiliateId = res.affiliate && res.affiliate.id || req.query.affiliateId;
+    let affiliate;
+    if(res.affiliate)
+        affiliate = res.affiliate;
+
+    if(!affiliate){
+        if(!req.query.affiliateId)
+            return createErrorResponse(res,"Affiliate Identifier not found");
+        affiliate = await affiliateRepository.find(req.query.affiliateId);
+        if(!affiliate)
+            return createErrorResponse(res, "Affiliate Not Found");
+    }
+    const users = await userRepository.findAll({affiliateCode: affiliate.username});
+    debug(users);
+    return createSuccessResponse(res, users);
+
 };
