@@ -11,6 +11,7 @@ const {createSuccessResponse, createErrorResponse, validationHandler} = require(
     cardRepository = require('../cards/CardRepository'),
     bitcoinRepository = require('../bitcoins/BitcoinRepository'),
     walletRepository = require("../wallets/WalletRepository"),
+    walletLogRepository = require("../wallet-logs/WalletLogRepository"),
     debug = require("debug")("app:debug"),
     {filter,sumBy}= require("lodash");
 /**
@@ -103,7 +104,16 @@ const create = async (req, res, next) => {
             wallet.balance += charge;
             wallet = await wallet.save();
         }
-        debug("completed", wallet, charge);
+
+
+        let log = await walletLogRepository.create({
+            userId: affiliate.id,
+            userType:"affiliate",
+            amount: charge,
+            description: `Commission on transaction ${transaction.transactionId}`,
+            transactionId: transaction.transactionId
+        });
+        debug("completed", wallet, log);
     } catch (e) {
         next(e);
     }
