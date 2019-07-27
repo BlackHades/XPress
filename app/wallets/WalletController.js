@@ -7,7 +7,33 @@ const affiliateRepository = require("../affiliates/AffiliateRepository");
 const walletRepository = require("./WalletRepository");
 const walletLogRepository = require("../wallet-logs/WalletLogRepository");
 
-exports.fetch = (req, res) => {
+exports.fetch = async (req, res) => {
+    let wallet, query = {};
+    if(req.affiliate){
+        query = {
+            userId: req.affiliate.id,
+            userType: "affiliate"
+        };
+
+        wallet = await walletRepository.findOne(query);
+    }else{
+        wallet = await walletRepository.paginate(query, req.query.page || 1, req.query.limit || 100);
+    }
+    return createSuccessResponse(res, wallet);
+};
+
+
+exports.logs = async  (req, res) => {
+    let logs, query = {};
+
+    if(req.affiliate){
+        query = {
+            userId: req.affiliate.id,
+            userType: "affiliate"
+        };
+    }
+    logs = await walletLogRepository.paginate(query, req.query.page || 1, req.query.limit || 100);
+    return createSuccessResponse(res, logs);
 
 };
 

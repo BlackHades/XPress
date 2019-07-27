@@ -184,8 +184,8 @@ exports.transactions = async (req, res) => {
 
 
     let affiliate;
-    if(res.affiliate)
-        affiliate = res.affiliate;
+    if(req.affiliate)
+        affiliate = req.affiliate;
 
     if(!affiliate){
         if(!req.query.affiliateId)

@@ -79,7 +79,7 @@ class Repository{
         const query = {};
         if(offset && offset > 0)
             query.offset = offset;
-        query.limit = limit;
+        query.limit = parseInt(limit);
         return this.Model.findAll({
             where: condition,
             order: [['id', 'DESC']],

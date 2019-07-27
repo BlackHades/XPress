@@ -11,6 +11,9 @@ const walletValidator  = require("../../app/wallets/WalletValidator");
 
 router.use(authenticate);
 
+router.get("/logs", walletController.logs);
+router.get("/", walletController.fetch);
+
 
 router.use(adminAuth);
 
