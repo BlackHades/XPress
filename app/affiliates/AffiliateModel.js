@@ -23,6 +23,10 @@ module.exports = (sequelize, type) => {
             primaryKey: true,
             autoIncrement: true
         },
+        type:{
+            type: type.STRING,
+            defaultValue: "normal"
+        },
         name: {
             type: type.STRING,
             allowNull:false

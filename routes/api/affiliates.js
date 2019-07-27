@@ -20,6 +20,7 @@ router.use(adminAuth);
 router.get('/all', affiliateController.all);
 router.put('/status', affiliateController.status);
 router.patch('/isActive', affiliateController.changeAffiliateActiveStatus);
+router.patch('/type', affiliateController.changeAffiliateType);
 //get all affiliate
 
 module.exports = router;

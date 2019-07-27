@@ -122,7 +122,6 @@ exports.status = async (req,res) => {
 };
 
 exports.changeAffiliateActiveStatus = async (req, res) => {
-    debug("Body", req.body);
     const isActiveOption = [0,1];
     const { affiliateId, isActive} = req.body;
     if(!isActiveOption.includes(isActive))
@@ -132,6 +131,19 @@ exports.changeAffiliateActiveStatus = async (req, res) => {
         return createErrorResponse(res, "Affiliate not found");
 
     affiliate.isActive = isActive;
+    affiliate = await affiliate.save();
+    return createSuccessResponse(res, affiliate, "Process Completed");
+};
+exports.changeAffiliateType = async (req, res) => {
+    const typeOption = ["normal","super"];
+    const { affiliateId, type} = req.body;
+    if(!typeOption.includes(type))
+        return createErrorResponse(res, "Type Option is invalid.");
+    let affiliate = await affiliateRepository.find(affiliateId);
+    if(!affiliate)
+        return createErrorResponse(res, "Affiliate not found");
+
+    affiliate.type = type;
     affiliate = await affiliate.save();
     return createSuccessResponse(res, affiliate, "Process Completed");
 };
