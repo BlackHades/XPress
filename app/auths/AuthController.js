@@ -185,11 +185,14 @@ const affiliates = async (req, res, next) => {
             return createErrorResponse(res, validationHandler(valFails), valFails.array);
 
         let payload = req.body;
-        let affiliate = await affiliateRepository.findOne({email: payload.email});
+        let affiliate = await affiliateRepository.findOneWithPassword({email: payload.email});
         if(!affiliate)
             return createErrorResponse(res, "Invalid Credentials");
         if (!bcrypt.compareSync(payload.password, affiliate.password))
             return createErrorResponse(res, "Invalid Credentials",);
+
+        if(affiliate && affiliate.isActive == 0)
+            return createErrorResponse(res, "Account is inactive. Contact the Administrator");
 
         const access = jwt.sign({affiliate}, process.env.SECURITY_KEY, {
             expiresIn: 86400 * 2 // expires in 48 hours if its not from a mobile device else 30 days
@@ -209,6 +212,7 @@ const affiliates = async (req, res, next) => {
             }
         }, "Login Successful")
     } catch (e) {
+        debug(e);
         next(e);
     }
 };

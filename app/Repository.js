@@ -26,7 +26,9 @@ class Repository{
     findOne(condition){
         return this.Model.findOne({where: condition});
     }
-
+    findOneWithPassword(condition){
+        return this.Model.scope("withPassword").findOne({where:condition});
+    }
     update(condition, update){
         return this.Model.update(update,{where:condition})
     }

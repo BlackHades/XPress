@@ -83,14 +83,19 @@ exports.create = async (req, res, next) => {
         next(e);
     }
 };
+
 exports.status = async (req,res) => {
     let allStatus = ["rejected","approved"];
     const {status, affiliateId, message} = req.query;
+
     if(!allStatus.includes(status))
         return createErrorResponse(res, "Unknown status", null);
+
     if(!affiliateId)
         return createErrorResponse(res, "Affiliate identifier not found.");
+
     let affiliate = await affiliateRepository.find(affiliateId);
+
     if(!affiliate)
         return createErrorResponse(res, "Affiliate not found");
 
@@ -98,8 +103,11 @@ exports.status = async (req,res) => {
         return createSuccessResponse(res, affiliate, "Status Successfully Changed");
 
     affiliate.status = status.toLowerCase();
+
     affiliate.approvedBy = req.user.id;
+
     affiliate = await affiliate.save();
+
     createSuccessResponse(res, affiliate, "Status Successfully Changed");
 
     if(affiliate.status == "approved"){
@@ -113,6 +121,20 @@ exports.status = async (req,res) => {
     }
 };
 
+exports.changeAffiliateActiveStatus = async (req, res) => {
+    debug("Body", req.body);
+    const isActiveOption = [0,1];
+    const { affiliateId, isActive} = req.body;
+    if(!isActiveOption.includes(isActive))
+        return createErrorResponse(res, "IsActive Option is invalid. 1 or 0 is required as (true of false)");
+    let affiliate = await affiliateRepository.find(affiliateId);
+    if(!affiliate)
+        return createErrorResponse(res, "Affiliate not found");
+
+    affiliate.isActive = isActive;
+    affiliate = await affiliate.save();
+    return createSuccessResponse(res, affiliate, "Process Completed");
+};
 
 exports.me = async (req,res) => {
     const affiliate = await affiliateRepository.find(req.affiliate.id);

@@ -21,7 +21,7 @@ exports.create = () => {
         check('shortNote','Short note is required').not().isEmpty(),
         check('email').custom(async value => {
 
-            await affiliateRepository.truncate();
+            // await affiliateRepository.truncate();
             return affiliateRepository.findOne({email: value}).then(affiliate => {
                 if(affiliate) return Promise.reject('Email has been taken');
             })

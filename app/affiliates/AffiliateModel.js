@@ -82,6 +82,12 @@ module.exports = (sequelize, type) => {
             type: type.STRING,
             defaultValue:"pending"
         },
+        isActive:{
+            allowNull: true,
+            type: type.INTEGER,
+            after: "status",
+            defaultValue: true
+        },
         approvedBy: {
             type: type.INTEGER,
             allowNull:true
@@ -90,6 +96,17 @@ module.exports = (sequelize, type) => {
         defaultScope: {
             attributes: {
                 exclude: ["password"]
+            }
+        },scopes: {
+            withPassword: {
+                attributes:{
+                    include: ["password"]
+                }
+            },
+            active:{
+                where:{
+                    isActive: true
+                }
             }
         }
     });
