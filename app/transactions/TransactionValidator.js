@@ -19,6 +19,7 @@ let create = () => {
             })
         }),
         check("transactionType","Invalid Transaction Type").isIn([transactionConstant.TYPE_BITCOIN, transactionConstant.TYPE_CARD]),
+        check("quantity","Quantity is required").not().isEmpty().isNumeric(),
     ];
 };
 

@@ -4,10 +4,14 @@ const {createSuccessResponse, createErrorResponse, validationHandler} = require(
     {validationResult } = require('express-validator/check'),
     transactionRepository = require("./TransactionRepository"),
     transactionConstant = require("./TransactionConstant"),
+    userRepository = require("../users/UserRepository"),
+    affiliateRepository = require("../affiliates/AffiliateRepository"),
     log = require("../../helpers/Logger"),
     role = require("../users/UserConstant"),
     cardRepository = require('../cards/CardRepository'),
     bitcoinRepository = require('../bitcoins/BitcoinRepository'),
+    walletRepository = require("../wallets/WalletRepository"),
+    debug = require("debug")("app:debug"),
     {filter,sumBy}= require("lodash");
 /**
  * Create Transactions
@@ -19,6 +23,9 @@ const {createSuccessResponse, createErrorResponse, validationHandler} = require(
 
 const create = async (req, res, next) => {
     try{
+
+
+        debug("Here");
 
         //Validate Request
         const valFails = validationResult(req);
@@ -34,7 +41,7 @@ const create = async (req, res, next) => {
         //check for bitcoin or cardId
         let creatorId = req.user.id;
         let payload = req.body;
-        let card,bitcoin;
+        let card,bitcoin, affiliateCharge, superAffiliateCharge;
 
         //If transaction is a card transaction
         if(payload.transactionType === transactionConstant.TYPE_CARD){
@@ -43,6 +50,10 @@ const create = async (req, res, next) => {
             card = await cardRepository.find(payload.cardId);
             if(!card || !card.isAvailable)
                 return createErrorResponse(res,"Card Not Found or Card Is Not Available");
+
+
+            affiliateCharge = card.affiliateCharge;
+            superAffiliateCharge = card.superAffiliateCharge;
         }
 
         //If transaction is a bitcoin transaction
@@ -52,6 +63,10 @@ const create = async (req, res, next) => {
             bitcoin = await bitcoinRepository.find(payload.bitcoinId);
             if(!bitcoin)
                 return createErrorResponse(res,"Bitcoin Not Found");
+
+
+            affiliateCharge = bitcoin.affiliateCharge;
+            superAffiliateCharge = bitcoin.superAffiliateCharge;
         }
 
         payload.createdBy = creatorId;
@@ -59,8 +74,36 @@ const create = async (req, res, next) => {
         const transaction = await transactionRepository.create(payload);
         transaction.dataValues.bitcoin = bitcoin;
         transaction.dataValues.card = card;
-        log("Transactions: " + JSON.stringify(transaction));
-        return createSuccessResponse(res, transaction, "Transaction Completed");
+        createSuccessResponse(res, transaction, "Transaction Completed");
+
+
+        if(transaction.status.toLowerCase() != "success" && transaction.status.toLowerCase() != "successful")
+            return;
+
+        debug(affiliateCharge, superAffiliateCharge, transaction.quantity);
+        const user = await userRepository.find(transaction.userId);
+        if(!user)
+            return;
+
+        const affiliate = await affiliateRepository.findOne({username: user.affiliateCode});
+        if(!affiliate)
+            return;
+
+        const charge = affiliate.type == "super" ? transaction.quantity * superAffiliateCharge : transaction.quantity * affiliateCharge;
+        let [wallet, created] = await walletRepository.findOrCreate({
+            userId: affiliate.id,
+            userType:"affiliate",
+        }, {
+            userId: affiliate.id,
+            userType:"affiliate",
+            balance: charge,
+        });
+
+        if(!created){
+            wallet.balance += charge;
+            wallet = await wallet.save();
+        }
+        debug("completed", wallet, charge);
     } catch (e) {
         next(e);
     }

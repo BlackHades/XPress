@@ -15,7 +15,7 @@ class TransactionRepository extends Repository{
             length: 12,
             charset: 'numeric'
         });
-        let transaction = await this.Model.findOne({transactionId});
+        let transaction = await this.findOne({transactionId});
         if(transaction == null)
             return transactionId;
         else

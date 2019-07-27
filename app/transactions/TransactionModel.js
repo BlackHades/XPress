@@ -38,6 +38,10 @@ module.exports = (queryInterface, Sequelize) => {
             type: Sequelize.TEXT,
             defaultValue:"PENDING"
         },
+        quantity:{
+            type: Sequelize.INTEGER,
+            defaultValue: 1
+        },
         createdBy:Sequelize.INTEGER
     },{
         paranoid:true
