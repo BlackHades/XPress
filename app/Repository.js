@@ -14,6 +14,8 @@ class Repository{
         this.bulkCreate = this.bulkCreate.bind(this);
         this.upsert = this.upsert.bind(this);
         this.paginate = this.paginate.bind(this);
+        this.findOneWithPassword = this.findOneWithPassword.bind(this);
+        // this.findOe = this.findOneWithPassword.bind(this);
     }
     create(payload){
         return this.Model.create(payload);
@@ -21,6 +23,10 @@ class Repository{
 
     find(id){
         return this.Model.findByPk(id);
+    }
+
+    findOrCreate(condition, defaults){
+        return this.Model.findOrCreate({where:condition,defaults});
     }
 
     findOne(condition){

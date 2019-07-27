@@ -36,6 +36,8 @@ const Verification = require("../app/verifications/VerificationModel")(sequelize
 const UserChat = require("../app/user-chats/UserChatModel")(sequelize, Sequelize);
 const Mailer = require("../app/notifications/mailers/MailModel")(sequelize, Sequelize);
 const SMS = require("../app/notifications/sms/SMSModel")(sequelize, Sequelize);
+const Wallet = require("../app/wallets/WalletModel")(sequelize, Sequelize);
+const WalletLog = require("../app/wallet-logs/WalletLogModel")(sequelize, Sequelize);
 /**
  * Relationships
  */
@@ -88,6 +90,8 @@ module.exports = {
     Verification,
     UserChat,
     Mailer,
-    SMS
+    SMS,
+    Wallet,
+    WalletLog
 };
 

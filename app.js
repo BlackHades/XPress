@@ -11,23 +11,6 @@ const expressValidator = require('express-validator');
 const cors = require('cors');
 const morgan = require('morgan');
 const Sentry = require('@sentry/node');
-const indexRouter = require('./routes/index');
-const usersRouter = require('./routes/api/users');
-const filesRouter = require('./routes/api/files');
-const passwordsRouter = require('./routes/api/passwords');
-const cardsRouter = require('./routes/api/cards');
-const messageRouter = require('./routes/api/messages');
-const postRouter = require('./routes/api/posts');
-const transactionRouter = require('./routes/api/transactions');
-const pushRouter = require('./routes/api/pushs');
-const bitcoinRouter = require('./routes/api/bitcoins');
-const authRouter = require('./routes/api/auth');
-const contactRouter = require('./routes/api/contacts');
-const utilityRouter = require('./routes/api/utilities');
-const affiliateRouter = require('./routes/api/affiliates');
-const verificationRouter = require('./routes/api/verifications');
-const notificationRouter = require('./routes/api/notifications');
-const apiRouter = require('./routes/api');
 const errorHandler = require('./helpers/ErrorHandler');
 const app = express();
 const {sequelize} = require('./database/sequelize');
@@ -67,24 +50,7 @@ try {
   if (err.code !== 'EEXIST') throw err
 }
 
-//Routes
-app.use('/', indexRouter);
-app.use('/api/v1',apiRouter);
-app.use('/api/v1/users',usersRouter);
-app.use('/api/v1/files',filesRouter);
-app.use('/api/v1/cards',cardsRouter);
-app.use('/api/v1/passwords',passwordsRouter);
-app.use('/api/v1/posts',postRouter);
-app.use('/api/v1/transactions',transactionRouter);
-app.use('/api/v1/push-tokens',pushRouter);
-app.use('/api/v1/messages',messageRouter);
-app.use('/api/v1/bitcoins',bitcoinRouter);
-app.use('/api/v1/auths',authRouter);
-app.use('/api/v1/contacts',contactRouter);
-app.use('/api/v1/utilities',utilityRouter);
-app.use('/api/v1/affiliates', affiliateRouter);
-app.use('/api/v1/verifications', verificationRouter);
-app.use('/api/v1/notifications', notificationRouter);
+require("./routes/router")(app);
 
 /**
  * Create HTTP server.
