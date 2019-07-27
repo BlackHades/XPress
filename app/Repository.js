@@ -1,5 +1,5 @@
 "use strict";
-
+const Op = require("sequelize").Op;
 
 class Repository{
     constructor(Model){
@@ -37,6 +37,16 @@ class Repository{
     }
     update(condition, update){
         return this.Model.update(update,{where:condition})
+    }
+
+    findIn(key, values = []){
+        return this.Model.findAll({
+            where:{
+                [key]: {
+                    [Op.in]: values
+                }
+            }
+        })
     }
 
     findAll(condition){

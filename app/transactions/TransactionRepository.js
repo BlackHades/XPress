@@ -1,116 +1,87 @@
 const { Transaction, User, Card, Bitcoin } = require("../../database/sequelize");
 const randomstring = require("randomstring");
+const Repository = require("../Repository");
 
+class TransactionRepository extends Repository{
+    constructor(){
+        super(Transaction);
+        this.generateTransactionId = this.generateTransactionId.bind(this);
+        this.getAllTransactions = this.getAllTransactions.bind(this);
+        this.getAgentTransaction = this.getAgentTransaction.bind(this);
+    }
 
-/**
- * Generate Transaction ID
- * @returns {Promise<*|*>}
- */
-const generateTransactionId = async () => {
-    let transactionId = randomstring.generate({
-        length: 12,
-        charset: 'numeric'
-    });
-    let transaction = await Transaction.findOne({where:{transactionId:transactionId}});
-    if(transaction == null)
-        return transactionId;
-    else
-        return generateTransactionId();
-};
+    async generateTransactionId (){
+        let transactionId = randomstring.generate({
+            length: 12,
+            charset: 'numeric'
+        });
+        let transaction = await this.Model.findOne({transactionId});
+        if(transaction == null)
+            return transactionId;
+        else
+            return await this.generateTransactionId();
+    };
 
-//Create Transaction
-const create = (data) => {
-    return Transaction.create(data);
-};
+    getAllTransactions(){
+        return this.Model.findAll({
+            include:[{
+                model: Card,
+                as: "card"
+            },{
+                model: User,
+                as: "user"
+            },{
+                model: User,
+                as: "agent",
+            },{
+                model: Bitcoin,
+                as: "bitcoin",
+            }]
+        });
+    }
 
-const getAllTransactions = () => {
-    return Transaction.findAll({
-        include:[{
-            model: Card,
-            as: "card"
-        },{
-            model: User,
-            as: "user"
-        },{
-            model: User,
-            as: "agent",
-        },{
-            model: Bitcoin,
-            as: "bitcoin",
-        }]
-    });
-};
+    getAgentTransaction(userId){
+        return this.Model.findAll({
+            where:{createdBy:userId},
+            include:[{
+                model: Card,
+                as: "card"
+            },{
+                model: User,
+                as: "user"
+            },{
+                model: User,
+                as: "agent",
+            },{
+                model: Bitcoin,
+                as: "bitcoin",
+            }]
+        })
+    };
 
+    find(transactionId){
+        return this.Model.findOne({
+            where:{transactionId: transactionId},
+            include:[{
+                model: Card,
+                as: "card"
+            },{
+                model: User,
+                as: "user"
+            },{
+                model: User,
+                as: "agent",
+            },{
+                model: Bitcoin,
+                as: "bitcoin",
+            }]
+        });
+    };
 
-const getUserTransaction = (userId) => {
-    return Transaction.findAll({
-        where:{userId:userId},
-        include:[{
-            model: Card,
-            as: "card"
-        },{
-            model: User,
-            as: "user"
-        },{
-            model: User,
-            as: "agent",
-        },{
-            model: Bitcoin,
-            as: "bitcoin",
-        }]
-    })
-};
+    destroy(transactionId){
+        return super.destroy({transactionId: transactionId})
+    }
 
+}
 
-const getAgentTransaction = (userId) => {
-    return Transaction.findAll({
-        where:{createdBy:userId},
-        include:[{
-            model: Card,
-            as: "card"
-        },{
-            model: User,
-            as: "user"
-        },{
-            model: User,
-            as: "agent",
-        },{
-            model: Bitcoin,
-            as: "bitcoin",
-        }]
-    })
-};
-
-const find = (transactionId) => {
-    return Transaction.findOne({
-        where:{transactionId: transactionId},
-        include:[{
-            model: Card,
-            as: "card"
-        },{
-            model: User,
-            as: "user"
-        },{
-            model: User,
-            as: "agent",
-        },{
-            model: Bitcoin,
-            as: "bitcoin",
-        }]
-    });
-};
-
-
-const destroy = (transactionId) => {
-    return Transaction.destroy({where:{transactionId: transactionId}})
-};
-
-module.exports = {
-    generateTransactionId,
-    create,
-    getAllTransactions,
-    getUserTransaction,
-    getAgentTransaction,
-    find,
-    destroy
-};
+module.exports = (new TransactionRepository());

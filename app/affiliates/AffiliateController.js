@@ -1,5 +1,5 @@
 "use strict";
-const {createSuccessResponse, createErrorResponse, validationHandler, formatPhone} = require('../../helpers/response');
+const {createSuccessResponse, createErrorResponse, validationHandler, formatPhone, _sumArrayOfObject} = require('../../helpers/response');
 const {validationResult } = require('express-validator/check');
 const bcrypt = require('bcryptjs');
 const debug = require("debug")("app:debug");
@@ -162,7 +162,6 @@ exports.all = async (req, res) => {
 };
 
 exports.users = async (req, res) => {
-    const affiliateId = res.affiliate && res.affiliate.id || req.query.affiliateId;
     let affiliate;
     if(res.affiliate)
         affiliate = res.affiliate;
@@ -178,4 +177,43 @@ exports.users = async (req, res) => {
     debug(users);
     return createSuccessResponse(res, users);
 
+};
+
+
+exports.transactions = async (req, res) => {
+
+
+    let affiliate;
+    if(res.affiliate)
+        affiliate = res.affiliate;
+
+    if(!affiliate){
+        if(!req.query.affiliateId)
+            return createErrorResponse(res,"Affiliate Identifier not found");
+        affiliate = await affiliateRepository.find(req.query.affiliateId);
+        if(!affiliate)
+            return createErrorResponse(res, "Affiliate Not Found");
+    }
+
+    const response = {
+        success: 0,
+        failed: 0
+    };
+    const users = await userRepository.findAll({affiliateCode: affiliate.username});
+    if(!users || users.length == 0)
+        return createSuccessResponse(res, response);
+
+    const ids = users.map(user => user.id.toString());
+    const transactions = await  transactionRepository.findIn("userId", ids);
+    debug("Transa", transactions);
+
+    const type = req.query.type || "data";
+    response.success = transactions.filter(tr => tr.status.toLowerCase() == "successful");
+    response.failed = transactions.filter(tr => tr.status.toLowerCase() == "failed");
+    if(type == "sum"){
+        response.success = _sumArrayOfObject(response.success, "amount");
+        response.failed = _sumArrayOfObject(response.failed, "amount");
+    }
+
+    return createSuccessResponse(res, response);
 };

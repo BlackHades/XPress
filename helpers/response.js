@@ -1,4 +1,5 @@
 "use strict";
+const _reduce = require("lodash/reduce");
 let createSuccessResponse = (res,data, message = "Completed") => {
     res.json({status: 1, message: message, data:data});
 };
@@ -24,9 +25,18 @@ let formatPhone = (phoneNumber) => {
     return phoneNumber ? `+234${phoneNumber}` : undefined;
 };
 
+let _sumArrayOfObject = (payload, sumKey) => {
+    try{
+        return _reduce(payload, (a,b) => ({[sumKey]: parseFloat(a[sumKey]) + parseFloat(b[sumKey])}))[sumKey]
+    }catch (e) {
+        return 0;
+    }
+};
+
 module.exports = {
   createSuccessResponse,
   createErrorResponse,
     validationHandler,
-    formatPhone
+    formatPhone,
+    _sumArrayOfObject
 };
