@@ -19,7 +19,7 @@ class SMSService{
                 username: process.env.SMS_USERNAME,
                 password: process.env.SMS_PASSWORD,
                 sender: "chiji",
-                message: `${message} -- chiji14`,
+                message: `${message} --chiji14xchange`,
                 forcednd: 1,
                 recipients: phoneNumber
             }

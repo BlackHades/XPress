@@ -11,7 +11,8 @@ const messages =  require("../../helpers/Messages");
 const jwt = require('jsonwebtoken');
 const userRepository = require("../users/UserRepository");
 const transactionRepository = require("../transactions/TransactionRepository");
-
+const walletRepository = require("../wallets/WalletRepository");
+const bankAccountRepository = require("../bank-accounts/BankAccountRepository");
 exports.create = async (req, res, next) => {
     try{
         const valFails = validationResult(req);
@@ -153,6 +154,18 @@ exports.changeAffiliateType = async (req, res) => {
 
 exports.me = async (req,res) => {
     const affiliate = await affiliateRepository.find(req.affiliate.id);
+    const wallets = await walletRepository.findOne({
+        userType: "affiliate",
+        userId: affiliate.id,
+    });
+
+    affiliate.dataValues.balance = wallets.balance || 0;
+    const bankAccount = await bankAccountRepository.findOne({
+        userType: "affiliate",
+        userId: affiliate.id,
+    });
+
+    affiliate.dataValues.bankAccount = bankAccount;
     return createSuccessResponse(res, affiliate);
 };
 
