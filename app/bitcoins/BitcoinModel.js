@@ -10,7 +10,15 @@ module.exports = (sequelize, type) => {
         name:type.STRING,
         lowerBound:type.STRING,
         upperBound:type.STRING,
-        value:type.STRING
+        value:type.STRING,
+        affiliateCharge:{
+            type: type.FLOAT,
+            defaultValue: 0,
+        },
+        superAffiliateCharge:{
+            type: type.FLOAT,
+            defaultValue: 0,
+        }
     });
 };
 // Export the model

@@ -30,6 +30,14 @@ module.exports = (sequelize, type) => {
         isAvailable:{
             type: type.BOOLEAN,
             defaultValue: true
+        },
+        affiliateCharge:{
+            type: type.FLOAT,
+            defaultValue: 0,
+        },
+        superAffiliateCharge:{
+            type: type.FLOAT,
+            defaultValue: 0,
         }
     },{
         paranoid:true
