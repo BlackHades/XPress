@@ -245,8 +245,9 @@ module.exports = (subject, text) => {
                                 <tr>
                                   <td style="padding-right: 0px; padding-left: 0px;" align="center">
                                     <a href="https://chiji14xchange.com/" target="_blank">
-                                      <img align="center" border="0" src="https://res.cloudinary.com/chiji14exchange/image/upload/v1563861290/acfa4212bf7f710a572a13230a5fcca6.png" alt="chiji14xchange"
-                                        title="chiji14xchange"
+                                      <img align="center" border="0"
+                                        src="https://res.cloudinary.com/chiji14exchange/image/upload/v1563861290/acfa4212bf7f710a572a13230a5fcca6.png"
+                                        alt="chiji14xchange" title="chiji14xchange"
                                         style="outline: none;text-decoration: none;-ms-interpolation-mode: bicubic;clear: both;display: block !important;border: none;height: auto;float: none;width: 100%;max-width: 274px;"
                                         width="274">
                                     </a>
@@ -293,9 +294,10 @@ module.exports = (subject, text) => {
                             <td
                               style="overflow-wrap:break-word;word-break:break-word;padding:20px;font-family:'Lato',sans-serif;"
                               align="left">
+
                               <div style="color: #000; line-height: 160%; word-wrap: break-word;">
                                 <p style="font-size: 14px; line-height: 160%;">
-                                    ${text}
+                                  ${text}
                                 </p>
                               </div>
 
@@ -351,7 +353,8 @@ module.exports = (subject, text) => {
                                       <tr>
                                         <td>
                                           <a href="https://web.facebook.com/chiji14xchange/" target="_blank">
-                                            <img align="center" border="0" src="https://res.cloudinary.com/chiji14exchange/image/upload/v1563861069/c9c6d4145dbb1860598bee4e9ed27534.png"
+                                            <img align="center" border="0"
+                                              src="https://res.cloudinary.com/chiji14exchange/image/upload/v1563861069/c9c6d4145dbb1860598bee4e9ed27534.png"
                                               alt="chiji14xchange facebook" title="chiji14xchange facebook"
                                               style="outline: none;text-decoration: none;-ms-interpolation-mode: bicubic;clear: both;display: inline-block !important;border: none;height: auto;float: none;width: 100%;max-width: 50px;"
                                               width="50">
@@ -359,7 +362,8 @@ module.exports = (subject, text) => {
                                         </td>
                                         <td>
                                           <a href="https://twitter.com/chiji14xchange" target="_blank">
-                                            <img align="center" border="0" src="https://res.cloudinary.com/chiji14exchange/image/upload/v1563861120/843dd8ca717a56cfc9a615df10d39944.png"
+                                            <img align="center" border="0"
+                                              src="https://res.cloudinary.com/chiji14exchange/image/upload/v1563861120/843dd8ca717a56cfc9a615df10d39944.png"
                                               alt="chiji14xchange twitter" title="chiji14xchange twitter"
                                               style="outline: none;text-decoration: none;-ms-interpolation-mode: bicubic;clear: both;display: inline-block !important;border: none;height: auto;float: none;width: 100%;max-width: 50px;"
                                               width="50">
@@ -368,7 +372,8 @@ module.exports = (subject, text) => {
                                         <td>
                                           <a href="https://www.youtube.com/channel/UCQXmS0YjsWIR77PmNoHfZrg"
                                             target="_blank">
-                                            <img align="center" border="0" src="https://res.cloudinary.com/chiji14exchange/image/upload/v1563861235/1e956b0f5deaec74b2d69e445bb4db07.png"
+                                            <img align="center" border="0"
+                                              src="https://res.cloudinary.com/chiji14exchange/image/upload/v1563861235/1e956b0f5deaec74b2d69e445bb4db07.png"
                                               alt="chiji14xchange youtube" title="chiji14xchange youtube"
                                               style="outline: none;text-decoration: none;-ms-interpolation-mode: bicubic;clear: both;display: inline-block !important;border: none;height: auto;float: none;width: 100%;max-width: 38px; margin-top: 4px"
                                               width="38">
@@ -376,9 +381,19 @@ module.exports = (subject, text) => {
                                         </td>
                                         <td>
                                           <a href="https://www.linkedin.com/company/chiji14xchange/" target="_blank">
-                                            <img align="center" border="0" src="https://res.cloudinary.com/chiji14exchange/image/upload/v1563861197/b70aff4faa44018e95988440d11fa393.png"
+                                            <img align="center" border="0"
+                                              src="https://res.cloudinary.com/chiji14exchange/image/upload/v1563861197/b70aff4faa44018e95988440d11fa393.png"
                                               alt="chiji14xchange linkedIn" title="chiji14xchange linkedIn"
                                               style="outline: none;text-decoration: none;-ms-interpolation-mode: bicubic;clear: both;display: inline-block !important;border: none;height: auto;float: none;width: 100%;max-width: 38px; margin-top: 4px"
+                                              width="38">
+                                          </a>
+                                        </td>
+                                        <td>
+                                          <a href="https://www.instagram.com/officialchiji14xchange/" target="_blank">
+                                            <img align="center" border="0"
+                                              src="https://res.cloudinary.com/chiji14exchange/image/upload/v1565013926/39f9403f32fa78f6ba1f435a742e2a6e.jpg"
+                                              alt="chiji14xchange instagram" title="chiji14xchange instagram"
+                                              style="outline: none;text-decoration: none;-ms-interpolation-mode: bicubic;clear: both;display: inline-block !important;border: none;height: auto;float: none;width: 100%;max-width: 50px; margin-top: 4px"
                                               width="38">
                                           </a>
                                         </td>
@@ -389,12 +404,21 @@ module.exports = (subject, text) => {
 
                                 <div style="font-family: arial, helvetica, sans-serif;">&nbsp;</div>
                                 <div style="font-family: arial, helvetica, sans-serif;"><span
-                                  style="font-size: 16px; color: #999999; line-height: 14.4px; margin: 10px 0;">
-                                    You can also download our android app on google play. <br />
-                                    <a href="https://play.google.com/store/apps/details?id=com.chiji14xchange" target="_blank">
-                                      <img align="center" border="0" src="https://res.cloudinary.com/chiji14exchange/image/upload/v1563861161/752a4d5919b05f9b82809070fb4225c1.png"
-                                        alt="chiji14xchange facebook" title="chiji14xchange facebook"
-                                        style="margin: 10px 0;outline: none;text-decoration: none;-ms-interpolation-mode: bicubic;clear: both;display: inline-block !important;border: none;height: auto;float: none;width: 100%;max-width: 150px;"
+                                    style="font-size: 16px; color: #999999; line-height: 14.4px; margin: 10px 0;">
+                                    You can also download our app on google play and iOS store. <br /> <br />
+                                    <a href="https://play.google.com/store/apps/details?id=com.chiji14xchange"
+                                      target="_blank">
+                                      <img align="center" border="0"
+                                        src="https://res.cloudinary.com/chiji14exchange/image/upload/v1563861161/752a4d5919b05f9b82809070fb4225c1.png"
+                                        alt="chiji14xchange google play" title="chiji14xchange google play"
+                                        style="margin: 10px 10px 0;outline: none;text-decoration: none;-ms-interpolation-mode: bicubic;clear: both;display: inline-block !important;border: none;height: auto;float: none;width: 100%;max-width: 150px;"
+                                        width="100">
+                                    </a>
+                                    <a href="https://apps.apple.com/ng/app/chiji14xchange/id1459183957" target="_blank">
+                                      <img align="center" border="0"
+                                        src="https://res.cloudinary.com/chiji14exchange/image/upload/v1565013932/312d0915c9166ff7db86dfc70cc71e0d.png"
+                                        alt="chiji14xchange ios" title="chiji14xchange ios"
+                                        style="margin: 10px 10px 0;outline: none;text-decoration: none;-ms-interpolation-mode: bicubic;clear: both;display: inline-block !important;border: none;height: auto;float: none;width: 100%;max-width: 150px;"
                                         width="100">
                                     </a>
                                   </span></div>
