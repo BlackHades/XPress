@@ -24,6 +24,7 @@ exports.send = async (req, res) => {
 
         await mailerRepository.bulkCreate(query);
 
+        debug("email length", to.length);
         emailService.sendMultiple(to, subject, message, from)
             .then(response => debug("Multiple", response))
             .catch(err => {
