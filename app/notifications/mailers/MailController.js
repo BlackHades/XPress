@@ -25,13 +25,23 @@ exports.send = async (req, res) => {
         await mailerRepository.bulkCreate(query);
 
         debug("email length", to.length);
-        emailService.sendMultiple(to, subject, message, from)
-            .then(response => debug("Multiple", response))
-            .catch(err => {
-                debug("ErrorMultiple", {err});
-                debug("ErrorMultiple", JSON.stringify(err));
-                debug("ErrorMultiple", err.response.body.errors);
-            });
+
+        const allEmail = to;
+        let i = 1;
+        let length = 1;
+        while(allEmail.length) {
+            setInterval(() => {
+                emailService.sendMultiple(allEmail.splice(0,length), subject, message, from)
+                    .then(response => debug("Multiple + " + i, response))
+                    .catch(err => {
+                        debug("ErrorMultiple", {err});
+                        debug("ErrorMultiple", JSON.stringify(err));
+                        debug("ErrorMultiple", err.response.body.errors);
+                    });
+                i++;
+            }, 10000)
+        }
+
     }else{
         if(!to)
             return createErrorResponse(res, "At least one recipient is required");
