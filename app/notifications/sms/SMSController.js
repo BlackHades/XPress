@@ -29,9 +29,16 @@ exports.send = async (req, res) => {
     });
 
     await smsRepository.bulkCreate(query);
-    smsService.send(to, message)
-        .then(response => debug("", response))
-        .catch(err => debug("ErrorSingle", err));
+    const allSMS = manyTo;
+    let length = 2;
+    while(allSMS.length) {
+        const data = allSMS.splice(0,length);
+        debug(data.length, data.join());
+        smsService.send(data.join(), message)
+            .then(response => debug("SMS", response.data))
+            .catch(err => debug("ErrorSingle", err.response));
+    }
+
     return createSuccessResponse(res, null,"SMS Sent");
 };
 
