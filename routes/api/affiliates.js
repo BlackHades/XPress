@@ -16,7 +16,7 @@ router.post('/', affiliateValidator.create(),  affiliateController.create);
 router.use(authenticate);
 router.get('/me',affiliateController.me);
 router.get('/users',affiliateController.users);
-router.get('/transactions',affiliateController.transactions);
+router.get('/transactions', affiliateController.transactions);
 
 router.use(adminAuth);
 router.get('/all', affiliateController.all);
