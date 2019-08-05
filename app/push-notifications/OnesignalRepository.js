@@ -28,7 +28,7 @@ const sendNotificationToUser = (tokens = [], title, message, data) => {
 
     myClient.sendNotification(notification)
         .then(res => {
-            log(JSON.stringify(res))
+            log(res.httpResponse.statusCode);
         })
         .catch(err => log(JSON.stringify(err)))
 

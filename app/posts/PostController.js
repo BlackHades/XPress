@@ -14,7 +14,7 @@ const postRepository = require('./PostRepository');
  */
 const all = async (req,res,next) => {
     let posts = await postRepository.all();
-    console.log("Posts: " + JSON.stringify(posts));
+    // console.log("Posts: " + JSON.stringify(posts));
     return createSuccessResponse(res,posts,"Fetched");
 };
 
@@ -38,7 +38,7 @@ const create = async (req, res, next) => {
         payload.postedBy = req.user.id;
         //create post
         let post = await postRepository.create(payload);
-        console.log("Payload: " + payload);
+        // console.log("Payload: " + payload);
         return createSuccessResponse(res,post,"Post Created ");
     }catch (e) {
         next(e);
