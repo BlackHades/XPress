@@ -30,7 +30,7 @@ exports.send = async (req, res) => {
 
     await smsRepository.bulkCreate(query);
     const allSMS = manyTo;
-    let length = 2;
+    let length = 199;
     while(allSMS.length) {
         const data = allSMS.splice(0,length);
         debug(data.length, data.join());
