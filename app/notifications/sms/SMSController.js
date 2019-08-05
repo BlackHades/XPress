@@ -7,12 +7,19 @@ const smsRepository = require("./SMSRepository");
 
 exports.send = async (req, res) => {
     debug("I AM here SMS-----------------------");
-    const {to, message} = req.body;
+    let {to, message} = req.body;
     if(!message)
         return createErrorResponse(res, "Message is required");
     if(!to)
         return createErrorResponse(res, "At least one recipient is required");
-    let manyTo = to.split(",");
+
+    let manyTo = to;
+    if(to instanceof Array){
+        manyTo = to;
+        to = to.join();
+    }else{
+        manyTo = to.split(",");
+    }
     debug(manyTo);
     let query = manyTo.map(t => {
         return {
