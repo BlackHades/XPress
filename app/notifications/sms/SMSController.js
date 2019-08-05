@@ -20,7 +20,7 @@ exports.send = async (req, res) => {
     }else{
         manyTo = to.split(",");
     }
-    debug(manyTo);
+    debug(manyTo.length);
     let query = manyTo.map(t => {
         return {
             to: t,
@@ -30,7 +30,7 @@ exports.send = async (req, res) => {
 
     await smsRepository.bulkCreate(query);
     smsService.send(to, message)
-        .then(response => debug("Single", response))
+        .then(response => debug("", response))
         .catch(err => debug("ErrorSingle", err));
     return createSuccessResponse(res, null,"SMS Sent");
 };
