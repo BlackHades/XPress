@@ -38,6 +38,11 @@ process.on('unhandledRejection', (reason, promise) => {
 
 
 
+process.on("uncaughtRejection",(ex) => {
+    console.log("Ubcaught", {ex});
+    throw ex;
+});
+
 //sentry only enabled in production
 if(process.env.APP_ENV == "production"){
     Sentry.init({ dsn: 'https://780ec425d68046ab8edabc8a37fa1597@sentry.io/1447209' });
