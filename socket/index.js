@@ -42,11 +42,11 @@ const ioEvents = (io) => {
          */
 
         socket.on(EVENT_INITIALIZATION,(payload) => {
-            console.log("Init: " + JSON.stringify(payload));
+            // console.log("Init: " + JSON.stringify(payload));
             if(payload.userId !== undefined || payload.user !== null){
                 socket.auth = true;
                 socket.userId = payload.userId;
-                console.log("Initialized: " + socket);
+                // console.log("Initialized: " + socket);
                 //add user to online-users table
                 onlineUserRepository.add(socket.userId, socket.id);
                 messageController.fetchMessages(socket,payload.lastMessageId || 0, payload.limit);
@@ -70,7 +70,7 @@ const ioEvents = (io) => {
            try{
                //remove user from online-users table
                onlineUserRepository.remove(socket.userId, socket.id);
-               console.log(socket.id + " has disconnected");
+               // console.log(socket.id + " has disconnected");
            }catch (e) {
                socket.disconnect(true);
            }
