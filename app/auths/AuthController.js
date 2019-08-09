@@ -28,6 +28,9 @@ const login = async (req, res, next) => {
 
         let payload = req.body;
         let user = await fetchByEmail(payload.email, true);
+        console.log({user, body: req.body});
+        if(!user)
+            return createErrorResponse(res, "User Not Found");
         if (!user.isActive)
             return createErrorResponse(res, "Your Account is Inactive. Kindly Contact Your The Admin");
         //Compare Password
