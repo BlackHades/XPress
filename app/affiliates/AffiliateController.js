@@ -89,8 +89,8 @@ exports.create = async (req, res, next) => {
 
 exports.status = async (req,res) => {
     let allStatus = ["rejected","approved"];
-    const {status, affiliateId, message} = req.query;
-
+    debug("Req", req.body, req.query);
+    const {status, affiliateId, message} = req.body;
     if(!allStatus.includes(status))
         return createErrorResponse(res, "Unknown status", null);
 

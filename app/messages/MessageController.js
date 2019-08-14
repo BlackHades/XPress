@@ -152,7 +152,6 @@ const send = async (io, socket, payload) => {
         //Emit Message Sent
         socket.emit(EMIT_MESSAGE_SENT, {message: newMessage});
     } catch (e) {
-        console.log("Error Handler: " + JSON.stringify(e));
         socket.emit(EMIT_ERROR, JSON.stringify(e));
     }
 };
@@ -172,7 +171,6 @@ const disperseMessageToAllAgentAndAdmins = async (io, message) => {
 
     let onlineUsers = await onlineUserRepository.getMultipleOnlineUsersById(nonUserIds, true);
     onlineUsers.forEach(user => {
-        console.log("socketId: " + user.socketId);
         emitMessage(io, user.socketId, message);
     })
 };
@@ -181,7 +179,6 @@ const disperseMessageToUser = (io, message) => {
     onlineUserRepository.findByUserId(message.to)
         .then(onlineUsers => {
             onlineUsers.forEach(user => {
-                console.log("User: " + JSON.stringify(user));
                 emitMessage(io, user.socketId, message);
             });
         })
@@ -206,10 +203,7 @@ const disperseMessageToUser = (io, message) => {
  * mark message as delivered
  */
 const markAsDelivered = async (payload) => {
-    log("PayloadDelivered: " + JSON.stringify(payload));
     let message = await messageRepository.findByMessageId(payload.mid);
-    console.clear();
-    log("Message: " + JSON.stringify(message));
     if (message.status < 2)
         messageRepository.update(payload.mid, {
             status: 2
@@ -223,8 +217,6 @@ const markAsDelivered = async (payload) => {
 
 
 const saveUserChats = async  ({userId, chatList}) => {
-
-    debug("cht", chatList.length);
     let userChatList = await userChatRepository.findOne({userId});
     if(!userChatList){
         userChatList = await userChatRepository.create({
