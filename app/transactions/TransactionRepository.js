@@ -8,6 +8,7 @@ class TransactionRepository extends Repository{
         this.generateTransactionId = this.generateTransactionId.bind(this);
         this.getAllTransactions = this.getAllTransactions.bind(this);
         this.getAgentTransaction = this.getAgentTransaction.bind(this);
+        this.getUserTransaction = this.getUserTransaction.bind(this);
     }
 
     async generateTransactionId (){
@@ -81,6 +82,25 @@ class TransactionRepository extends Repository{
     destroy(transactionId){
         return super.destroy({transactionId: transactionId})
     }
+
+    getUserTransaction (userId){
+        return Transaction.findAll({
+            where:{userId:userId},
+            include:[{
+                model: Card,
+                as: "card"
+            },{
+                model: User,
+                as: "user"
+            },{
+                model: User,
+                as: "agent",
+            },{
+                model: Bitcoin,
+                as: "bitcoin",
+            }]
+        })
+    };
 
 }
 
