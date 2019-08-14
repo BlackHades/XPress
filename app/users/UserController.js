@@ -7,6 +7,8 @@ const userRepository = require('./UserRepository');
 const userConstant = require('./UserConstant');
 const transactionRepository = require("../transactions/TransactionRepository");
 const log = require("../../helpers/Logger");
+const walletRepository = require("../wallets/WalletRepository");
+const bankAccountRepository = require("../transactions/TransactionRepository");
 const debug = require("debug")("app:debug");
 const {
     EMIT_AGENT_STATUS
@@ -160,8 +162,23 @@ const destroy = async (req,res,next) => {
 };
 
 const me = async (req, res, next) => {
+
+    const user = await userRepository.find(req.user.id);
+
+    const wallets = await walletRepository.findOne({
+        userType: "user",
+        userId: user.id,
+    });
+
+    user.dataValues.balance = wallets.balance || 0;
+    const bankAccount = await bankAccountRepository.findOne({
+        userType: "user",
+        userId: user.id,
+    });
+
+    user.dataValues.bankAccount = bankAccount;
     return createSuccessResponse(res, {
-        user: await userRepository.find(req.user.id),
+        user: user,
         transactions: await transactionRepository.getUserTransaction(req.user.id)
     },"User Details Fetched");
 };
