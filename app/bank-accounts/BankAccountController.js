@@ -5,15 +5,24 @@ const {validationResult} = require('express-validator/check');
 const bankAccountRepository = require("./BankAccountRepository");
 
 exports.fetch = async (req, res) => {
-    let bankAccount, query = {};
-    if(req.affiliate){
+    let {userType, userId, ...query} = req.query;
+    let bankAccount;
+    if(req.affiliate ){
         query = {
             userId: req.affiliate.id,
             userType: "affiliate"
         };
 
         bankAccount = await bankAccountRepository.findOne(query);
-    }else{
+    }else if(userType && userId){
+        query = {
+            userId,
+            userType
+        };
+
+        bankAccount = await bankAccountRepository.findOne(query);
+    }
+    else{
         bankAccount = await bankAccountRepository.paginate(query, req.query.page || 1, req.query.limit || 100);
     }
     return createSuccessResponse(res, bankAccount);
