@@ -8,7 +8,7 @@ const userConstant = require('./UserConstant');
 const transactionRepository = require("../transactions/TransactionRepository");
 const log = require("../../helpers/Logger");
 const walletRepository = require("../wallets/WalletRepository");
-const bankAccountRepository = require("../transactions/TransactionRepository");
+const bankAccountRepository = require("../bank-accounts/BankAccountRepository");
 const debug = require("debug")("app:debug");
 const {
     EMIT_AGENT_STATUS
