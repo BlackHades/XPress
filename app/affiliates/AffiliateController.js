@@ -154,9 +154,13 @@ exports.changeAffiliateType = async (req, res) => {
 
 exports.me = async (req,res) => {
     const affiliate = await affiliateRepository.find(req.affiliate.id);
-    const wallets = await walletRepository.findOne({
+    const wallets = await walletRepository.findOrCreate({
         userType: "affiliate",
         userId: affiliate.id,
+    },{
+        userType: "affiliate",
+        userId: affiliate.id,
+        balance: 0
     });
 
     affiliate.dataValues.balance = wallets.balance || 0;

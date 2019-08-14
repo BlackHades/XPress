@@ -165,18 +165,24 @@ const me = async (req, res, next) => {
 
     const user = await userRepository.find(req.user.id);
 
-    const wallets = await walletRepository.findOne({
+    const wallets = await walletRepository.findOrCreate({
         userType: "user",
         userId: user.id,
+    },{
+        userType: "user",
+        userId: user.id,
+        balance: 0
     });
 
     user.dataValues.balance = wallets.balance || 0;
+
     const bankAccount = await bankAccountRepository.findOne({
         userType: "user",
         userId: user.id,
     });
 
-    user.dataValues.bankAccount = bankAccount;
+    if(bankAccount)
+        user.dataValues.bankAccount = bankAccount;
     return createSuccessResponse(res, {
         user: user,
         transactions: await transactionRepository.getUserTransaction(req.user.id)
