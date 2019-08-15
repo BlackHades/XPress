@@ -164,7 +164,7 @@ const me = async (req, res, next) => {
 
     const user = await userRepository.find(req.user.id);
 
-    const wallets = await walletRepository.findOrCreate({
+    const [wallets, created] = await walletRepository.findOrCreate({
         userType: "user",
         userId: user.id,
     },{
@@ -173,7 +173,8 @@ const me = async (req, res, next) => {
         balance: 0
     });
 
-    user.dataValues.balance = wallets.balance || 0;
+    debug(created, wallets);
+    user.dataValues.balance = wallets.balance;
 
     const bankAccount = await bankAccountRepository.findOne({
         userType: "user",

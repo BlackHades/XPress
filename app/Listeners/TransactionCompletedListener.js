@@ -8,6 +8,9 @@ const userRepository = require("../users/UserRepository");
 const affiliateRepository = require("../affiliates/AffiliateRepository");
 const walletRepository = require("../wallets/WalletRepository");
 const walletLogRepository = require("../wallet-logs/WalletLogRepository");
+const transactionRepository = require("../transactions/TransactionRepository");
+
+
 listener.on(TRANSACTION_COMPLETED, async ({transaction, charge : { affiliateCharge, superAffiliateCharge}}) => {
     debug("transaction-completed is triggered", transaction, affiliateCharge, superAffiliateCharge);
     if (transaction.status.toLowerCase() != "success" && transaction.status.toLowerCase() != "successful")
@@ -58,34 +61,40 @@ listener.on(TRANSACTION_COMPLETED, async ({transaction, charge : { affiliateChar
         //check if total past transaction is >= referral amount
         //if true give referral
         //find a way to track the user who has gotten the referral
-        const affiliate = await affiliateRepository.findOne({username: user.affiliateCode});
-        if (!affiliate)
-            return;
 
-        const charge = affiliate.type == "super" ? transaction.quantity * superAffiliateCharge : transaction.quantity * affiliateCharge;
-        let [wallet, created] = await walletRepository.findOrCreate({
-            userId: affiliate.id,
-            userType: "affiliate",
-        }, {
-            userId: affiliate.id,
-            userType: "affiliate",
-            balance: charge,
+        const transactions = await transactionRepository.all({
+            userId: transaction.userId,
+            status: "SUCCESSFUL"
         });
 
-        if (!created) {
-            wallet.balance += charge;
-            wallet = await wallet.save();
-        }
-
-
-        let log = await walletLogRepository.create({
-            userId: affiliate.id,
-            userType: "affiliate",
-            amount: charge,
-            description: `Commission on transaction ${transaction.transactionId}`,
-            transactionId: transaction.transactionId
-        });
-        debug("completed", wallet, log);
+        // const affiliate = await affiliateRepository.findOne({username: user.affiliateCode});
+        // if (!affiliate)
+        //     return;
+        //
+        // const charge = affiliate.type == "super" ? transaction.quantity * superAffiliateCharge : transaction.quantity * affiliateCharge;
+        // let [wallet, created] = await walletRepository.findOrCreate({
+        //     userId: affiliate.id,
+        //     userType: "affiliate",
+        // }, {
+        //     userId: affiliate.id,
+        //     userType: "affiliate",
+        //     balance: charge,
+        // });
+        //
+        // if (!created) {
+        //     wallet.balance += charge;
+        //     wallet = await wallet.save();
+        // }
+        //
+        //
+        // let log = await walletLogRepository.create({
+        //     userId: affiliate.id,
+        //     userType: "affiliate",
+        //     amount: charge,
+        //     description: `Commission on transaction ${transaction.transactionId}`,
+        //     transactionId: transaction.transactionId
+        // });
+        // debug("completed", wallet, log);
     });
 
 });
