@@ -101,14 +101,15 @@ const register = async (req, res, next) => {
         });
 
         const isMobile = req.body.isMobile || false;
-        const access = jwt.sign({user: user}, process.env.SECURITY_KEY, {
+        const access = jwt.sign({user}, process.env.SECURITY_KEY, {
             expiresIn: isMobile ? (86400 * 30) : (86400 * 2) // expires in 48 hours if its not from a mobile device else 30 days
         });
         const refresh = jwt.sign({userId: user.id}, process.env.SECURITY_KEY, {
             expiresIn: (86400 * 30) // expires in 30days
         });
         delete user.dataValues.password;
-        createSuccessResponse(res, {
+        createSuccessResponse(res,
+            {
             user: user,
             token: {
                 access: access,
@@ -116,14 +117,12 @@ const register = async (req, res, next) => {
             }
         }, "Registration Successful");
 
-
         const emailVerification = {
             code: verificationRepository.generateCode(),
             type: "email",
             userType: "user",
             value: user.email
         };
-
 
         const phoneVerification = {
             code: verificationRepository.generateCode(),
@@ -219,6 +218,7 @@ const affiliates = async (req, res, next) => {
         next(e);
     }
 };
+
 module.exports = {
     login,
     register,

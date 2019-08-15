@@ -32,7 +32,6 @@ let create = async (req, res, next) => {
         //hash password
         const hashedPassword = bcrypt.hashSync(payload.password,  bcrypt.genSaltSync(10));
 
-
         //generate UID
         let uid = await userRepository.generateUid();
 
