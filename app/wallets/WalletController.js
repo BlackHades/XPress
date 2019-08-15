@@ -80,7 +80,7 @@ exports.increase = async (req, res) => {
     });
 
     if (!created) {
-        wallet.balance += amount;
+        wallet.balance += parseFloat(amount);
         wallet = await wallet.save();
     }
 
