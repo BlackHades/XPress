@@ -19,7 +19,16 @@ exports.fetch = async (req, res) => {
             userType: "user"
         };
     }
-    withdrawals = await withdrawalRepository.paginate(query, req.query.page || 1, req.query.limit || 100);
+    withdrawals = await withdrawalRepository.getWithdrawals(query, req.query.page || 1, req.query.limit || 100);
+
+    withdrawals = withdrawals.filter(withdrawal => {
+       if(withdrawal.userType == "user")
+           delete withdrawal.dataValues.affiliate;
+       else
+           delete withdrawal.dataValues.user;
+
+       return withdrawal;
+    });
     return createSuccessResponse(res, withdrawals);
 };
 

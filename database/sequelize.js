@@ -73,6 +73,24 @@ Message.belongsTo(User,{as:"receiver", foreignKey:"to"});
 Message.belongsTo(Card,{as:"card", foreignKey:"cardId"});
 Message.belongsTo(Bitcoin,{as:"bitcoin", foreignKey:"bitcoinId"});
 
+/**
+ *
+ * Withdrwals
+ */
+
+
+Withdrawal.belongsTo(User,{
+    as: "user",
+    foreignKey: "userId",
+    constraints: false
+});
+
+Withdrawal.belongsTo(Affiliate,{
+    as: "affiliate",
+    foreignKey: "userId",
+    constraints: false
+});
+
 
 module.exports = {
     sequelize,
