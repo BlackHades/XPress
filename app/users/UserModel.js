@@ -46,6 +46,10 @@ module.exports = (sequelize, type) => {
             type: type.STRING,
             allowNull: true,
         },
+        referralPaid: {
+            type: type.STRING,
+            allowNull: true
+        },
         emailVerifiedAt:{
             type: type.DATE,
             allowNull: true,
