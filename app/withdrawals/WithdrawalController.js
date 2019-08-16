@@ -3,6 +3,7 @@ const {createSuccessResponse, createErrorResponse, validationHandler} = require(
 const debug = require("debug")("app:debug");
 const {validationResult} = require('express-validator/check');
 const userRepository = require("../users/UserRepository");
+const affiliateRepository = require("../affiliates/AffiliateRepository");
 const walletRepository = require("../wallets/WalletRepository");
 const withdrawalRepository = require("./WithdrawalRepository");
 const bankAccountRepository = require("../bank-accounts/BankAccountRepository");
@@ -82,6 +83,24 @@ exports.status = async (req,res) => {
     if(!withdrawal)
         return createErrorResponse(res, "Withdrawal request not found");
 
+    if(withdrawal.status == "SUCCESS"){
+        const {userId, userType} = withdrawal;
+        const [wallet, created] = await  walletRepository.findOrCreate({
+            userId,
+            userType
+        },{
+            userId,
+            userType,
+            balance: 0
+        });
+
+        if(created || wallet.balance < withdrawal.amount)
+            return createErrorResponse(res, "Insufficient balance");
+
+
+        wallet.balance -= withdrawal.amount;
+        await  wallet.save();
+    }
     withdrawal.status = status;
     withdrawal.reason = reason;
     withdrawal = await withdrawal.save();
