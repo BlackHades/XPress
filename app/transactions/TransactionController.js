@@ -32,10 +32,6 @@ const create = async (req, res, next) => {
         if (!valFails.isEmpty())
             return createErrorResponse(res, validationHandler(valFails), valFails.array);
 
-        //Extract Data
-        // return createSuccessResponse(res,req.body);
-
-
         //check for bitcoin or cardId
         let creatorId = req.user.id;
         let payload = req.body;
@@ -48,7 +44,6 @@ const create = async (req, res, next) => {
             card = await cardRepository.find(payload.cardId);
             if (!card || !card.isAvailable)
                 return createErrorResponse(res, "Card Not Found or Card Is Not Available");
-
 
             affiliateCharge = card.affiliateCharge;
             superAffiliateCharge = card.superAffiliateCharge;
@@ -68,19 +63,22 @@ const create = async (req, res, next) => {
         }
 
         payload.createdBy = creatorId;
+        payload.status = payload.mode == "WALLET" && payload.status == "SUCCESSFUL" ? "PENDING" : payload.status;
         payload.transactionId = await transactionRepository.generateTransactionId();
         const transaction = await transactionRepository.create(payload);
         transaction.dataValues.bitcoin = bitcoin;
         transaction.dataValues.card = card;
         createSuccessResponse(res, transaction, "Transaction Completed");
 
-        listener.emit(TRANSACTION_COMPLETED, {
-            transaction,
-            charge: {
-                affiliateCharge,
-                superAffiliateCharge
-            }
-        });
+        if(payload.mode != transactionConstant.MODE_WALLET){
+            listener.emit(TRANSACTION_COMPLETED, {
+                transaction,
+                charge: {
+                    affiliateCharge,
+                    superAffiliateCharge
+                }
+            });
+        }
     } catch (e) {
         next(e);
     }
@@ -121,8 +119,6 @@ const show = (req, res, next) => {
         next(error);
     });
 };
-
-
 const details = async (req, res, next) => {
     try {
         let transactions = {};
@@ -164,10 +160,77 @@ const details = async (req, res, next) => {
     }
 };
 
+
+
+const status = async (req, res, next) => {
+    try{
+        const {status, transactionId} = req.query;
+        const allStatus = ["SUCCESSFUL", "FAILED"];
+        if(!allStatus.includes(status))
+            return createErrorResponse(res, "Invalid Status");
+        if(!transactionId)
+            return createErrorResponse(res, "Transaction Id is required");
+
+        let transaction = await transactionRepository.find(transactionId);
+        if(!transaction)
+            return createErrorResponse(res, "Transaction Not Found");
+
+        if(transaction.status != "PENDING")
+            return createErrorResponse(res, "This transaction has been resolved...");
+        transaction.status = status;
+        transaction.approvedBy = req.user.id;
+        transaction = await transaction.save();
+
+        createSuccessResponse(res, transaction, "Transaction Status Updated");
+
+        let card, bitcoin, affiliateCharge, superAffiliateCharge;
+
+        //If transaction is a card transaction
+        if (transaction.transactionType === transactionConstant.TYPE_CARD) {
+            if (!transaction.cardId)
+                return;
+            card = await cardRepository.find(transaction.cardId);
+            if (!card || !card.isAvailable)
+                return;
+
+            affiliateCharge = card.affiliateCharge;
+            superAffiliateCharge = card.superAffiliateCharge;
+        }
+
+        //If transaction is a bitcoin transaction
+        if (transaction.transactionType === transactionConstant.TYPE_BITCOIN) {
+            if (!transaction.bitcoinId)
+                return;
+            bitcoin = await bitcoinRepository.find(transaction.bitcoinId);
+            if (!bitcoin)
+                return;
+
+
+            affiliateCharge = bitcoin.affiliateCharge;
+            superAffiliateCharge = bitcoin.superAffiliateCharge;
+        }
+
+        debug("Here", superAffiliateCharge, affiliateCharge);
+
+        listener.emit(TRANSACTION_COMPLETED, {
+            transaction,
+            charge: {
+                affiliateCharge,
+                superAffiliateCharge
+            }
+        });
+
+
+    }catch (e) {
+        debug(e);
+        return next(e);
+    }
+};
 module.exports = {
     create,
     all,
     destroy,
     show,
-    details
+    details,
+    status
 };

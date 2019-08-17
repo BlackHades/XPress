@@ -13,7 +13,7 @@ const utilityRepository = require("../utilities/UtilityRepository");
 const {_sumArrayOfObject} = require("../../helpers/response");
 const moment = require("moment");
 listener.on(TRANSACTION_COMPLETED, async ({transaction, charge : { affiliateCharge, superAffiliateCharge}}) => {
-    debug("transaction-completed is triggered", transaction, affiliateCharge, superAffiliateCharge);
+    debug("transaction-completed is triggered");
     if (transaction.status.toLowerCase() != "success" && transaction.status.toLowerCase() != "successful")
         return;
 
@@ -75,12 +75,6 @@ listener.on(TRANSACTION_COMPLETED, async ({transaction, charge : { affiliateChar
         let referrer = await userRepository.findOne({username: user.referralCode});
         if(!referrer)
             return;
-        //get all user Past Transaction
-        //check if total past transaction is >= referral amount
-        //if true give referral
-        //find a way to track the user who has gotten the referral
-
-
 
         //check if the required transaction amount is up to the MINIMUM_TRANSACTION_FOR_REFERRAL
         const transactions = await transactionRepository.all({
@@ -93,8 +87,6 @@ listener.on(TRANSACTION_COMPLETED, async ({transaction, charge : { affiliateChar
         const minimumTransactionAmountBeforeReferralIsGiven = await utilityRepository.fetchByKey("MINIMUM_TRANSACTION_FOR_REFERRAL");
         const referralAmount = await utilityRepository.fetchByKey("REFERRAL_AMOUNT");
 
-        // const
-        debug(transactionSum, referralAmount);
         if(!minimumTransactionAmountBeforeReferralIsGiven
             || !minimumTransactionAmountBeforeReferralIsGiven.value
             || minimumTransactionAmountBeforeReferralIsGiven.value > transactionSum)
@@ -130,6 +122,27 @@ listener.on(TRANSACTION_COMPLETED, async ({transaction, charge : { affiliateChar
         debug("completed referral", wallet, log);
     });
 
+
+    setImmediate(async () => {
+       if(transaction.mode != "WALLET")
+           return;
+
+
+       const [wallet, created] = await walletRepository.findOrCreate({
+           userId: transaction.userId,
+           userType: "user"
+       },{
+           userId: transaction.userId,
+           userType: "user",
+           balance: transaction.amount
+       });
+       if(!created){
+           wallet.balance += parseFloat(transaction.amount);
+           await wallet.save();
+       }
+
+       debug(wallet, created);
+    });
 });
 
 

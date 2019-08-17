@@ -25,6 +25,7 @@ router.post("/create",transactionValidator.create(),transactionController.create
 
 router.use(adminAuth);
 router.delete("/delete/:transactionId", transactionController.destroy);
+router.get("/status", transactionController.status);
 
 
 

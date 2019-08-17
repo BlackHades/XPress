@@ -23,10 +23,14 @@ exports.fetch = async (req, res) => {
     withdrawals = await withdrawalRepository.getWithdrawals(query, req.query.page || 1, req.query.limit || 100);
 
     withdrawals = withdrawals.filter(withdrawal => {
-       if(withdrawal.userType == "user")
+       if(withdrawal.userType == "user"){
            delete withdrawal.dataValues.affiliate;
-       else
+           delete withdrawal.dataValues.affiliateWallet;
+       }
+       else{
            delete withdrawal.dataValues.user;
+           delete withdrawal.dataValues.userWallet;
+       }
 
        return withdrawal;
     });

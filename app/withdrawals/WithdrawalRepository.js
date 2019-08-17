@@ -1,6 +1,6 @@
 "use strict";
 const Repository = require("../Repository");
-const {Withdrawal} = require("../../database/sequelize");
+const {Withdrawal, Wallet} = require("../../database/sequelize");
 const Sequelize = require('sequelize');
 const Op = Sequelize.Op;
 const {Affiliate, User} = require("../../database/sequelize");
@@ -22,10 +22,22 @@ class WithdrawalRepository extends Repository{
             include:[
                 {
                     model: User,
-                    as: "user"
+                    as: "user",
+                    include: [
+                        {
+                            model: Wallet,
+                            as: "wallet"
+                        }
+                    ]
                 },{
                     model: Affiliate,
-                    as: "affiliate"
+                    as: "affiliate",
+                    include: [
+                        {
+                            model: Wallet,
+                            as: "wallet"
+                        }
+                    ]
                 }
             ],
             order: [['id', 'DESC']],

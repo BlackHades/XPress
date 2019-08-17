@@ -47,49 +47,73 @@ const Withdrawal = require("../app/withdrawals/WithdrawalModel")(sequelize, Sequ
 /**
  * Transactions
  */
-Transaction.belongsTo(Card,{as: "card", foreignKey:"cardId"});
-Transaction.belongsTo(Bitcoin,{as: "bitcoin", foreignKey:"bitcoinId"});
-Transaction.belongsTo(User,{as: "user", foreignKey: "userId"});
-Transaction.belongsTo(User,{as: "agent", foreignKey: "createdBy"});
+Transaction.belongsTo(Card, {as: "card", foreignKey: "cardId"});
+Transaction.belongsTo(Bitcoin, {as: "bitcoin", foreignKey: "bitcoinId"});
+Transaction.belongsTo(User, {as: "user", foreignKey: "userId"});
+Transaction.belongsTo(User, {as: "agent", foreignKey: "createdBy"});
 
 /**
  * Users
  */
-User.hasMany(Transaction,{as: "transactions", foreignKey:"userId",targetKey:"id"});
+User.hasMany(Transaction, {as: "transactions", foreignKey: "userId", targetKey: "id"});
 
+User.hasOne(Wallet, {
+    as: "wallet",
+    foreignKey: "userId",
+    sourceKey: "id",
+    scope: {
+        userType: "user"
+    }
+});
 
 /**
  * Cards
  */
-Card.hasMany(Transaction,{as: "transactions", foreignKey:"cardId",targetKey:"id"});
+Card.hasMany(Transaction, {as: "transactions", foreignKey: "cardId", targetKey: "id"});
 
 /**
  *  Message
  * */
 
-Message.belongsTo(User,{as:"agent", foreignKey:"agentId"});
-Message.belongsTo(User,{as:"sender", foreignKey:"from"});
-Message.belongsTo(User,{as:"receiver", foreignKey:"to"});
-Message.belongsTo(Card,{as:"card", foreignKey:"cardId"});
-Message.belongsTo(Bitcoin,{as:"bitcoin", foreignKey:"bitcoinId"});
+Message.belongsTo(User, {as: "agent", foreignKey: "agentId"});
+Message.belongsTo(User, {as: "sender", foreignKey: "from"});
+Message.belongsTo(User, {as: "receiver", foreignKey: "to"});
+Message.belongsTo(Card, {as: "card", foreignKey: "cardId"});
+Message.belongsTo(Bitcoin, {as: "bitcoin", foreignKey: "bitcoinId"});
 
 /**
  *
  * Withdrwals
  */
 
-
-Withdrawal.belongsTo(User,{
+Withdrawal.belongsTo(User, {
     as: "user",
     foreignKey: "userId",
-    constraints: false
+    constraints: false,
 });
 
-Withdrawal.belongsTo(Affiliate,{
+Withdrawal.belongsTo(Affiliate, {
     as: "affiliate",
     foreignKey: "userId",
     constraints: false
 });
+
+
+/**
+ *  Affiliate
+ */
+
+Affiliate.hasOne(Wallet, {
+    as: "wallet",
+    foreignKey: "userId",
+    sourceKey: "id",
+    constraints: false,
+    scope: {
+        userType: "affiliate"
+    }
+});
+
+
 
 
 module.exports = {

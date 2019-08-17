@@ -1,12 +1,13 @@
 'use strict';
-const {User} = require('../../database/sequelize');
+const {User, Wallet} = require('../../database/sequelize');
 const userConstant = require("./UserConstant");
 const Sequelize = require('sequelize');
 const Op = Sequelize.Op;
 const uuid = require("uuid");
 const Repository = require("../Repository");
-class UserRepository extends Repository{
-    constructor(){
+
+class UserRepository extends Repository {
+    constructor() {
         super(User);
         this.updateUser = this.updateUser.bind(this);
         this.generateUid = this.generateUid.bind(this);
@@ -15,24 +16,38 @@ class UserRepository extends Repository{
         this.destroy = this.destroy.bind(this);
         this.fetchByRole = this.fetchByRole.bind(this);
     }
-    async generateUid(){
+
+
+    all(condition) {
+        return this.Model.findAll({
+            where: condition,
+            include: [
+                {
+                    model: Wallet,
+                    as: "wallet"
+                }
+            ]
+        });
+    }
+
+    async generateUid() {
         let uid = uuid.v4();
-        let user = await this.findOne({uid:uid});
-        if(user == null)
+        let user = await this.findOne({uid: uid});
+        if (user == null)
             return uid;
         else
             return this.generateUid();
     }
 
-    fetchByEmail(email, withPassword = false){
-        if(withPassword)
-            return this.Model.scope("withPassword","active").findOne({where:{email:email}});
+    fetchByEmail(email, withPassword = false) {
+        if (withPassword)
+            return this.Model.scope("withPassword", "active").findOne({where: {email: email}});
         else
-            return this.Model.findOne({where:{email:email}});
+            return this.Model.findOne({where: {email: email}});
     }
 
-    fetchByPhone (phone) {
-        return this.Model.findOne({where:{phone:phone}});
+    fetchByPhone(phone) {
+        return this.Model.findOne({where: {phone: phone}});
     }
 
     updateUser(update, id) {
@@ -40,7 +55,7 @@ class UserRepository extends Repository{
     }
 
     destroy(userId) {
-        return super.destroy({id:userId});
+        return super.destroy({id: userId});
     }
 
     getAllNonUser(id = false) {
@@ -50,8 +65,8 @@ class UserRepository extends Repository{
             return this.all({where: {roleId: {[Op.ne]: userConstant.USER}}});
     }
 
-    fetchByRole(roleId){
-        return this.all({where:{roleId:roleId}});
+    fetchByRole(roleId) {
+        return this.all({where: {roleId: roleId}});
     }
 }
 

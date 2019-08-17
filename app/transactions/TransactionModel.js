@@ -34,6 +34,10 @@ module.exports = (queryInterface, Sequelize) => {
             type: Sequelize.TEXT,
             allowNull:true
         },
+        mode:{
+            type: Sequelize.STRING,
+            defaultValue: "INSTANT",
+        },
         status:{
             type: Sequelize.TEXT,
             defaultValue:"PENDING"
@@ -42,7 +46,11 @@ module.exports = (queryInterface, Sequelize) => {
             type: Sequelize.INTEGER,
             defaultValue: 1
         },
-        createdBy:Sequelize.INTEGER
+        createdBy:Sequelize.INTEGER,
+        approvedBy: {
+            type: Sequelize.INTEGER,
+
+        }
     },{
         paranoid:true
     });

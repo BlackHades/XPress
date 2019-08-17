@@ -1,10 +1,7 @@
 'use strict';
 
 const { check } = require('express-validator/check'), role = require("../users/UserConstant");
-const transactionRepository = require('./TransactionRepository');
 const transactionConstant = require('./TransactionConstant');
-const cardRepository = require('../cards/CardRepository');
-const bitcoinRepository = require('../bitcoins/BitcoinRepository');
 const userRepository = require('../users/UserRepository');
 
 let create = () => {
@@ -20,6 +17,7 @@ let create = () => {
         }),
         check("transactionType","Invalid Transaction Type").isIn([transactionConstant.TYPE_BITCOIN, transactionConstant.TYPE_CARD]),
         check("quantity","Quantity is required").not().isEmpty().isNumeric(),
+        check("mode","Mode is required(INSTANT or WALLET)").isIn([transactionConstant.MODE_INSTANT, transactionConstant.MODE_WALLET]),
     ];
 };
 

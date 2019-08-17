@@ -7,6 +7,7 @@ const affiliateRepository = require("../affiliates/AffiliateRepository");
 const walletRepository = require("./WalletRepository");
 const walletLogRepository = require("../wallet-logs/WalletLogRepository");
 
+
 exports.fetch = async (req, res) => {
     let wallet, query = {};
     if(req.affiliate){
@@ -30,7 +31,6 @@ exports.fetch = async (req, res) => {
     return createSuccessResponse(res, wallet);
 };
 
-
 exports.logs = async  (req, res) => {
     let logs, query = {};
 
@@ -49,7 +49,6 @@ exports.logs = async  (req, res) => {
     return createSuccessResponse(res, logs);
 
 };
-
 
 exports.increase = async (req, res) => {
     const valFails = validationResult(req);
