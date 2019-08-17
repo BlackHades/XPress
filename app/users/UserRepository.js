@@ -40,7 +40,7 @@ class UserRepository extends Repository{
     }
 
     destroy(userId) {
-        return this.Model.destroy({id:userId});
+        return super.destroy({id:userId});
     }
 
     getAllNonUser(id = false) {

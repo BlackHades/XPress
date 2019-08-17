@@ -1,6 +1,6 @@
 "use strict";
 const Op = require("sequelize").Op;
-
+const cache = require("../services/CacheManager");
 class Repository{
     constructor(Model){
         this.Model = Model;

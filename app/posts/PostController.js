@@ -14,7 +14,6 @@ const postRepository = require('./PostRepository');
  */
 const all = async (req,res,next) => {
     let posts = await postRepository.all();
-    // console.log("Posts: " + JSON.stringify(posts));
     return createSuccessResponse(res,posts,"Fetched");
 };
 

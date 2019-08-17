@@ -4,7 +4,8 @@ const {createSuccessResponse, createErrorResponse, validationHandler} = require(
 
 const cardRepository = require('./CardRepository');
 const log = require("../../helpers/Logger");
-
+const cache = require("../../services/CacheManager");
+const cacheKey = "cards";
 const bitcoinRepository = require("../bitcoins/BitcoinRepository");
 
 /**
@@ -71,8 +72,6 @@ const update = async (req, res, next) => {
         //Extract Body
         let payload = req.body;
         const cardId = req.params.cardId;
-        log("CardId: " + cardId);
-        log("Card Payload: " + JSON.stringify(payload));
         let card = await cardRepository.update({
             name: payload.name.charAt(0).toUpperCase() + payload.name.slice(1),
             avatar: payload.avatar,
@@ -82,7 +81,6 @@ const update = async (req, res, next) => {
             priceRange: payload.priceRange,
             amount: payload.amount
         }, cardId);
-        log("Card: " + JSON.stringify(card));
         return createSuccessResponse(res, payload, "Card Updated");
     }catch (e) {
         next(e);
@@ -142,8 +140,12 @@ const groupCardsByName = async (req,res,next) => {
     try{
         //get all cards/
         //loop through and put new data in an array
+        let cards = await cache.getAsync(`${cacheKey}:name`);
+        if(cards)
+            return createSuccessResponse(res, JSON.parse(cards));
+
         const result = await cardRepository.available();
-        let cards = {};
+        cards = {};
         for(let i = result.length; i > 0; i--){
             let j = i-1;
             //group cards by their name
@@ -151,9 +153,9 @@ const groupCardsByName = async (req,res,next) => {
             card.push(result[j]);
             cards[result[j].name] = card;
         }
+        cache.setAsync(`${cacheKey}:name`, JSON.stringify(cards));
         return createSuccessResponse(res, cards, "Cards Fetched");
     }catch (e) {
-        log(JSON.stringify(e));
         next(e);
     }
 };
