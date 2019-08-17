@@ -84,13 +84,11 @@ exports.increase = async (req, res) => {
         wallet = await wallet.save();
     }
 
-    let log = await walletLogRepository.create({
+    wallet.dataValues.log = await walletLogRepository.create({
         userId,
         userType,
         amount,
         description
     });
-
-    wallet.dataValues.log = log;
-    return createSuccessResponse(res, wallet, "Completed");
+    return createSuccessResponse(res, wallet);
 };
