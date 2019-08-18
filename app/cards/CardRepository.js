@@ -9,7 +9,7 @@ const all = async () => {
         return JSON.parse(fromCache);
 
     const cards = await Card.findAll();
-    cache.setAsync(cacheKey, JSON.stringify(card));
+    cache.setAsync(cacheKey, JSON.stringify(cards));
     return cards;
 };
 

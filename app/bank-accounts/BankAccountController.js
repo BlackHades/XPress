@@ -33,7 +33,7 @@ exports.save = async (req, res) => {
     if (!valFails.isEmpty())
         return createErrorResponse(res, validationHandler(valFails), valFails.array);
 
-    const {userId, userType, bankName, accountName, accountNumber} = req.body;
+    const {userId, userType, bankName, accountName, accountNumber, bankCode} = req.body;
 
     const userTypeOptions = ["user", "affiliate"];
 
@@ -48,6 +48,7 @@ exports.save = async (req, res) => {
         userId,
         userType,
         bankName,
+        bankCode,
         accountName,
         accountNumber
     });
@@ -56,6 +57,7 @@ exports.save = async (req, res) => {
         bankAccount.accountName = accountName;
         bankAccount.accountNumber = accountNumber;
         bankAccount.bankName = bankName;
+        bankAccount.bankCode = bankCode;
         bankAccount = await bankAccount.save();
     }
 

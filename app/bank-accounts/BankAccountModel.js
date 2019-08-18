@@ -16,6 +16,10 @@ module.exports = (sequelize, type) => {
             type: type.STRING,
             defaultValue: "user"
         },
+        bankCode: {
+            type: type.STRING,
+            allowNull: true,
+        },
         bankName: {
             type: type.STRING,
             defaultValue: 0
