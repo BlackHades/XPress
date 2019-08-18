@@ -127,7 +127,7 @@ const agents = async (req,res,next) => {
  * @returns {Promise<void|*>}
  */
 const all = async (req, res, next) => {
-    return createSuccessResponse(res, await userRepository.all());
+    return createSuccessResponse(res, await userRepository.all(req.query));
 };
 
 
