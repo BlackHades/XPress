@@ -127,7 +127,8 @@ listener.on(TRANSACTION_COMPLETED, async ({transaction, charge : { affiliateChar
        if(transaction.mode != "WALLET")
            return;
 
-
+       if(transaction.status !=  "PENDING")
+           return;
        const [wallet, created] = await walletRepository.findOrCreate({
            userId: transaction.userId,
            userType: "user"
