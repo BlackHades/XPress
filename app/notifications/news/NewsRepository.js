@@ -1,10 +1,10 @@
 
 "use strict";
 const Repository = require("../../Repository");
-const {SMS} = require("../../../database/sequelize");
-class SMSRepository extends Repository{
-    constructor(){
-        super(SMS);
+const { News } = require("../../../database/sequelize");
+class NewsRepository extends Repository {
+    constructor() {
+        super(News);
     }
 }
-module.exports = (new SMSRepository());
+module.exports = (new NewsRepository());
