@@ -16,38 +16,40 @@ const messageRepository = require("./MessageRepository");
 const messageConstant = require("./MessageConstant");
 
 const log = require("../../helpers/Logger");
-const {createSuccessResponse} = require("../../helpers/response");
+const { createSuccessResponse } = require("../../helpers/response");
 const debug = require("debug")("app:debug");
 
 
 
 const fetchMessages = async (socket, lastMessageId, limit) => {
-    try{
-        let userChatList = await userChatRepository.findOne({userId: socket.userId});
+    try {
+        let userChatList = await userChatRepository.findOne({ userId: socket.userId });
         let list = [];
-        if(!userChatList || userChatList.chatList.length == 0){
+        if (!userChatList || userChatList.chatList.length == 0) {
             let messages = await messageRepository.fetchMessage(socket.userId, lastMessageId, limit);
             let list = [];
             await Promise.all(messages.map(message => {
                 list = createChatList(message, message.from === socket.userId ? "sent" : "received", list);
             }));
-            socket.emit(EMIT_MESSAGE_IN_BULK, {list});
-        }else{
-            let chatList = JSON.parse(userChatList.chatList);
-            for(let ch of chatList){
-                ch.messages = await messageRepository.fetchMessageBySenderAndRecipient(socket.userId, ch.id,lastMessageId);
-                list.push(ch.messages.reverse());
+            socket.emit(EMIT_MESSAGE_IN_BULK, { list });
+        } else {
+            let chatList = userChatList.chatList ? JSON.parse(userChatList.chatList) : [];
+            if (chatList) {
+                for (let ch of chatList) {
+                    ch.messages = await messageRepository.fetchMessageBySenderAndRecipient(socket.userId, ch.id, lastMessageId);
+                    list.push(ch.messages.reverse());
+                }
+                socket.emit(EMIT_MESSAGE_IN_BULK, { list });
             }
-            socket.emit(EMIT_MESSAGE_IN_BULK, {list});
         }
-    }catch (e) {
+    } catch (e) {
         debug("FATAL ERROR", e);
     }
 };
 
-const fetchOldMessages = async (socket, recipient, startMessageId,limit) => {
-    const messages = await messageRepository.fetchMessageBySenderAndRecipientReverse(socket.userId, recipient,startMessageId, limit || 20);
-    socket.emit(EMIT_MESSAGE_IN_BULK, {recipient, list: messages.reverse()});
+const fetchOldMessages = async (socket, recipient, startMessageId, limit) => {
+    const messages = await messageRepository.fetchMessageBySenderAndRecipientReverse(socket.userId, recipient, startMessageId, limit || 20);
+    socket.emit(EMIT_MESSAGE_IN_BULK, { recipient, list: messages.reverse() });
 
 };
 
@@ -150,7 +152,7 @@ const send = async (io, socket, payload) => {
         disperseMessageToUser(io, newMessage);
 
         //Emit Message Sent
-        socket.emit(EMIT_MESSAGE_SENT, {message: newMessage});
+        socket.emit(EMIT_MESSAGE_SENT, { message: newMessage });
     } catch (e) {
         socket.emit(EMIT_ERROR, JSON.stringify(e));
     }
@@ -158,7 +160,7 @@ const send = async (io, socket, payload) => {
 
 
 const emitMessage = (io, socketId, message) => {
-    io.to(socketId).emit(EMIT_RECEIVE_MESSAGE, {message: message})
+    io.to(socketId).emit(EMIT_RECEIVE_MESSAGE, { message: message })
 };
 
 
@@ -192,8 +194,8 @@ const disperseMessageToUser = (io, message) => {
             if (tokens.length === 0)
                 return;
             tokens = tokens.map(t => t.token);
-            const data = {notificationType: "MESSAGE", message: message};
-            log("data: " + JSON.stringify({data: data, tokens: tokens, message: message}));
+            const data = { notificationType: "MESSAGE", message: message };
+            log("data: " + JSON.stringify({ data: data, tokens: tokens, message: message }));
             onesignalRepository.sendNotificationToUser(tokens, message.sender.name, message.content, data)
         }).catch(err => log("pusherror: " + err));
 };
@@ -216,14 +218,14 @@ const markAsDelivered = async (payload) => {
 
 
 
-const saveUserChats = async  ({userId, chatList}) => {
-    let userChatList = await userChatRepository.findOne({userId});
-    if(!userChatList){
+const saveUserChats = async ({ userId, chatList }) => {
+    let userChatList = await userChatRepository.findOne({ userId });
+    if (!userChatList) {
         userChatList = await userChatRepository.create({
             userId,
             chatList
         });
-    }else{
+    } else {
         userChatList.chatList = chatList;
         userChatList = await userChatList.save();
     }

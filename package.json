@@ -3,7 +3,8 @@
   "version": "0.0.0",
   "private": true,
   "scripts": {
-    "start": "node ./bin/www"
+    "start": "node ./bin/www",
+    "dev": "nodemon ./bin/www"
   },
   "dependencies": {
     "@sendgrid/mail": "^6.4.0",
@@ -33,7 +34,6 @@
     "randomstring": "^1.1.5",
     "redis": "^2.8.0",
     "sequelize": "^4.42.0",
-    "sequelize-cli": "^5.4.0",
     "slack-webhook": "^1.0.0",
     "socket.io": "^2.2.0",
     "uuid": "latest"

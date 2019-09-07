@@ -11,11 +11,11 @@ const myClient = new OneSignal.Client({
 
 const sendNotificationToUser = (tokens = [], title, message, data) => {
 
-    if(!tokens || tokens.length === 0)
+    if (!tokens || tokens.length === 0)
         return;
 
     const notification = new OneSignal.Notification({
-        headings:{
+        headings: {
             en: title
         },
         contents: {
