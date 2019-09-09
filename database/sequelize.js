@@ -13,9 +13,9 @@ const sequelize = new Sequelize(process.env.DB_NAME, process.env.DB_USERNAME, pr
         charset: 'utf8mb4',
         collate: 'utf8mb4_general_ci',
     },
-    // dialectOptions: {
-    //     socketPath: "/Applications/MAMP/tmp/mysql/mysql.sock"
-    // },
+    dialectOptions: {
+        socketPath: "/Applications/MAMP/tmp/mysql/mysql.sock"
+    },
     operatorsAliases: false,
     timezone: "+01:00", //for writing to database,
     logging: process.env.APP_ENV == "development"

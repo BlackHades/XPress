@@ -28,7 +28,7 @@ exports.send = async (req, res) => {
 
     debug('users - ', users);
 
-    await newsRepository.create(message);
+    await newsRepository.create({ title, message });
 
     await users.map(user => {
         pushTokenRepository.fetchUserTokens(user.id, true)
@@ -46,27 +46,11 @@ exports.send = async (req, res) => {
             })
             .catch(err => log("pusherror for news: " + err));
     });
-
-
-
-    // console.log(quert)
-
-    // await newsRepository.bulkCreate(query);
-    // const allSMS = manyTo;
-    // let length = 199;
-    // while (allSMS.length) {
-    //     const data = allSMS.splice(0, length);
-    //     debug(data.length, data.join());
-    //     smsService.send(data.join(), message)
-    //         .then(response => debug("In app notification messages sent", response.data))
-    //         .catch(err => debug("ErrorSingle", err.response));
-    // }
-
     return createSuccessResponse(res, null, "In app notification messages sent");
 };
 
 exports.fetch = async (req, res) => {
     const page = Number(req.query.page) || 1;
     const limit = Number(req.query.limit) || 100;
-    return createSuccessResponse(res, await newsRepository.paginate({}, page, limit))
+    return createSuccessResponse(res, await newsRepository.get(page, limit))
 };
