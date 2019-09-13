@@ -2,7 +2,7 @@
 
 const { createSuccessResponse, createErrorResponse } = require("../../../helpers/response");
 const debug = require("debug")("app:debug");
-const newsRepository = require("./newsRepository");
+const newsRepository = require("./NewsRepository");
 const userRepository = require("../../users/UserRepository");
 const userConstant = require('../../users/UserConstant');
 const pushTokenRepository = require("../../push-notifications/PushTokenRepository");
