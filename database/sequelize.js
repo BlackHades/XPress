@@ -7,7 +7,7 @@ const sequelize = new Sequelize(process.env.DB_NAME, process.env.DB_USERNAME, pr
         max: 5,
         min: 0,
         acquire: 100000,
-        idle: 20000
+        idle: 10000
     },
     define: {
         charset: 'utf8mb4',
