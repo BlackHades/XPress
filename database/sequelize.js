@@ -4,7 +4,7 @@ const sequelize = new Sequelize(process.env.DB_NAME, process.env.DB_USERNAME, pr
     host: process.env.DB_HOST,
     dialect: 'mysql',
     pool: {
-        max: 100,
+        max: 10,
         min: 0,
         acquire: 100000,
         idle: 10000
@@ -18,7 +18,7 @@ const sequelize = new Sequelize(process.env.DB_NAME, process.env.DB_USERNAME, pr
     // },
     operatorsAliases: false,
     timezone: "+01:00", //for writing to database,
-    logging: process.env.APP_ENV == "development"
+    logging: true
 });
 
 
