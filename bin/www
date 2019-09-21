@@ -19,7 +19,7 @@ let numCores = require('os').cpus().length;
 const setupWorkerProcesses = () => {
 
   const server = http.createServer(app);
-  require('../socket')(server);
+  // require('../socket').init(server);
   // to read number of cores on system
   console.log('Master cluster setting up ' + numCores + ' workers');
 
