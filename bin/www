@@ -155,7 +155,7 @@ function onError(error, port) {
 
 if(process.env.APP_ENV == "production"){
   if(numCores > 1){
-    setupServer(true);
+    setupServer(false);
   }else{
     setupServer(false);
   }
