@@ -32,6 +32,7 @@ const messageController = require('../app/messages/MessageController');
  */
 const ioEvents = (io) => {
     io.sockets.on(CONNECTION, (socket) => {
+        debug(`${socket.id} is connected`);
         socket.emit(CONNECTED,{payload: socket.id});
         /**
          * Initialization Event
@@ -76,6 +77,7 @@ const ioEvents = (io) => {
          * Disconnect User and Remove from Online users
          */
         socket.on(DISCONNECTED, () => {
+            debug(`${socket.id} has disconnected`);
             onlineUserRepository.remove(socket.userId, socket.id);
         });
     });
