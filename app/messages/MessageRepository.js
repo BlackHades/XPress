@@ -44,7 +44,7 @@ const fetchMessage = (userId,lastMessageId, limit) => {
         }
       ],
       order: [['id', 'ASC']],
-      limit: limit || 50
+      limit: limit && limit > 500 ? 500 : limit
     });
 };
 
