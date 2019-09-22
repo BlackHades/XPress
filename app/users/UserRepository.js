@@ -67,7 +67,7 @@ class UserRepository extends Repository {
 
     fetchByRole(roleId) {
         console.log('roleId -> ', this.all());
-        return this.all({ where: { roleId: roleId } });
+        return this.all( { roleId } );
     }
 }
 
