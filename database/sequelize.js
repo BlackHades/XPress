@@ -60,7 +60,11 @@ Transaction.belongsTo(User, { as: "agent", foreignKey: "createdBy" });
  * Users
  */
 User.hasMany(Transaction, { as: "transactions", foreignKey: "userId", targetKey: "id" });
-
+User.hasMany(PushToken, {
+    as: "pushTokens",
+    foreignKey: "userId",
+    targetKey: "id"
+});
 User.hasOne(Wallet, {
     as: "wallet",
     foreignKey: "userId",

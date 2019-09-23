@@ -18,7 +18,7 @@ const {seeder} = require('./database/databaseSeeder');
 const debug = require("debug")("app:debug");
 require("express-async-errors");
 
-debug(process.env);
+// debug(process.env);
 //sentry only enabled in production
 if(process.env.APP_ENV == "production"){
     Sentry.init({ dsn: 'https://780ec425d68046ab8edabc8a37fa1597@sentry.io/1447209' });
