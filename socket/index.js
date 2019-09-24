@@ -2,6 +2,7 @@
 const {authenticate} = require("../app/middleware/SocketMiddleware");
 const onlineUserRepository= require("../app/online-users/OnlineUserRepository");
 const debug = require("debug")("app:debug");
+const constants = require("../app/Constants");
 const {
 
     //Events
@@ -14,12 +15,37 @@ const {
     EVENT_GET_OLDER_MESSAGE,
     DISCONNECTED,
 
+    EMIT_RECEIVE_MESSAGE
     //Emissions
 } = require('./constants');
 
 const init = (io) => {
     // let io = require('socket.io')(server);
     ioEvents(io);
+
+    redisEventManager.subscriber.on("message", (channel, message) => {
+        debug("Here",);
+        console.log("Message: " + message + " on channel: " + channel + " has arrive!");
+
+        switch (channel) {
+            case constants.MESSAGES:{
+                const payload = JSON.parse(message);
+                debug(payload);
+                payload.socketIds.map(socketId => {
+                    io.to(socketId).emit(EMIT_RECEIVE_MESSAGE, { message: payload.message });
+                    debug(`Sent to ${socketId} from ${process.env.PORT}`);
+                });
+                break;
+            }
+
+            default: {
+                console.log("No Channel is listening");
+                break;
+            }
+        }
+    });
+
+    redisEventManager.subscriber.subscribe(constants.MESSAGES);
     return io;
 };
 
@@ -32,7 +58,7 @@ const messageController = require('../app/messages/MessageController');
  */
 const ioEvents = (io) => {
     io.sockets.on(CONNECTION, (socket) => {
-        debug(`${socket.id} is connected`);
+        // debug(`${socket.id} is connected on worker ${workerId}`);
         socket.emit(CONNECTED,{payload: socket.id});
         /**
          * Initialization Event

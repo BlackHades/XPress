@@ -37,6 +37,7 @@
     "sequelize-cli": "^5.5.1",
     "slack-webhook": "^1.0.0",
     "socket.io": "^2.2.0",
+    "socket.io-redis": "^5.2.0",
     "uuid": "latest"
   },
   "engines": {

@@ -59,7 +59,6 @@ require("./routes/router")(app);
  */
 
 const server = http.createServer(app);
-// const io = require('./socket')(server);
 let io = require('socket.io')(server);
 require("./socket").init(io);
 global.io = io;

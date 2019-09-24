@@ -13,7 +13,7 @@ const {
 
 const messageRepository = require("./MessageRepository");
 
-const messageConstant = require("./MessageConstant");
+const constants = require("../Constants");
 
 const log = require("../../helpers/Logger");
 const { createSuccessResponse } = require("../../helpers/response");
@@ -34,7 +34,6 @@ const fetchMessages = async (socket, lastMessageId, limit) => {
             }));
             socket.emit(EMIT_MESSAGE_IN_BULK, { list });
         } else {
-            debug("Error", userChatList.chatList);
             let chatList = userChatList.chatList ? JSON.parse(userChatList.chatList) : [];
             if (chatList) {
                 for (let ch of chatList) {
@@ -58,7 +57,6 @@ const fetchMessages = async (socket, lastMessageId, limit) => {
 const fetchOldMessages = async (socket, recipient, startMessageId, limit) => {
     const messages = await messageRepository.fetchMessageBySenderAndRecipientReverse(socket.userId, recipient, startMessageId, limit || 20);
     socket.emit(EMIT_MESSAGE_IN_BULK, { recipient, list: messages.reverse() });
-
 };
 
 const createChatList = (message, type, list = []) => {
@@ -116,7 +114,6 @@ const fetchMessagesRequest = async (req, res) => {
     return createSuccessResponse(res, await messageRepository.fetchMessage(req.user.id, req.body.lastMessageId || 0, req.body.limit || 50));
 };
 
-
 //Send Message
 const send = async (io, socket, payload) => {
     try {
@@ -149,16 +146,11 @@ const send = async (io, socket, payload) => {
         }
         //Save Message Object
         let newMessage = await messageRepository.create(message);
-        // newMessage.dataValues.sender = sender;
-        // newMessage.dataValues.receiver = receiver;
-        // if(newMessage.type === messageConstant.TYPE_CARD)
-        //     newMessage.dataValues.card = await cardRepository.find(newMessage.cardId);
         newMessage = await messageRepository.findByMessageId(newMessage.mid);
 
 
         console.log("Message: " + JSON.stringify(newMessage));
         disperseMessageToUser(io, newMessage);
-
         //Emit Message Sent
         socket.emit(EMIT_MESSAGE_SENT, { message: newMessage });
     } catch (e) {
@@ -188,12 +180,15 @@ const disperseMessageToAllAgentAndAdmins = async (io, message) => {
 const disperseMessageToUser = (io, message) => {
     onlineUserRepository.findByUserId(message.to)
         .then(onlineUsers => {
-            onlineUsers.forEach(user => {
-                emitMessage(io, user.socketId, message);
-            });
+            redisEventManager.publisher.publish(constants.MESSAGES, JSON.stringify({
+                message: message,
+                socketIds: onlineUsers.map(user => user.socketId)
+            }));
+            // onlineUsers.forEach(user => {
+            //     emitMessage(io, user.socketId, message);
+            // });
         })
         .catch(err => log(err));
-
 
     //send onesignal integration
     pushTokenRepository.fetchUserTokens(message.to, true)

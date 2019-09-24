@@ -3,18 +3,24 @@
 const redis = require("redis");
 const {promisify} = require("util");
 const debug = require("debug")("app:debug");
-const redisClient = redis.createClient(
-    {
-        host: process.env.REDIS_HOST,
-        port: process.env.REDIS_PORT,
-        prefix: `chiji14xchange:${process.env.APP_ENV}:`
-    }
-);
 
+
+const credentials = {
+    host: process.env.REDIS_HOST,
+    port: process.env.REDIS_PORT,
+    prefix: `chiji14xchange:${process.env.APP_ENV}:`
+};
+const redisClient = redis.createClient(credentials);
+const publisher = redis.createClient(credentials);
+const subscriber = redis.createClient(credentials);
 const password = process.env.REDIS_PASSWORD || null;
 if(password  && password != "null"){
     debug("add", password, process.env.REDIS_PASSWORD, typeof password);
     redisClient.auth(password, (err,res) => {
+        debug("res",res);
+        debug("err",err);
+    });
+    eventClient.auth(password, (err,res) => {
         debug("res",res);
         debug("err",err);
     });
@@ -43,5 +49,8 @@ redisClient.on("connected", function () {
 redisClient.on("error", function (err) {
     debug("Redis error.", err);
 });
-
+global.redisEventManager = {
+    publisher,
+    subscriber
+};
 module.exports = redisClient;

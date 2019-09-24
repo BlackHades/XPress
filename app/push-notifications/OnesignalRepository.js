@@ -26,11 +26,12 @@ const sendNotificationToUser = (tokens = [], title, message, data) => {
 
     notification.postBody['data'] = data;
 
-    myClient.sendNotification(notification)
-        .then(res => {
-            log(res.httpResponse.statusCode);
-        })
-        .catch(err => log(JSON.stringify(err)))
+    if(process.env.APP_ENV != "development")
+        myClient.sendNotification(notification)
+            .then(res => {
+                log(res.httpResponse.statusCode);
+            })
+            .catch(err => log(JSON.stringify(err)))
 
 };
 
