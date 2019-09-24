@@ -6,3 +6,7 @@ PORT=8002 pm2 restart 8002
 PORT=8003 pm2 restart 8003
 PORT=8004 pm2 restart 8004
 PORT=8005 pm2 restart 8005
+PORT=8006 pm2 restart 8006
+PORT=8007 pm2 restart 8007
+PORT=8008 pm2 restart 8008
+PORT=8009 pm2 restart 8009
