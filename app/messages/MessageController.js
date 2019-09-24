@@ -28,7 +28,7 @@ const fetchMessages = async (socket, lastMessageId, limit) => {
         let userChatList = await userChatRepository.findOne({ userId: socket.userId });
         let list = [];
         if (!userChatList || userChatList.chatList.length == 0) {
-            messages = await messageRepository.fetchMessage(socket.userId, lastMessageId, limit);
+            messages = await messageRepository.fetchMessage(socket.userId, lastMessageId, limit || 50);
             let list = [];
             await Promise.all(messages.map(message => {
                 list = createChatList(message, message.from === socket.userId ? "sent" : "received", list);
