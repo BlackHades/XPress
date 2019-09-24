@@ -35,6 +35,7 @@ const fetchMessages = async (socket, lastMessageId, limit) => {
             }));
             socket.emit(EMIT_MESSAGE_IN_BULK, { list });
         } else {
+            debug("Chatlist", userChatList);
             let chatList = userChatList.chatList ? JSON.parse(userChatList.chatList) : [];
             if (chatList) {
                 for (let ch of chatList) {
@@ -45,7 +46,7 @@ const fetchMessages = async (socket, lastMessageId, limit) => {
             }
         }
     } catch (e) {
-        debug("FATAL ERROR", e);
+        // debug("FATAL ERROR", e);
         messages = await messageRepository.fetchMessage(socket.userId, lastMessageId, limit);
         let list = [];
         await Promise.all(messages.map(message => {
