@@ -24,17 +24,13 @@ const init = (io) => {
     ioEvents(io);
 
     redisEventManager.subscriber.on("message", (channel, message) => {
-        debug("Here",);
-        console.log("Message: " + message + " on channel: " + channel + " has arrive!");
-
         switch (channel) {
             case constants.MESSAGES:{
                 const payload = JSON.parse(message);
-                debug(payload);
                 payload.socketIds.map(socketId => {
                     io.to(socketId).emit(EMIT_RECEIVE_MESSAGE, { message: payload.message });
-                    debug(`Sent to ${socketId} from ${process.env.PORT}`);
                 });
+                debug(`Sent to ${payload.socketIds.length} from ${process.env.PORT}`);
                 break;
             }
 
