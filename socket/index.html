@@ -100,7 +100,7 @@
         console.clear();
         console.log("Message: Init");
         socket = io.connect(prod ? liveUrl : localUrl, {
-            transports: ['websocket'] // or [ 'websocket', 'polling' ], which is the same thing
+            transports: ['websocket','polling'] // or [ 'websocket', 'polling' ], which is the same thing
         });
         // console.log('Socket: '+ socket);
         socket.on('connected', (payload) => {

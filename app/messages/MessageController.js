@@ -184,21 +184,17 @@ const disperseMessageToUser = (io, message) => {
                 message: message,
                 socketIds: onlineUsers.map(user => user.socketId)
             }));
-            // onlineUsers.forEach(user => {
-            //     emitMessage(io, user.socketId, message);
-            // });
         })
         .catch(err => log(err));
 
     //send onesignal integration
     pushTokenRepository.fetchUserTokens(message.to, true)
         .then(tokens => {
-            log("messages: " + JSON.stringify(message));
             if (tokens.length === 0)
                 return;
             tokens = tokens.map(t => t.token);
             const data = { notificationType: "MESSAGE", message: message };
-            log("data: " + JSON.stringify({ data: data, tokens: tokens, message: message }));
+            // log("data: " + JSON.stringify({ data: data, tokens: tokens, message: message }));
             onesignalRepository.sendNotificationToUser(tokens, message.sender.name, message.content, data)
         }).catch(err => log("pusherror: " + err));
 };

@@ -39,6 +39,10 @@ sequelize
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'jade');
 
+app.use((req, res, next) => {
+    debug(`${process.env.PORT} is processing a request from ${req.url}`);
+    next();
+});
 app.use(cors());
 app.use(morgan('combined'));
 app.use(express.json({ limit: '20mb' }));
