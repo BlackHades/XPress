@@ -1,5 +1,5 @@
 'use strict';
-const { User, Wallet } = require('../../database/sequelize');
+const { User, Wallet, PushToken } = require('../../database/sequelize');
 const userConstant = require("./UserConstant");
 const Sequelize = require('sequelize');
 const Op = Sequelize.Op;
@@ -15,6 +15,7 @@ class UserRepository extends Repository {
         this.fetchByPhone = this.fetchByPhone.bind(this);
         this.destroy = this.destroy.bind(this);
         this.fetchByRole = this.fetchByRole.bind(this);
+        this.getUserTokenWithPushToken = this.getUserTokenWithPushToken.bind(this);
     }
 
 
@@ -66,8 +67,21 @@ class UserRepository extends Repository {
     }
 
     fetchByRole(roleId) {
-        console.log('roleId -> ', this.all());
-        return this.all( { roleId } );
+        // console.log('roleId -> ', this.all());
+        return this.all({ roleId });
+    }
+
+    getUserTokenWithPushToken(condition) {
+        // debug(condition);
+        return this.Model.findAll({
+            where: condition,
+            include: [
+                {
+                    model: PushToken,
+                    as: "pushTokens"
+                }
+            ]
+        });
     }
 }
 

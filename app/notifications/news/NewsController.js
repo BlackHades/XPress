@@ -16,37 +16,29 @@ exports.send = async (req, res) => {
         return createErrorResponse(res, "Title is required");
     if (!message)
         return createErrorResponse(res, "Message is required");
-
-    const users = await userRepository.all();
-    // const users = await userRepository.all({
-    //     where: {
-    //         roleId: 3
-    //     }
-    // });
-    // const users = await userRepository.fetchByRole(userConstant.USER);
-    // const users = await userRepository.fetchByRole(userConstant.USER);
-
+    
+    const users = await userRepository.getUserTokenWithPushToken({
+        roleId: userConstant.USER
+    });
     debug('users - ', users);
 
     await newsRepository.create({ title, message });
 
-    await users.map(user => {
-        pushTokenRepository.fetchUserTokens(user.id, true)
-            .then(tokens => {
-                log("messages: " + JSON.stringify(message));
-                if (tokens.length === 0)
-                    return;
-                tokens = tokens.map(t => t.token);
-                const data = {
-                    notificationType: "NEWS",
-                    message: message
-                };
-                log("data: " + JSON.stringify({ data: data, tokens: tokens, message: message }));
-                onesignalRepository.sendNotificationToUser(tokens, title, message, data)
-            })
-            .catch(err => log("pusherror for news: " + err));
-    });
-    return createSuccessResponse(res, null, "In app notification messages sent");
+    let tokens = [];
+    await Promise.all(await users.map(user => {
+        log("messages: " + JSON.stringify(user.pushTokens));
+        if (user.pushTokens && user.pushTokens.length === 0)
+            return;
+        user.pushTokens.map(t => tokens.push(t.token));
+    }));
+    tokens = tokens.filter(Boolean);
+    const data = {
+        notificationType: "NEWS",
+        message: message
+    };
+    log("data: " + JSON.stringify({ data: data, tokens: tokens, message: message }));
+    onesignalRepository.sendNotificationToUser(tokens, title, message, data)
+    return createSuccessResponse(res, tokens, "In app notification messages sent");
 };
 
 exports.fetch = async (req, res) => {

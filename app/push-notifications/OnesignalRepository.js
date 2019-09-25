@@ -14,16 +14,15 @@ const sendNotificationToUser = (tokens = [], title, message, data) => {
     if (!tokens || tokens.length === 0)
         return;
 
+
     const notification = new OneSignal.Notification({
         headings: {
             en: title
         },
         contents: {
             en: message,
-        },
-        include_player_ids: tokens
+        }
     });
-
     notification.postBody['data'] = data;
 
     if(process.env.APP_ENV != "development")
@@ -33,6 +32,27 @@ const sendNotificationToUser = (tokens = [], title, message, data) => {
             })
             .catch(err => log(JSON.stringify(err)))
 
+    let length = 2000;
+    if (tokens.length > length) {
+        while (tokens.length) {
+            const data = tokens.splice(0, length);
+            debug(data.length);
+            notification.include_player_ids = data;
+            myClient.sendNotification(notification)
+                .then(res => {
+                    log(res.httpResponse.statusCode);
+                })
+                .catch(err => log(JSON.stringify(err)))
+        }
+
+    } else {
+        notification.include_player_ids = tokens;
+        myClient.sendNotification(notification)
+            .then(res => {
+                log(res.httpResponse.statusCode);
+            })
+            .catch(err => log(JSON.stringify(err)))
+    }
 };
 
 module.exports = {

@@ -21,7 +21,6 @@ module.exports = {
             },
             message: {
                 type: type.STRING,
-                unique: true,
                 allowNull: false
             },
             createdAt: type.DATE,

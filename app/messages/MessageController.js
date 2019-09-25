@@ -166,19 +166,6 @@ const emitMessage = (io, socketId, message) => {
 };
 
 
-const disperseMessageToAllAgentAndAdmins = async (io, message) => {
-    let nonUsers = await userRepository.getAllNonUser(true);
-    let nonUserIds = [];
-    for (let i = 0; i < nonUsers.length; i++) {
-        nonUserIds[i] = nonUsers[i].id;
-    }
-
-    let onlineUsers = await onlineUserRepository.getMultipleOnlineUsersById(nonUserIds, true);
-    onlineUsers.forEach(user => {
-        emitMessage(io, user.socketId, message);
-    })
-};
-
 const disperseMessageToUser = (io, message) => {
     onlineUserRepository.findByUserId(message.to)
         .then(onlineUsers => {
