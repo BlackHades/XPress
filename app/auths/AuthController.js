@@ -22,12 +22,15 @@ const randomString = require("randomstring");
 const login = async (req, res, next) => {
     try {
 
+        debug("Starting Login");
         const valFails = validationResult(req);
         if (!valFails.isEmpty())
             return createErrorResponse(res, validationHandler(valFails), valFails.array);
 
         let payload = req.body;
+        debug("First Query Start");
         let user = await fetchByEmail(payload.email, true);
+        debug("First Query end/ Processing start");
         console.log({user, body: req.body});
         if(!user)
             return createErrorResponse(res, "User Not Found");
@@ -57,6 +60,8 @@ const login = async (req, res, next) => {
             if (user.roleId !== roles.USER)
                 return createErrorResponse(res, "Unauthorized User");
         }
+
+        debug("Processing stops");
         return createSuccessResponse(res, {
             user: user,
             token: {
