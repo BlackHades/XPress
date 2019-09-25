@@ -30,7 +30,7 @@ const sendNotificationToUser = (tokens = [], title, message, data) => {
             .then(res => {
                 log(res.httpResponse.statusCode);
             })
-            .catch(err => log(JSON.stringify(err)))
+            .catch(err => log(JSON.stringify(err)));
 
     let length = 2000;
     if (tokens.length > length) {

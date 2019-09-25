@@ -23,7 +23,7 @@ const debug = require("debug")("app:debug");
 
 const fetchMessages = async (socket, lastMessageId, limit) => {
     let messages;
-    debug("Fetch Messages", lastMessageId, limit);
+    debug("Fetch Messages", socket.userId, lastMessageId, limit);
     try {
         let userChatList = await userChatRepository.findOne({ userId: socket.userId });
         let list = [];
@@ -33,9 +33,11 @@ const fetchMessages = async (socket, lastMessageId, limit) => {
             await Promise.all(messages.map(message => {
                 list = createChatList(message, message.from === socket.userId ? "sent" : "received", list);
             }));
+
+            debug(process.env.PORT, "List", list);
             socket.emit(EMIT_MESSAGE_IN_BULK, { list });
         } else {
-            debug("Chatlist", userChatList);
+            debug(process.env.PORT, "Chatlist", userChatList);
             let chatList = userChatList.chatList ? JSON.parse(userChatList.chatList) : [];
             if (chatList) {
                 for (let ch of chatList) {
@@ -53,6 +55,7 @@ const fetchMessages = async (socket, lastMessageId, limit) => {
             list = createChatList(message, message.from === socket.userId ? "sent" : "received", list);
         }));
         socket.emit(EMIT_MESSAGE_IN_BULK, { list });
+        debug(process.env.PORT, "List", list);
     }
 };
 
