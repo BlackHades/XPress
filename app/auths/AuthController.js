@@ -12,6 +12,8 @@ const smsService = require("../../services/SMSService");
 const debug = require("debug")("app:debug");
 const messages =  require("../../helpers/Messages");
 const randomString = require("randomstring");
+const walletRepository = require("../wallets/WalletRepository");
+const bankAccountRepository = require("../bank-accounts/BankAccountRepository");
 /**
  * Authenticate User
  * @param req
@@ -61,6 +63,26 @@ const login = async (req, res, next) => {
                 return createErrorResponse(res, "Unauthorized User");
         }
 
+        const [wallets, created] = await walletRepository.findOrCreate({
+            userType: "user",
+            userId: user.id,
+        },{
+            userType: "user",
+            userId: user.id,
+            balance: 0
+        });
+
+        debug(created, wallets);
+        user.dataValues.balance = wallets.balance;
+
+        const bankAccount = await bankAccountRepository.findOne({
+            userType: "user",
+            userId: user.id,
+        });
+
+        if(bankAccount)
+            user.dataValues.bankAccount = bankAccount;
+
         debug("Processing stops");
         return createSuccessResponse(res, {
             user: user,
@@ -70,6 +92,7 @@ const login = async (req, res, next) => {
             }
         }, "Login Successful")
     } catch (e) {
+        debug(e);
         next(e);
     }
 };
