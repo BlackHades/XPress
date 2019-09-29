@@ -124,6 +124,7 @@ const send = async (io, socket, payload) => {
     try {
         let message = payload.message;
 
+        debug("Message", message);
         //validate Message Object
         if (message.from == null || message.to == null || message.content == null || message.type == null) {
             socket.emit(EMIT_ERROR, "One or More Fields is required");
@@ -160,6 +161,7 @@ const send = async (io, socket, payload) => {
         socket.emit(EMIT_MESSAGE_SENT, { message: newMessage });
     } catch (e) {
         socket.emit(EMIT_ERROR, JSON.stringify(e));
+        debug("Messages Error", e);
     }
 };
 
