@@ -2,7 +2,7 @@
 const OneSignal = require("onesignal-node");
 const log = require("../../helpers/Logger");
 require('dotenv').config();
-
+const debug = require("debug")("app:debug");
 const myClient = new OneSignal.Client({
     userAuthKey: process.env.ONESIGNAL_USER_AUTH_KEY,
     // note that "app" must have "appAuthKey" and "appId" keys
