@@ -43,12 +43,11 @@ const fetchMessage = (userId,lastMessageId, limit) => {
           as: "bitcoin"
         }
       ],
-      order: [['id', 'ASC']],
-      limit: limit && limit > 500 ? 500 : limit
+      order: [['id', 'ASC']]
     });
 };
 
-const fetchMessageBySenderAndRecipient = (from,to, limit = 20) => {
+const fetchMessageBySenderAndRecipient = (from,to, limit) => {
   return Message.findAll({
     where:{
       [Op.or]:[{
@@ -79,12 +78,12 @@ const fetchMessageBySenderAndRecipient = (from,to, limit = 20) => {
       }
     ],
     order: [['id', 'DESC']],
-    limit
+    limit: limit || 5000
   });
 };
 
 
-const fetchMessageBySenderAndRecipientReverse = (from,to, lastMessageId, limit = 20, offset = 0) => {
+const fetchMessageBySenderAndRecipientReverse = (from,to, lastMessageId, limit, offset = 0) => {
   return Message.findAll({
     where:{
       [Op.or]:[{
@@ -118,7 +117,7 @@ const fetchMessageBySenderAndRecipientReverse = (from,to, lastMessageId, limit =
       }
     ],
     order: [['id', 'DESC']],
-    limit
+    limit: limit || 5000
   });
 };
 const findByMessageId = (messageId) => {
