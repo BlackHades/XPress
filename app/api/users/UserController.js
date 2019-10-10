@@ -186,6 +186,18 @@ const toggleIsActive = (req,res, next) => {
             return createSuccessResponse(res, await userRepository.find(req.body.userId) ,  "User Record Is Updated")
         }).catch(err => next(err));
 };
+
+const subscriptions = (req,res, next) => {
+    console.log(req.params.key);
+    userRepository.updateUser({
+        subscribe : req.params.key
+    },req.body.userId)
+        .then(async response => {
+            log("response: " + response);
+            return createSuccessResponse(res, await userRepository.find(req.body.userId) ,  `User ${req.params.key === 1 ? 'Subscribed': 'Unscubscribed'}`)
+        }).catch(err => next(err));
+};
+
 module.exports = {
-  create, update, avatar, all, destroy, details, me, agents, toggleStatus, toggleIsActive
+  create, update, avatar, all, destroy, details, me, agents, toggleStatus, toggleIsActive , subscriptions
 };
