@@ -1,48 +1,24 @@
 'use strict';
+process.env.DEBUG="app:debug";
 const createError = require('http-errors');
 const express = require('express');
 const path = require('path');
 require('dotenv').config();
 const fs = require('fs');
+const http = require("http");
 // const cookieParser = require('cookie-parser');
 const expressValidator = require('express-validator');
 const cors = require('cors');
 const morgan = require('morgan');
 const Sentry = require('@sentry/node');
-const indexRouter = require('./routes/index');
-const usersRouter = require('./routes/api/users');
-const filesRouter = require('./routes/api/files');
-const passwordsRouter = require('./routes/api/passwords');
-const cardsRouter = require('./routes/api/cards');
-const messageRouter = require('./routes/api/messages');
-const postRouter = require('./routes/api/posts');
-const transactionRouter = require('./routes/api/transactions');
-const pushRouter = require('./routes/api/pushs');
-const bitcoinRouter = require('./routes/api/bitcoins');
-const authRouter = require('./routes/api/auth');
-const contactRouter = require('./routes/api/contacts');
-const utilityRouter = require('./routes/api/utilities');
-const apiRouter = require('./routes/api');
 const errorHandler = require('./helpers/ErrorHandler');
 const app = express();
 const {sequelize} = require('./database/sequelize');
 const {seeder} = require('./database/databaseSeeder');
+const debug = require("debug")("app:debug");
+require("express-async-errors");
 
-
-process.on('unhandledRejection', (reason, promise) => {
-    console.log(reason);
-    console.log('Unhandled Rejection at:', reason.stack || reason);
-    // Recommended: send the information to sentry.io
-    // or whatever crash reporting service you use
-});
-
-
-
-process.on("uncaughtRejection",(ex) => {
-    console.log("Ubcaught", {ex});
-    throw ex;
-});
-
+// debug(process.env);
 //sentry only enabled in production
 if(process.env.APP_ENV == "production"){
     Sentry.init({ dsn: 'https://780ec425d68046ab8edabc8a37fa1597@sentry.io/1447209' });
@@ -54,12 +30,7 @@ sequelize
     .authenticate()
     .then(() => {
       console.log('Connection has been established successfully.');
-      // //
-      sequelize.sync({force: false}).then(() => {
-          //this seeder checks and create the default admins
-          seeder();
-      });
-
+      seeder();
     })
     .catch(err => {
       console.error('Unable to connect to the database:', err);
@@ -68,6 +39,10 @@ sequelize
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'jade');
 
+app.use((req, res, next) => {
+    debug(`${process.env.PORT} is processing a request from ${req.url}`);
+    next();
+});
 app.use(cors());
 app.use(morgan('combined'));
 app.use(express.json({ limit: '20mb' }));
@@ -81,22 +56,17 @@ try {
   if (err.code !== 'EEXIST') throw err
 }
 
-//Routes
-app.use('/', indexRouter);
-app.use('/api/v1',apiRouter);
-app.use('/api/v1/users',usersRouter);
-app.use('/api/v1/files',filesRouter);
-app.use('/api/v1/cards',cardsRouter);
-app.use('/api/v1/passwords',passwordsRouter);
-app.use('/api/v1/posts',postRouter);
-app.use('/api/v1/transactions',transactionRouter);
-app.use('/api/v1/push-tokens',pushRouter);
-app.use('/api/v1/messages',messageRouter);
-app.use('/api/v1/bitcoins',bitcoinRouter);
-app.use('/api/v1/auths',authRouter);
-app.use('/api/v1/contacts',contactRouter);
-app.use('/api/v1/utilities',utilityRouter);
+require("./routes/router")(app);
 
+/**
+ * Create HTTP server.
+ */
+
+const server = http.createServer(app);
+let io = require('socket.io')(server);
+require("./socket").init(io);
+global.io = io;
+app.server = server;
 
 //sentry only enabled in production
 if(process.env.APP_ENV == "production"){

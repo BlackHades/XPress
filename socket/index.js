@@ -1,82 +1,111 @@
 'use strict';
-const {authenticate} = require("../app/middleware/SocketMiddleware");
-const onlineUserRepository= require("../app/api/online-users/OnlineUserRepository");
+const { authenticate } = require("../app/middleware/SocketMiddleware");
+const onlineUserRepository = require("../app/online-users/OnlineUserRepository");
+const debug = require("debug")("app:debug");
+const constants = require("../app/Constants");
 const {
 
     //Events
     CONNECTION,
     CONNECTED,
     EVENT_INITIALIZATION,
-    EVENT_AUTHENTICATION,
-    EVENT_USER_INFO,
     EVENT_SEND_MESSAGE,
-    EVENT_FETCH_MESSAGE,
     EVENT_MARK_MESSAGE_AS_DELIVERED,
+    EVENT_SAVE_USER_CHAT,
+    EVENT_GET_OLDER_MESSAGE,
     DISCONNECTED,
 
+    EMIT_RECEIVE_MESSAGE
     //Emissions
-    EMIT_AUTHENTICATED,
-    EMIT_MESSAGE,
-    EMIT_ERROR
 } = require('./constants');
 
-const init = (server) => {
-    let io = require('socket.io')(server);
+const init = (io) => {
+    // let io = require('socket.io')(server);
     ioEvents(io);
+
+    redisEventManager.subscriber.on("message", (channel, message) => {
+        switch (channel) {
+            case constants.MESSAGES:{
+                const payload = JSON.parse(message);
+                payload.socketIds.map(socketId => {
+                    io.to(socketId).emit(EMIT_RECEIVE_MESSAGE, { message: payload.message });
+                });
+                debug(`Sent to ${payload.socketIds.length} from ${process.env.PORT}`);
+                break;
+            }
+
+            default: {
+                console.log("No Channel is listening");
+                break;
+            }
+        }
+    });
+
+    redisEventManager.subscriber.subscribe(constants.MESSAGES);
+    return io;
 };
 
 //Controller
-const messageController = require('../app/api/messages/MessageController');
+const messageController = require('../app/messages/MessageController');
 
 /**
  * This Methods handles all events and emitters of the socket
  * @param io
  */
 const ioEvents = (io) => {
+    console.log('socket io ->', io)
     io.sockets.on(CONNECTION, (socket) => {
+        debug(`${socket.id} is connected on PORT ${process.env.PORT}`);
         socket.emit(CONNECTED,{payload: socket.id});
-        socket.auth = false;
-
         /**
          * Initialization Event
          */
-
-        socket.on(EVENT_INITIALIZATION,(payload) => {
-            // console.log("Init: " + JSON.stringify(payload));
-            if(payload.userId !== undefined || payload.user !== null){
-                socket.auth = true;
-                socket.userId = payload.userId;
-                // console.log("Initialized: " + socket);
-                //add user to online-users table
-                onlineUserRepository.add(socket.userId, socket.id);
-                messageController.fetchMessages(socket,payload.lastMessageId || 0, payload.limit);
-            }else{
+        socket.on(EVENT_INITIALIZATION, (payload) => {
+            try {
+                // console.log("Init: " + JSON.stringify(payload));
+                if (payload.userId !== undefined || payload.user !== null) {
+                    socket.auth = true;
+                    socket.userId = payload.userId;
+                    //add user to online-users table
+                    onlineUserRepository.add(socket.userId, socket.id)
+                        .then(res => null)
+                        .catch(err => debug("FATAL ERROR", err));
+                    messageController.fetchMessages(socket, payload.lastMessageId || 0, payload.limit);
+                } else {
+                    socket.disconnect(true);
+                }
+            } catch (e) {
+                debug("FATAL ERROR", e);
                 socket.disconnect(true);
             }
         });
 
-        socket.on(EVENT_SEND_MESSAGE,(payload) => {
+        socket.on(EVENT_SEND_MESSAGE, (payload) => {
             messageController.send(io, socket, payload)
         });
 
         socket.on(EVENT_MARK_MESSAGE_AS_DELIVERED, (payload) => {
-           messageController.markAsDelivered(payload);
+            messageController.markAsDelivered(payload);
+        });
+
+        socket.on(EVENT_SAVE_USER_CHAT, (payload) => {
+            messageController.saveUserChats(payload);
+        });
+
+        socket.on(EVENT_GET_OLDER_MESSAGE, ({ startMessageId, recipient, limit }) => {
+            messageController.fetchOldMessages(socket, recipient, startMessageId, limit);
         });
 
         /**
          * Disconnect User and Remove from Online users
          */
         socket.on(DISCONNECTED, () => {
-           try{
-               //remove user from online-users table
-               onlineUserRepository.remove(socket.userId, socket.id);
-               // console.log(socket.id + " has disconnected");
-           }catch (e) {
-               socket.disconnect(true);
-           }
+            debug(`${socket.id} has disconnected on from PORT ${process.env.PORT}`);
+            onlineUserRepository.remove(socket.userId, socket.id);
         });
     });
 };
 
-module.exports= init;
-
+module.exports = {
+    init
+};

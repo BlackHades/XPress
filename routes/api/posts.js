@@ -7,11 +7,11 @@ const router = express.Router();
 const {authenticate,adminAuth} = require('../../app/middleware/ApiAuthMiddleware');
 
 //Controllers
-const postController = require('../../app/api/posts/PostController');
-const commentController = require('../../app/api/comments/CommentController');
+const postController = require('../../app/posts/PostController');
+const commentController = require('../../app/comments/CommentController');
 
 //Validators
-const postValidator  = require('../../app/validator/PostValidator');
+const postValidator  = require('../../app/posts/PostValidator');
 
 
 //No Auth

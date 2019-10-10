@@ -1,69 +1,70 @@
 const bcrypt = require('bcryptjs');
 const {User, Transaction} = require('../database/sequelize');
-const {fetchByEmail, generateUid} = require('../app/api/users/UserRepository');
-const transactionRepository = require('../app/api/transactions/TransactionRepository');
-const randomSentence = require("random-sentence");
+const {fetchByEmail, generateUid, all, updateUser} = require('../app/users/UserRepository');
+const transactionRepository = require('../app/transactions/TransactionRepository');
+// const randomSentence = require("random-sentence");
+const randomString = require("randomstring");
 let seeder = () => {
-    admin();
-    boss();
-    agent();
-    user();
-    // transactions();
+    // admin();
+    // boss();
+    // agent();
+    // user();
+    // seedUsername();
 };
 
-const boss = async () => {
-    const email = "boss@chiji14xchange.com";
-    let user = await fetchByEmail(email);
-    let uid = await generateUid();
-    if(!user){
-        const hashedPassword = bcrypt.hashSync("Goodbetter123",  bcrypt.genSaltSync(10));
-        await User.create({
-            name: "Boss",
-            uid: uid,
-            roleId: 1,
-            email: email ,
-            password: hashedPassword,
-            phone: "+2349055695712"
-        });
-        console.log("Boss Seeder Complete");
-    }
-};
-
-const admin = async () => {
-    const email = "hades@hades.com";
-    let user = await fetchByEmail(email);
-    let uid = await generateUid();
-    if(!user){
-        const hashedPassword = bcrypt.hashSync("Goodbetter123",  bcrypt.genSaltSync(10));
-        await User.create({
-            name: "Hades",
-            uid: uid,
-            roleId: 1,
-            email: email ,
-            password: hashedPassword,
-            phone: "+23470381012174"
-        });
-        console.log("Admin Seeder Complete");
-    }
-};
-
-const agent = async () => {
-    const email = "agent@hades.com";
-    let user = await fetchByEmail(email);
-    let uid = await generateUid();
-    if(!user){
-        const hashedPassword = bcrypt.hashSync("Goodbetter123",  bcrypt.genSaltSync(10));
-        await User.create({
-            name: "Agent Agent",
-            uid: uid,
-            roleId: 2,
-            email: email ,
-            password: hashedPassword,
-            phone: "+23470381012274"
-        });
-        console.log("Agent Seeder Complete");
-    }
-};
+// const boss = async () => {
+//     const email = "boss@chiji14xchange.com";
+//     let user = await fetchByEmail(email);
+//     let uid = await generateUid();
+//     if(!user){
+//         const hashedPassword = bcrypt.hashSync("Goodbetter123",  bcrypt.genSaltSync(10));
+//         await User.create({
+//             name: "Boss",
+//             uid: uid,
+//             roleId: 1,
+//             email: email ,
+//             password: hashedPassword,
+//             phone: "+2349055695712"
+//         });
+//         console.log("Boss Seeder Complete");
+//     }
+// };
+//
+// const admin = async () => {
+//     const email = "hades@hades.com";
+//     let user = await fetchByEmail(email);
+//     let uid = await generateUid();
+//     if(!user){
+//         const hashedPassword = bcrypt.hashSync("Goodbetter123",  bcrypt.genSaltSync(10));
+//         await User.create({
+//             name: "Hades",
+//             uid: uid,
+//             roleId: 1,
+//             email: email ,
+//             password: hashedPassword,
+//             phone: "+23470381012174"
+//         });
+//         console.log("Admin Seeder Complete");
+//     }
+// };
+//
+// const agent = async () => {
+//     const email = "agent@hades.com";
+//     let user = await fetchByEmail(email);
+//     let uid = await generateUid();
+//     if(!user){
+//         const hashedPassword = bcrypt.hashSync("Goodbetter123",  bcrypt.genSaltSync(10));
+//         await User.create({
+//             name: "Agent Agent",
+//             uid: uid,
+//             roleId: 2,
+//             email: email ,
+//             password: hashedPassword,
+//             phone: "+23470381012274"
+//         });
+//         console.log("Agent Seeder Complete");
+//     }
+// };
 
 const user = async () => {
     const email = "user@hades.com";
@@ -84,31 +85,33 @@ const user = async () => {
     }
 };
 
+const seedUsername = () => {
+    all()
+        .then(users =>{
+            console.log("Users", users.length);
+            const res = users.map(async user => {
+                if(user.username == null || user.username == ""){
+                    let username = `${user.name.substr(0,3)}${randomString.generate({
+                        charset: "numeric",
+                        length: 3
+                    })}`;
+                    user.username = username;
+                    // let u = await user.save();
+                    // console.log("u", u.username);
+                    // user.update({username: user.username});
+                    // console.log("username", user.username);
+                    updateUser({username: username}, user.id)
+                        .then(res => {
+                            console.log("Ress",res);
+                        }).catch(err => {
+                        console.log("Inner Error", err);
+                    });
 
-const transactions = async () => {
-    for(let i = 0; i < 20; i++){
-        Transaction.create({
-            transactionId: await  transactionRepository.generateTransactionId(),
-            bitcoinId:1,
-            userId: i > 10 ? 19 : 11,
-            transactionType:"BITCOIN",
-            description: randomSentence({words: 1000}),
-            createdBy: 2,
-            amount: 100000 * Math.random()
-        });
-    }
-
-    for(let i = 0; i < 20; i++){
-        Transaction.create({
-            transactionId: await  transactionRepository.generateTransactionId(),
-            cardId:1,
-            userId: 11,
-            transactionType:"CARD",
-            description: randomSentence({words: 1000}),
-            createdBy: 2,
-            amount: 100000 * Math.random()
-        });
-    }
+                    // return await user.save();
+                }
+            });
+            console.log("Res", res);
+        }).catch(err => console.log(err));
 };
 module.exports = {
     seeder

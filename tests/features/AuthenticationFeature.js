@@ -5,7 +5,7 @@ const app = require('../../app'),
 
 const  expect = chai.expect;
 
-const {destroy} = require("../../app/api/users/UserRepository");
+const {destroy} = require("../../app/users/UserRepository");
 describe('Authentication API Integration Tests', function() {
 
     it('should sign in user', function(done) {

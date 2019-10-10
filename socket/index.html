@@ -1,183 +1,190 @@
 <!doctype html>
 <html>
-    <head>
-        <meta charset="utf-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
 
-        <title>Laravel</title>
+    <title>Laravel</title>
 
-        <!-- Fonts -->
-        <link href="https://fonts.googleapis.com/css?family=Nunito:200,600" rel="stylesheet" type="text/css">
+    <!-- Fonts -->
+    <link href="https://fonts.googleapis.com/css?family=Nunito:200,600" rel="stylesheet" type="text/css">
 
-        <!-- Styles -->
-        <style>
-            html, body {
-                background-color: #fff;
-                color: #636b6f;
-                font-family: 'Nunito', sans-serif;
-                font-weight: 200;
-                height: 100vh;
-                margin: 0;
-            }
+    <!-- Styles -->
+    <style>
+        html, body {
+            background-color: #fff;
+            color: #636b6f;
+            font-family: 'Nunito', sans-serif;
+            font-weight: 200;
+            height: 100vh;
+            margin: 0;
+        }
 
-            .full-height {
-                height: 100vh;
-            }
+        .full-height {
+            height: 100vh;
+        }
 
-            .flex-center {
-                align-items: center;
-                display: flex;
-                justify-content: center;
-            }
+        .flex-center {
+            align-items: center;
+            display: flex;
+            justify-content: center;
+        }
 
-            .position-ref {
-                position: relative;
-            }
+        .position-ref {
+            position: relative;
+        }
 
-            .top-right {
-                position: absolute;
-                right: 10px;
-                top: 18px;
-            }
+        .top-right {
+            position: absolute;
+            right: 10px;
+            top: 18px;
+        }
 
-            .content {
-                text-align: center;
-            }
+        .content {
+            text-align: center;
+        }
 
-            .title {
-                font-size: 84px;
-            }
+        .title {
+            font-size: 84px;
+        }
 
-            .links > a {
-                color: #636b6f;
-                padding: 0 25px;
-                font-size: 13px;
-                font-weight: 600;
-                letter-spacing: .1rem;
-                text-decoration: none;
-                text-transform: uppercase;
-            }
+        .links > a {
+            color: #636b6f;
+            padding: 0 25px;
+            font-size: 13px;
+            font-weight: 600;
+            letter-spacing: .1rem;
+            text-decoration: none;
+            text-transform: uppercase;
+        }
 
-            .m-b-md {
-                margin-bottom: 30px;
-            }
-        </style>
-    </head>
-    <body>
-        <div class="flex-center position-ref full-height">
-            <div class="content">
-                <div class="title m-b-md">
-                    FoodVendorNG
-                </div>
-
-                <div class="links">
-                    <a href="#connect" onClick="init()">Connect to Stream</a>
-                    <a href="#send-message" onClick="sendMessage()">Send Message</a>
-                    <a href="#disconnect" onClick="disconnect()">Disconnect From Stream</a>
-                </div>
-            </div>
+        .m-b-md {
+            margin-bottom: 30px;
+        }
+    </style>
+</head>
+<body>
+<div class="flex-center position-ref full-height">
+    <div class="content">
+        <div class="title m-b-md">
+            Test
         </div>
-    </body>
-    <script
-            src="https://code.jquery.com/jquery-3.3.1.min.js"
-            integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8="
-            crossorigin="anonymous"></script>
-    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/2.2.0/socket.io.js"></script>
-    <script>
-        const token = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjp7ImlkIjoxLCJyb2xlSWQiOjEsIm5hbWUiOiJIYWRlcyIsImVtYWlsIjoiaGFkZXNAaGFkZXMuY29tIiwicGhvbmUiOiIrMjM0NzAzODEwMTI0NzQiLCJwYXNzd29yZCI6IiQyYSQxMCR6TExiRVBRTjJ4VmRIUVFDZmI0ZlV1S2JGdGkxTmhIaHJEb3R4Y2phNjhWMi9zRS5BWWNZLiIsImF2YXRhciI6bnVsbCwibGFzdFNlZW4iOm51bGwsImNyZWF0ZWRBdCI6IjIwMTktMDItMTFUMTU6Mjc6MTMuMDAwWiIsInVwZGF0ZWRBdCI6IjIwMTktMDItMTFUMTU6Mjc6MTMuMDAwWiJ9LCJpYXQiOjE1NTA1OTk5MjYsImV4cCI6MTU1MDc3MjcyNn0.sjhwipQB74-wUwTiXzUQy0yngRRJnPD6ZRLXH388Gxs";
-        let auth = true;
-        let prod = false;
-        let userId = prod ? 4 : 3;
-        let uid = "6379e69d-b80a-47e7-a4b8-4b261e67ab22";
-        let socket;
-        let liveUrl = "http://phoenix.chiji14xchange.com";
-        let localUrl = "http://192.168.4.249:3000";
-        let lastMessageId = 172;
-        function init(){
-            socket === null ? socket.disconnect() : console.log("Socket is Null");
-            console.clear();
-            console.log("Message: Init");
-            socket = io.connect(prod ? liveUrl : localUrl,{
-                transports: [ 'websocket' ] // or [ 'websocket', 'polling' ], which is the same thing
-            });
-            // console.log('Socket: '+ socket);
-            socket.on('connected', (payload) => {
-                console.log(`Connected: ${payload.payload}`);
 
-                //this events emit an initialization which triggers the server to return messages starting from the lastMessage Id
-                socket.emit('event-initialization',{userId: userId,lastMessageId:lastMessageId});
-            });
+        <div class="links">
+            <a href="#connect" onClick="init()">Connect to Stream</a>
+            <a href="#send-message" onClick="sendMessage()">Send Message</a>
+            <a href="#disconnect" onClick="disconnect()">Disconnect From Stream</a>
+        </div>
+    </div>
+</div>
+</body>
+<script
+        src="https://code.jquery.com/jquery-3.3.1.min.js"
+        integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8="
+        crossorigin="anonymous"></script>
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/2.2.0/socket.io.js"></script>
+<script>
+    const token = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjp7ImlkIjoxLCJyb2xlSWQiOjEsIm5hbWUiOiJIYWRlcyIsImVtYWlsIjoiaGFkZXNAaGFkZXMuY29tIiwicGhvbmUiOiIrMjM0NzAzODEwMTI0NzQiLCJwYXNzd29yZCI6IiQyYSQxMCR6TExiRVBRTjJ4VmRIUVFDZmI0ZlV1S2JGdGkxTmhIaHJEb3R4Y2phNjhWMi9zRS5BWWNZLiIsImF2YXRhciI6bnVsbCwibGFzdFNlZW4iOm51bGwsImNyZWF0ZWRBdCI6IjIwMTktMDItMTFUMTU6Mjc6MTMuMDAwWiIsInVwZGF0ZWRBdCI6IjIwMTktMDItMTFUMTU6Mjc6MTMuMDAwWiJ9LCJpYXQiOjE1NTA1OTk5MjYsImV4cCI6MTU1MDc3MjcyNn0.sjhwipQB74-wUwTiXzUQy0yngRRJnPD6ZRLXH388Gxs";
+    let auth = true;
+    let prod = true;
+    let userId = prod ? 4 : 3;
+    let uid = "6379e69d-b80a-47e7-a4b8-4b261e67ab22";
+    let socket;
+    let liveUrl = "https://phoenix.chiji14xchange.com/";
+    // let liveUrl = "https://phoenix.chiji14xchange.com";
+    let localUrl = "http://localhost:8000";
+    let lastMessageId = 172;
 
-            socket.on('emit-receive-message',(payload) => {
-                console.log(`Message received: ${JSON.stringify(payload)}`);
-                console.log(`Message received: ${JSON.stringify(payload.message.mid)}`);
+    function init() {
+        socket === null ? socket.disconnect() : console.log("Socket is Null");
+        console.clear();
+        console.log("Message: Init");
+        socket = io.connect(prod ? liveUrl : localUrl, {
+            transports: ['websocket','polling'] // or [ 'websocket', 'polling' ], which is the same thing
+        });
+        // console.log('Socket: '+ socket);
+        socket.on('connected', (payload) => {
+            console.log(`Connected: ${payload.payload}`);
 
-                //send push only if message is a received message and message status is sent(==1)
+            //this events emit an initialization which triggers the server to return messages starting from the lastMessage Id
+            socket.emit('event-initialization', {userId: userId, lastMessageId: lastMessageId});
+        });
 
-                if(payload.message.status < 2 && payload.message.from !== userId){
-                    pushNotification(payload.message);
-                    emitDelivered(payload.message.mid);
+        socket.on('emit-receive-message', (payload) => {
+            console.log(`Message received: ${JSON.stringify(payload)}`);
+            console.log(`Message received: ${JSON.stringify(payload.message.mid)}`);
+
+            //send push only if message is a received message and message status is sent(==1)
+
+            if (payload.message.status < 2 && payload.message.from !== userId) {
+                pushNotification(payload.message);
+                emitDelivered(payload.message.mid);
+            }
+        });
+
+        socket.on("emit-agent-status", (payload) => {
+              console.log("Agent Status", payload);
+        });
+
+        socket.on('emit-error', (payload) => {
+            console.log("Error: " + JSON.stringify(payload));
+        });
+    }
+
+
+    function sendMessage() {
+        let message = {
+            mid: `${uid}-${Date.now()}`,
+            from: userId,
+            to: 8,
+            content: "Message " + Date.now(),
+            type: "TEXT",
+            // bitcoinId: 1
+        };
+        console.clear();
+        console.log(socket.connected);
+        if (socket.connected) {
+            socket.emit("event-send-message", {message: message});
+            console.log("Message Sent: " + JSON.stringify(message));
+        }
+    }
+
+
+    function emitDelivered(messageId) {
+        console.log("Delivered: " + JSON.stringify(messageId));
+        socket.emit("event-mark-message-as-delivered", {mid: messageId});
+    }
+
+    function disconnect() {
+        socket.disconnect(true);
+        console.log("Disconnected")
+    }
+
+
+    function pushNotification(message) {
+        // Let's check if the browser supports notifications
+        if (!("Notification" in window)) {
+            alert("This browser does not support desktop notification");
+        }
+
+        // Let's check whether notification permissions have already been granted
+        else if (Notification.permission === "granted") {
+            // If it's okay let's create a notification
+            new Notification(`${message.sender.name}: ${message.content}`);
+        }
+
+        // Otherwise, we need to ask the user for permission
+        else if (Notification.permission !== "denied") {
+            Notification.requestPermission().then(function (permission) {
+                // If the user accepts, let's create a notification
+                if (permission === "granted") {
+                    new Notification(`${message.sender.name}: ${message.content}`);
                 }
             });
-
-            socket.on('emit-error',(payload) =>{
-                console.log("Error: " + JSON.stringify(payload));
-            });
         }
 
-
-        function sendMessage(){
-            let message = {
-                mid:`${uid}-${Date.now()}`,
-                from: userId,
-                to:2,
-                content: "Message " + Date.now(),
-                type:"BITCOIN",
-                bitcoinId:1
-            };
-            console.clear();console.log(socket.connected);
-            if(socket.connected){
-                socket.emit("event-send-message", {message:message});
-                console.log("Message Sent: " + JSON.stringify(message));
-            }
-        }
-
-
-        function emitDelivered(messageId){
-            console.log("Delivered: " + JSON.stringify(messageId));
-            socket.emit("event-mark-message-as-delivered",{mid:messageId});
-        }
-
-        function disconnect(){
-            socket.disconnect(true);
-            console.log("Disconnected")
-        }
-
-
-        function pushNotification(message) {
-            // Let's check if the browser supports notifications
-            if (!("Notification" in window)) {
-                alert("This browser does not support desktop notification");
-            }
-
-            // Let's check whether notification permissions have already been granted
-            else if (Notification.permission === "granted") {
-                // If it's okay let's create a notification
-                new Notification(`${message.sender.name}: ${message.content}`);
-            }
-
-            // Otherwise, we need to ask the user for permission
-            else if (Notification.permission !== "denied") {
-                Notification.requestPermission().then(function (permission) {
-                    // If the user accepts, let's create a notification
-                    if (permission === "granted") {
-                        new Notification(`${message.sender.name}: ${message.content}`);
-                    }
-                });
-            }
-
-            // At last, if the user has denied notifications, and you
-            // want to be respectful there is no need to bother them any more.
-        }
-    </script>
+        // At last, if the user has denied notifications, and you
+        // want to be respectful there is no need to bother them any more.
+    }
+</script>
 </html>

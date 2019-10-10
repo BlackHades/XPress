@@ -5,10 +5,10 @@ const router = express.Router();
 const {authenticate,agentAuth,adminAuth} = require('../../app/middleware/ApiAuthMiddleware');
 
 //Controllers
-const userController = require('../../app/api/users/UserController');
+const userController = require('../../app/users/UserController');
 
 //Validators
-const userValidator  = require('../../app/validator/UserValidator');
+const userValidator  = require('../../app/users/UserValidator');
 
 
 

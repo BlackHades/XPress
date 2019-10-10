@@ -5,10 +5,10 @@ const router = express.Router();
 const {authenticate, adminAuth} = require('../../app/middleware/ApiAuthMiddleware');
 
 //Controllers
-const contactController = require('../../app/api/contact-us/ContactController');
+const contactController = require('../../app/contact-us/ContactController');
 
 //Validators
-const contactValidator  = require('../../app/validator/ContactValidator');
+const contactValidator  = require('../../app/contact-us/ContactValidator');
 
 
 router.post('/save', contactValidator.save(), contactController.save);

@@ -6,10 +6,10 @@ const router = express.Router();
 const {authenticate, adminAuth, agentAuth} = require('../../app/middleware/ApiAuthMiddleware');
 
 //Controllers
-const transactionController = require('../../app/api/transactions/TransactionController');
+const transactionController = require('../../app/transactions/TransactionController');
 
 //Validators
-const transactionValidator  = require('../../app/validator/TransactionValidator');
+const transactionValidator  = require('../../app/transactions/TransactionValidator');
 
 
 //General Auth
@@ -25,6 +25,7 @@ router.post("/create",transactionValidator.create(),transactionController.create
 
 router.use(adminAuth);
 router.delete("/delete/:transactionId", transactionController.destroy);
+router.get("/status", transactionController.status);
 
 
 

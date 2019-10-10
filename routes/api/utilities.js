@@ -6,10 +6,10 @@ const router = express.Router();
 const {authenticate,adminAuth} = require('../../app/middleware/ApiAuthMiddleware');
 
 //Controllers
-const utilityController = require('../../app/api/utilities/UtilityController');
+const utilityController = require('../../app/utilities/UtilityController');
 
 //validator
-const utilityValidator  = require("../../app/validator/UtilityValidator");
+const utilityValidator  = require("../../app/utilities/UtilityValidator");
 
 
 router.get("/fetch/:key?",utilityController.fetch);

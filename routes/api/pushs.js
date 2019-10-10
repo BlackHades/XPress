@@ -7,10 +7,10 @@ const router = express.Router();
 const {authenticate,adminAuth} = require('../../app/middleware/ApiAuthMiddleware');
 
 //Controllers
-const pushController = require('../../app/api/push-notifications/PushTokenController');
+const pushController = require('../../app/push-notifications/PushTokenController');
 
 //validator
-const pushValidator  = require("../../app/validator/PushTokenValidator");
+const pushValidator  = require("../../app/push-notifications/PushTokenValidator");
 
 //General Auth
 router.use(authenticate);

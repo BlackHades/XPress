@@ -1,7 +1,8 @@
 const jwt = require('jsonwebtoken');
 const config = require('../../config/config');
-const roles = require('../api/users/UserConstant');
-
+const roles = require('../users/UserConstant');
+const userRepository = require("../users/UserRepository");
+const affiliateRepository = require("../affiliates/AffiliateRepository");
 const {createErrorResponse} = require('../../helpers/response');
 
 /**
@@ -20,15 +21,19 @@ let authenticate = (req,res,next) => {
         token = token.slice(7, token.length);
     }
 
-    jwt.verify(token, process.env.SECURITY_KEY, function(err, decoded) {
+    jwt.verify(token, process.env.SECURITY_KEY, async (err, decoded) => {
         if (err) return createErrorResponse(res,'Failed to authenticate token.');
         // console.log("User: " + JSON.stringify(decoded));
         let user = decoded.user;
-        req.user = user;
-        if(user.roleId === roles.AGENT)
-            req.agent = user;
-        if(user.roleId === roles.ADMINISTRATOR)
-            req.admin = user;
+        let affiliate = decoded.affiliate;
+        req.user = user ? await userRepository.find(user.id) : null;
+        req.affiliate = affiliate ? await affiliateRepository.find(affiliate.id) : null;
+       if(req.user){
+           if(user.roleId === roles.AGENT)
+               req.agent = user;
+           if(user.roleId === roles.ADMINISTRATOR)
+               req.admin = user;
+       }
         next();
     });
 };

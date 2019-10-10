@@ -4,7 +4,7 @@ const router = express.Router();
 const {authenticate,agentAuth,adminAuth, refresh} = require('../../app/middleware/ApiAuthMiddleware');
 
 //Controllers
-const AuthController = require('../../app/api/auths/AuthController');
+const AuthController = require('../../app/auths/AuthController');
 
 
 router.get('auth/login', function(req, res, next) {

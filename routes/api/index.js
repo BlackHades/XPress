@@ -1,15 +1,15 @@
+"use strict";
 const express = require('express');
 const router = express.Router();
-const {authenticate,agentAuth,adminAuth, refresh} = require('../../app/middleware/ApiAuthMiddleware');
-
 //Controllers
-const AuthController = require('../../app/api/auths/AuthController');
+const AuthController = require('../../app/auths/AuthController');
 
 //Validators
-const AuthValidator  = require('../../app/validator/AuthValidator');
+const AuthValidator  = require('../../app/auths/AuthValidator');
 
 
 router.post('/login', AuthValidator.login(), AuthController.login);
+router.post('/login/affiliates', AuthValidator.login(), AuthController.affiliates);
 router.post('/register', AuthValidator.register(), AuthController.register);
 
 
