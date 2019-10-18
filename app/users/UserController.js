@@ -68,10 +68,12 @@ let update = async (req, res, next) => {
 
         let payload = req.body;
         let user = req.user;
-
+  console.log(req)
         //Update User
-        await userRepository.updateUser({name: payload.name, email:payload.email,phone:payload.phone, isActive: payload.isActive || true},req.user.id);
-        user = userRepository.find(user.id);
+        await userRepository.updateUser({name: payload.name, email:payload.email,phone:payload.phone, isActive: payload.isActive || true, subscribe : payload.subscribe},req.user.id);
+        user = userRepository.find(user.id); 
+        console.log('user ---> ', user)
+
         return createSuccessResponse(res, user, "User Profile Updated");
     }catch (e) {
         // handler(e);

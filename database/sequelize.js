@@ -1,6 +1,6 @@
 'use strict';
 const Sequelize = require('sequelize');
-const sequelize = new Sequelize(process.env.DB_NAME, process.env.DB_USERNAME, process.env.DB_PASSWORD, {
+ const sequelize = new Sequelize(process.env.DB_NAME, process.env.DB_USERNAME, process.env.DB_PASSWORD, {
     host: process.env.DB_HOST,
     port: process.env.DB_PORT,
     dialect: 'mysql',
@@ -14,9 +14,9 @@ const sequelize = new Sequelize(process.env.DB_NAME, process.env.DB_USERNAME, pr
         charset: 'utf8mb4',
         collate: 'utf8mb4_general_ci',
     },
-    // dialectOptions: {
-    //     socketPath: "/Applications/MAMP/tmp/mysql/mysql.sock"
-    // },
+    dialectOptions: {
+        socketPath: "/Applications/MAMP/tmp/mysql/mysql.sock"
+    },
     operatorsAliases: false,
     timezone: "+01:00", //for writing to database,
     // logging: true

@@ -13,6 +13,10 @@ module.exports = (sequelize, type) => {
             type: type.STRING,
             unique: true
         },
+        subscribe :{
+            type: type.INTEGER,
+            allowNull: true
+        },
         roleId:{
             type: type.INTEGER,
             defaultValue: roles.USER,
