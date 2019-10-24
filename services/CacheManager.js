@@ -20,7 +20,12 @@ if(password  && password != "null"){
         debug("res",res);
         debug("err",err);
     });
-    eventClient.auth(password, (err,res) => {
+    publisher.auth(password, (err,res) => {
+        debug("res",res);
+        debug("err",err);
+    });
+
+    subscriber.auth(password, (err,res) => {
         debug("res",res);
         debug("err",err);
     });
@@ -49,6 +54,7 @@ redisClient.on("connected", function () {
 redisClient.on("error", function (err) {
     debug("Redis error.", err);
 });
+
 global.redisEventManager = {
     publisher,
     subscriber
