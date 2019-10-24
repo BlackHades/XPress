@@ -34,10 +34,10 @@ const fetchMessages = async (socket, lastMessageId, limit) => {
                 list = createChatList(message, message.from === socket.userId ? "sent" : "received", list);
             }));
 
-            debug(process.env.PORT, "List", list);
+            // debug(process.env.PORT, "List", list);
             socket.emit(EMIT_MESSAGE_IN_BULK, { list });
         } else {
-            debug(process.env.PORT, "Chatlist", userChatList);
+            // debug(process.env.PORT, "Chatlist", userChatList);
             let chatList = userChatList.chatList ? JSON.parse(userChatList.chatList) : [];
             if (chatList) {
                 for (let ch of chatList) {
@@ -55,7 +55,7 @@ const fetchMessages = async (socket, lastMessageId, limit) => {
             list = createChatList(message, message.from === socket.userId ? "sent" : "received", list);
         }));
         socket.emit(EMIT_MESSAGE_IN_BULK, { list });
-        debug(process.env.PORT, "List", list);
+        // debug(process.env.PORT, "List", list);
     }
 };
 
@@ -124,7 +124,7 @@ const send = async (io, socket, payload) => {
     try {
         let message = payload.message;
 
-        debug("Message", message);
+        // debug("Message", message);
         //validate Message Object
         if (message.from == null || message.to == null || message.content == null || message.type == null) {
             socket.emit(EMIT_ERROR, "One or More Fields is required");
@@ -155,7 +155,7 @@ const send = async (io, socket, payload) => {
         newMessage = await messageRepository.findByMessageId(newMessage.mid);
 
 
-        console.log("Message: " + JSON.stringify(newMessage));
+        // console.log("Message: " + JSON.stringify(newMessage));
         disperseMessageToUser(io, newMessage);
         //Emit Message Sent
         socket.emit(EMIT_MESSAGE_SENT, { message: newMessage });
