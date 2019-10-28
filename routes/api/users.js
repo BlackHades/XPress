@@ -16,6 +16,7 @@ const userValidator  = require('../../app/users/UserValidator');
 router.use(authenticate);
 router.post('/update', userValidator.update(),  userController.update);
 router.post('/avatar', userValidator.avatar(),  userController.avatar);
+router.post('/rating', userController.submitRating)
 router.get("/details/:userId", userController.details);
 router.get("/me", userController.me);
 router.get("/agents", userController.agents);
