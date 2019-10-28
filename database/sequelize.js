@@ -15,7 +15,7 @@ const Sequelize = require('sequelize');
         collate: 'utf8mb4_general_ci',
     },
     dialectOptions: {
-        socketPath: "/Applications/MAMP/tmp/mysql/mysql.sock"
+        // socketPath: "/Applications/MAMP/tmp/mysql/mysql.sock"
     },
     operatorsAliases: false,
     timezone: "+01:00", //for writing to database,
