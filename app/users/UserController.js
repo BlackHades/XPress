@@ -1,8 +1,8 @@
 'use strict';
-const {createSuccessResponse, createErrorResponse, validationHandler} = require('../../helpers/response');
-const {validationResult } = require('express-validator/check');
+const { createSuccessResponse, createErrorResponse, validationHandler } = require('../../helpers/response');
+const { validationResult } = require('express-validator/check');
 const bcrypt = require('bcryptjs');
-const {User} = require('../../database/sequelize');
+const { User } = require('../../database/sequelize');
 const userRepository = require('./UserRepository');
 const userConstant = require('./UserConstant');
 const transactionRepository = require("../transactions/TransactionRepository");
@@ -22,15 +22,15 @@ const {
  * @returns {Promise<void>}
  */
 let create = async (req, res, next) => {
-    try{
+    try {
         const valFails = validationResult(req);
-        if(!valFails.isEmpty())
-            return createErrorResponse(res,validationHandler(valFails), valFails.array);
+        if (!valFails.isEmpty())
+            return createErrorResponse(res, validationHandler(valFails), valFails.array);
 
         let payload = req.body;
 
         //hash password
-        const hashedPassword = bcrypt.hashSync(payload.password,  bcrypt.genSaltSync(10));
+        const hashedPassword = bcrypt.hashSync(payload.password, bcrypt.genSaltSync(10));
 
         //generate UID
         let uid = await userRepository.generateUid();
@@ -38,15 +38,15 @@ let create = async (req, res, next) => {
         //Create User
         let user = await User.create({
             name: payload.name,
-            uid:uid,
+            uid: uid,
             roleId: payload.roleId,
-            email:payload.email,
-            phone:payload.phone,
+            email: payload.email,
+            phone: payload.phone,
             password: hashedPassword
         });
         delete user.dataValues.password;
         return createSuccessResponse(res, user, "User Created");
-    }catch (e) {
+    } catch (e) {
         // handler(e);
         next(e);
     }
@@ -61,21 +61,21 @@ let create = async (req, res, next) => {
  */
 
 let update = async (req, res, next) => {
-    try{
+    try {
         const valFails = validationResult(req);
-        if(!valFails.isEmpty())
-            return createErrorResponse(res,validationHandler(valFails), valFails.array);
+        if (!valFails.isEmpty())
+            return createErrorResponse(res, validationHandler(valFails), valFails.array);
 
         let payload = req.body;
         let user = req.user;
-  console.log(req)
+        console.log(req)
         //Update User
-        await userRepository.updateUser({name: payload.name, email:payload.email,phone:payload.phone, isActive: payload.isActive || true, subscribe : payload.subscribe},req.user.id);
-        user = userRepository.find(user.id); 
+        await userRepository.updateUser({ name: payload.name, email: payload.email, phone: payload.phone, isActive: payload.isActive || true, subscribe: payload.subscribe }, req.user.id);
+        user = userRepository.find(user.id);
         console.log('user ---> ', user)
 
         return createSuccessResponse(res, user, "User Profile Updated");
-    }catch (e) {
+    } catch (e) {
         // handler(e);
         next(e);
     }
@@ -89,32 +89,32 @@ let update = async (req, res, next) => {
  * @returns {void|*}
  */
 
-let avatar = async (req,res,next) => {
-    try{
+let avatar = async (req, res, next) => {
+    try {
         const valFails = validationResult(req);
-        if(!valFails.isEmpty())
-            return createErrorResponse(res,validationHandler(valFails), valFails.array);
+        if (!valFails.isEmpty())
+            return createErrorResponse(res, validationHandler(valFails), valFails.array);
 
         let payload = req.body;
         let user = req.user;
         //Update user Object
         user.avatar = payload.avatar;
         // Update Database
-        await userRepository.updateUser({avatar: payload.avatar},req.user.id);
+        await userRepository.updateUser({ avatar: payload.avatar }, req.user.id);
 
         return createSuccessResponse(res, user, "Avatar Updated Successfully");
-    }catch (e) {
+    } catch (e) {
         // handler(e);
         next(e);
     }
 };
 
 
-const agents = async (req,res,next) => {
+const agents = async (req, res, next) => {
     const agents = await userRepository.fetchByRole(userConstant.AGENT);
     const online = agents.filter(agent => agent.status === "online");
     const offline = agents.filter(agent => agent.status === "offline");
-    return createSuccessResponse(res,{
+    return createSuccessResponse(res, {
         all: agents,
         online: online,
         offline: offline
@@ -143,7 +143,7 @@ const details = async (req, res, next) => {
     return createSuccessResponse(res, {
         user: await userRepository.find(req.params.userId),
         transactions: await transactionRepository.getUserTransaction(req.params.userId)
-    },"User Details Fetched");
+    }, "User Details Fetched");
 };
 
 /**
@@ -153,12 +153,12 @@ const details = async (req, res, next) => {
  * @param next
  * @returns {Promise<void|*>}
  */
-const destroy = async (req,res,next) => {
+const destroy = async (req, res, next) => {
     let userId = req.params.userId;
-    if(req.user.id.toString() === userId)
+    if (req.user.id.toString() === userId)
         return createErrorResponse(res, "An Error Occurred. Can't delete Self");
 
-    return createSuccessResponse(res, await userRepository.destroy(userId),"User deleted successfully");
+    return createSuccessResponse(res, await userRepository.destroy(userId), "User deleted successfully");
 
 };
 
@@ -169,7 +169,7 @@ const me = async (req, res, next) => {
     const [wallets, created] = await walletRepository.findOrCreate({
         userType: "user",
         userId: user.id,
-    },{
+    }, {
         userType: "user",
         userId: user.id,
         balance: 0
@@ -183,55 +183,44 @@ const me = async (req, res, next) => {
         userId: user.id,
     });
 
-    if(bankAccount)
+    if (bankAccount)
         user.dataValues.bankAccount = bankAccount;
     return createSuccessResponse(res, {
         user: user,
         transactions: await transactionRepository.getUserTransaction(req.user.id)
-    },"User Details Fetched");
+    }, "User Details Fetched");
 };
 
 
-const toggleStatus = async (req,res,next) => {
+const toggleStatus = async (req, res, next) => {
     console.log(req.params.status);
     const status = req.params.status.toString() !== "online" ? "offline" : "online";
-    let user =  req.user;
+    let user = req.user;
     user.status = status;
-    user  = await user.save();
-    try{
-        io.emit(EMIT_AGENT_STATUS,{
+    user = await user.save();
+    try {
+        io.emit(EMIT_AGENT_STATUS, {
             userId: user.id,
             status: status,
             user: user
         });
-    }catch (e) {
+    } catch (e) {
         debug(e);
     }
-    return createSuccessResponse(res, user , `Agent is ${status}`)
+    return createSuccessResponse(res, user, `Agent is ${status}`)
 };
 
-const toggleIsActive = (req,res, next) => {
-    console.log("param",req.body);
+const toggleIsActive = (req, res, next) => {
+    console.log("param", req.body);
     userRepository.updateUser({
-        isActive: req.body.isActive ? true :false
-    },req.body.userId)
+        isActive: req.body.isActive ? true : false
+    }, req.body.userId)
         .then(async response => {
             log("response: " + response);
-            return createSuccessResponse(res, await userRepository.find(req.body.userId) ,  "User Record Is Updated")
-        }).catch(err => next(err));
-};
-
-const subscriptions = (req,res, next) => {
-    console.log(req.params.key);
-    userRepository.updateUser({
-        subscribe : req.params.key
-    },req.body.userId)
-        .then(async response => {
-            log("response: " + response);
-            return createSuccessResponse(res, await userRepository.find(req.body.userId) ,  `User ${req.params.key === 1 ? 'Subscribed': 'Unscubscribed'}`)
+            return createSuccessResponse(res, await userRepository.find(req.body.userId), "User Record Is Updated")
         }).catch(err => next(err));
 };
 
 module.exports = {
-  create, update, avatar, all, destroy, details, me, agents, toggleStatus, toggleIsActive , subscriptions
+    create, update, avatar, all, destroy, details, me, agents, toggleStatus, toggleIsActive
 };
