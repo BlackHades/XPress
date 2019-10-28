@@ -226,11 +226,33 @@ const status = async (req, res, next) => {
         return next(e);
     }
 };
+
+const leaderboards = async (req, res, next) => {
+    let leaderboard = {}
+        const {userId} = req.params;
+        try{
+            const leaderBoardByAmount = await transactionRepository.getLeaderbaords('Amount')
+            const leaderBoardByCount = await transactionRepository.getLeaderbaords('Count')
+            leaderboard.byAmount = leaderBoardByAmount;
+            leaderboard.byCount = leaderBoardByCount
+            if(userId){
+               let userDetails = await transactionRepository.getLeaderbaords('User', userId)
+                leaderboard.user = userDetails
+            }
+            return createSuccessResponse(res, leaderboard);
+        }catch (e) {
+       console.log("error --> e")
+        return next(e);
+    }
+}
+
+
 module.exports = {
     create,
     all,
     destroy,
     show,
     details,
-    status
+    status,
+    leaderboards
 };
