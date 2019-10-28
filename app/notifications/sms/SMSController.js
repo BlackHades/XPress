@@ -7,7 +7,7 @@ const smsRepository = require("./SMSRepository");
 
 exports.send = async (req, res) => {
     debug("I AM here SMS-----------------------");
-    let {to, message} = req.body;
+    let {to, message, sender} = req.body;
     if(!message)
         return createErrorResponse(res, "Message is required");
     if(!to)

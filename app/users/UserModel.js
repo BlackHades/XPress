@@ -9,15 +9,16 @@ module.exports = (sequelize, type) => {
             primaryKey: true,
             autoIncrement: true
         },
-        uid:{
+        uid: {
             type: type.STRING,
             unique: true
         },
-        subscribe :{
+        subscribe: {
             type: type.INTEGER,
-            allowNull: true
+            allowNull: true,
+            defaultValue: 1
         },
-        roleId:{
+        roleId: {
             type: type.INTEGER,
             defaultValue: roles.USER,
         },
@@ -34,19 +35,19 @@ module.exports = (sequelize, type) => {
         password: type.STRING,
         avatar: type.STRING,
         lastSeen: type.DATE,
-        status:{
+        status: {
             type: type.STRING,
-            defaultValue:"offline"
+            defaultValue: "offline"
         },
-        isActive:{
+        isActive: {
             type: type.BOOLEAN,
             defaultValue: true
         },
-        affiliateCode:{
+        affiliateCode: {
             type: type.STRING,
             allowNull: true,
         },
-        referralCode:{
+        referralCode: {
             type: type.STRING,
             allowNull: true,
         },
@@ -54,27 +55,27 @@ module.exports = (sequelize, type) => {
             type: type.STRING,
             allowNull: true
         },
-        emailVerifiedAt:{
+        emailVerifiedAt: {
             type: type.DATE,
             allowNull: true,
         },
-        phoneVerifiedAt:{
+        phoneVerifiedAt: {
             type: type.DATE,
             allowNull: true,
         }
-    },{
+    }, {
         defaultScope: {
             attributes: {
                 exclude: ["password"]
             }
-        },scopes: {
+        }, scopes: {
             withPassword: {
-                attributes:{
+                attributes: {
                     include: ["password"]
                 }
             },
-            active:{
-                where:{
+            active: {
+                where: {
                     isActive: true
                 }
             }

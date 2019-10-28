@@ -8,10 +8,12 @@ const userConstant = require('../../users/UserConstant');
 const pushTokenRepository = require("../../push-notifications/PushTokenRepository");
 const onesignalRepository = require("../../push-notifications/OnesignalRepository");
 const log = require("../../../helpers/Logger");
+const axios = require("axios");
+
 
 exports.send = async (req, res, next) => {
     debug("I AM here In app notification messages-----------------------");
-    try{
+    try {
         let { title, message } = req.body;
         if (!title)
             return createErrorResponse(res, "Title is required");
@@ -35,14 +37,15 @@ exports.send = async (req, res, next) => {
         tokens = tokens.filter(Boolean);
         const data = {
             notificationType: "NEWS",
-            message: message
+            message: message,
         };
-        log("data: " + JSON.stringify({ data: data, tokens: tokens, message: message }));
+        console.log('tokens => ', tokens)
+        log("data: " + JSON.stringify({ data: data, tokens: tokens, message: message, title: title, message: message }));
+        // onesignalRepository.sendNotificationToUser(tokens, message.sender.name, message.content, data)
         onesignalRepository.sendNotificationToUser(tokens, title, message, data);
         return createSuccessResponse(res, tokens, "In app notification messages sent");
-    }catch (e) {
+    } catch (e) {
         debug("Exception", e);
-        console.log("Error", {e});
         return next(e);
     }
 };

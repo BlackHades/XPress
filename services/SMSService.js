@@ -13,13 +13,13 @@ class SMSService{
         }));
     }
 
-    send(phoneNumber, message){
+    send(phoneNumber, message, sender){
         return axios.get(baseUrl,{
             params:{
                 username: process.env.SMS_USERNAME,
                 password: process.env.SMS_PASSWORD,
-                sender: "C14xchange",
-                message: `${message} -- C14xchange`,
+                sender: "Cxchange",
+                message: `${message} -- ${sender || "chiji14xchange"}`,
                 forcednd: 1,
                 recipients: phoneNumber
             }
