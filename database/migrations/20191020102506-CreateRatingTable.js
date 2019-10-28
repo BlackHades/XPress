@@ -22,7 +22,7 @@ module.exports = {
                 allowNull: true
             },
             rating: {
-                type: type.INT,
+                type: type.INTEGER,
                 defaultValue: 0
             },
             createdAt: {
