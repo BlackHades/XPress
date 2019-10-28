@@ -26,11 +26,13 @@ const sendNotificationToUser = (tokens = [], title, message, data) => {
     notification.postBody['data'] = data;
 
     if(process.env.APP_ENV != "development")
-        myClient.sendNotification(notification)
-            .then(res => {
-                log(res.httpResponse.statusCode);
-            })
-            .catch(err => log(JSON.stringify(err)));
+
+    myClient.sendNotification(notification)
+        .then(res => {
+
+            log(res.httpResponse.statusCode);
+        })
+        .catch(err => log(JSON.stringify(err)));
 
     let length = 2000;
     if (tokens.length > length) {
@@ -47,8 +49,14 @@ const sendNotificationToUser = (tokens = [], title, message, data) => {
 
     } else {
         notification.include_player_ids = tokens;
+        notification.includedSegments = ["All"];
+        console.log(notification, '----->>>>\n')
+        console.log('-----\n')
         myClient.sendNotification(notification)
             .then(res => {
+                log(res)
+                console.log('-----\n')
+
                 log(res.httpResponse.statusCode);
             })
             .catch(err => log(JSON.stringify(err)))
