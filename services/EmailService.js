@@ -11,7 +11,7 @@ class EmailService {
     sendMultiple(to = [], subject, msg, from = "no-reply@chiji14xchange.com") {
         const unsubscribe_email = to.join('');
         const unsubscribe_link = Buffer.from(unsubscribe_email).toString('base64');
-        // console.log('to ==>> ', to, unsubscribe_email, unsubscribe_link)
+        
         return sendGrid.sendMultiple(this.formatTextToEmail(to, msg, "customer", subject, from, unsubscribe_link));
     }
 
