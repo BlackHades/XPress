@@ -4,6 +4,7 @@ const {validationResult } = require('express-validator/check');
 const bcrypt = require('bcryptjs');
 const {User} = require('../../database/sequelize');
 const userRepository = require('./UserRepository');
+const RatingsRepository = require('../ratings/RatingsRepository')
 const userConstant = require('./UserConstant');
 const transactionRepository = require("../transactions/TransactionRepository");
 const log = require("../../helpers/Logger");
@@ -232,6 +233,18 @@ const subscriptions = (req,res, next) => {
         }).catch(err => next(err));
 };
 
+const submitRating = async (req,res,next)=>{
+    console.log(req.body)
+    let {agentId,userId,comment,rating} = req.body;
+    
+    try{
+       await RatingsRepository.create(rating,comment,userId,agentId)
+       return createSuccessResponse(res, await userRepository.find(agentId), 'Your response was handled succesfully')    
+    }catch(e){
+        next(e)
+    }
+
+}
 module.exports = {
-  create, update, avatar, all, destroy, details, me, agents, toggleStatus, toggleIsActive , subscriptions
+  create, update, avatar, all, destroy, details, me, agents, toggleStatus, toggleIsActive , subscriptions , submitRating
 };
