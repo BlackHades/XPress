@@ -68,10 +68,12 @@ let update = async (req, res, next) => {
 
         let payload = req.body;
         let user = req.user;
-
+  console.log(req)
         //Update User
-        await userRepository.updateUser({name: payload.name, email:payload.email,phone:payload.phone, isActive: payload.isActive || true},req.user.id);
-        user = userRepository.find(user.id);
+        await userRepository.updateUser({name: payload.name, email:payload.email,phone:payload.phone, isActive: payload.isActive || true, subscribe : payload.subscribe},req.user.id);
+        user = userRepository.find(user.id); 
+        console.log('user ---> ', user)
+
         return createSuccessResponse(res, user, "User Profile Updated");
     }catch (e) {
         // handler(e);
@@ -218,6 +220,18 @@ const toggleIsActive = (req,res, next) => {
             return createSuccessResponse(res, await userRepository.find(req.body.userId) ,  "User Record Is Updated")
         }).catch(err => next(err));
 };
+
+const subscriptions = (req,res, next) => {
+    console.log(req.params.key);
+    userRepository.updateUser({
+        subscribe : req.params.key
+    },req.body.userId)
+        .then(async response => {
+            log("response: " + response);
+            return createSuccessResponse(res, await userRepository.find(req.body.userId) ,  `User ${req.params.key === 1 ? 'Subscribed': 'Unscubscribed'}`)
+        }).catch(err => next(err));
+};
+
 module.exports = {
-  create, update, avatar, all, destroy, details, me, agents, toggleStatus, toggleIsActive
+  create, update, avatar, all, destroy, details, me, agents, toggleStatus, toggleIsActive , subscriptions
 };

@@ -12,11 +12,14 @@ const transactionController = require('../../app/transactions/TransactionControl
 const transactionValidator  = require('../../app/transactions/TransactionValidator');
 
 
+
 //General Auth
-router.use(authenticate);
+router.get("/leaderboards/:userId", transactionController.leaderboards); 
+router.use(authenticate);       
 router.get("/all",transactionController.all);
 router.get("/show/:transactionId", transactionController.show);
 router.get("/details", transactionController.details);
+
 
 //Agents And Above
 router.use(agentAuth);
