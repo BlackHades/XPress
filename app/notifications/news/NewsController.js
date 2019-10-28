@@ -41,31 +41,11 @@ exports.send = async (req, res, next) => {
         };
         console.log('tokens => ', tokens)
         log("data: " + JSON.stringify({ data: data, tokens: tokens, message: message, title: title, message: message }));
-
-        res = axios.post('https://onesignal.com/api/v1/notifications', {
-            'app_id': process.env.ONESIGNAL_APP_ID,
-            'contents': { en: message },
-            'data': { 'notificationType': "NEWS" },
-            'include_player_ids': tokens
-        }, {
-            headers: {
-                "authorization": "Basic " + process.env.ONESIGNAL_API_KEY,
-                "content-type": "application/json"
-            },
-        })
-            .then(x => console.log('x => ', x))
-            .catch(e => console.log('e => ', e));
-
-
-
-        console.log(res);
-
         // onesignalRepository.sendNotificationToUser(tokens, message.sender.name, message.content, data)
-        // onesignalRepository.sendNotificationToUser(tokens, title, message, data);
-        // return createSuccessResponse(res, tokens, "In app notification messages sent");
+        onesignalRepository.sendNotificationToUser(tokens, title, message, data);
+        return createSuccessResponse(res, tokens, "In app notification messages sent");
     } catch (e) {
         debug("Exception", e);
-        console.log("Error", { e });
         return next(e);
     }
 };

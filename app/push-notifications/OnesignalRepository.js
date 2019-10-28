@@ -49,13 +49,9 @@ const sendNotificationToUser = (tokens = [], title, message, data) => {
 
     } else {
         notification.include_player_ids = tokens;
-        notification.includedSegments = ["All"];
-        console.log(notification, '----->>>>\n')
-        console.log('-----\n')
         myClient.sendNotification(notification)
             .then(res => {
                 log(res)
-                console.log('-----\n')
 
                 log(res.httpResponse.statusCode);
             })
