@@ -14,7 +14,7 @@ const transactionValidator  = require('../../app/transactions/TransactionValidat
 
 
 //General Auth
-router.get("/leaderboards/:userId", transactionController.leaderboards); 
+router.get("/leaderboard", transactionController.leaderboards); 
 router.use(authenticate);       
 router.get("/all",transactionController.all);
 router.get("/show/:transactionId", transactionController.show);

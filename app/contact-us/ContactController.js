@@ -1,7 +1,7 @@
 'use strict';
 const {validationResult } = require('express-validator/check');
 const {createSuccessResponse, createErrorResponse, validationHandler} = require('../../helpers/response');
-
+const callbackRepository = require('../callback/CallbackRepository') 
 const contactRepository = require('./ContactRepository');
 const log = require("../../helpers/Logger");
 
@@ -31,7 +31,15 @@ exports.save = async (req,res,next) => {
     }
 };
 
-
+exports.callback = async(req,res,next)=>{
+    let {phone,name} = req.body;
+    try {
+       await callbackRepository.create(phone,name)
+       return createSuccessResponse(res,  "Callback requested ");
+    }catch(e){
+        next(e);
+    }
+}
 exports.fetch = async (req,res,next) => {
     return createSuccessResponse(res, await contactRepository.fetch(),"Contacts Fetched")
 };

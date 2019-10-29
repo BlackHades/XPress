@@ -47,6 +47,7 @@ const WalletLog = require("../app/wallet-logs/WalletLogModel")(sequelize, Sequel
 const BankAccount = require("../app/bank-accounts/BankAccountModel")(sequelize, Sequelize);
 const Withdrawal = require("../app/withdrawals/WithdrawalModel")(sequelize, Sequelize);
 const Ratings = require("../app/ratings/RatingsModel")(sequelize, Sequelize)
+const Callback = require("../app/callback/CallbackModel")(sequelize, Sequelize)
 /**
  * Relationships
  */
@@ -151,6 +152,7 @@ module.exports = {
     WalletLog,
     BankAccount,
     Withdrawal,
-    Ratings
+    Ratings,
+    Callback
 };
 

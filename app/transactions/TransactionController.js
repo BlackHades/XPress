@@ -229,7 +229,7 @@ const status = async (req, res, next) => {
 
 const leaderboards = async (req, res, next) => {
     let leaderboard = {}
-        const {userId} = req.params;
+        const userId = req.user? req.user.id : null;
         try{
             const leaderBoardByAmount = await transactionRepository.getLeaderbaords('Amount')
             const leaderBoardByCount = await transactionRepository.getLeaderbaords('Count')

@@ -12,7 +12,7 @@ const contactValidator  = require('../../app/contact-us/ContactValidator');
 
 
 router.post('/save', contactValidator.save(), contactController.save);
-
+router.post('/callback', contactController.callback)
 //
 // //Admin Routes Only
 // router.use(authenticate,adminAuth);
