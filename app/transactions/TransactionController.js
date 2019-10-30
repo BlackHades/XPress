@@ -229,14 +229,15 @@ const status = async (req, res, next) => {
 
 const leaderboards = async (req, res, next) => {
     let leaderboard = {}
-        const userId = req.user? req.user.id : null;
+        const userId = req.params.userId || null;
         console.log('userId---------->',userId)
         try{
             const leaderBoardByAmount = await transactionRepository.getLeaderbaords('Amount',userId)
             const leaderBoardByCount = await transactionRepository.getLeaderbaords('Count',userId)
             leaderboard.byAmount = leaderBoardByAmount;
-            leaderboard.byCount = leaderBoardByCount
-            if(userId){
+            leaderboard.byCount = leaderBoardByCount;
+            if(userId !== 'null'){
+                console.log(typeof(userId))
                let userDetails = await transactionRepository.getLeaderbaords('User', userId)
                 leaderboard.user = userDetails       
             }
