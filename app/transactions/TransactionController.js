@@ -230,14 +230,15 @@ const status = async (req, res, next) => {
 const leaderboards = async (req, res, next) => {
     let leaderboard = {}
         const userId = req.user? req.user.id : null;
+        console.log('userId---------->',userId)
         try{
-            const leaderBoardByAmount = await transactionRepository.getLeaderbaords('Amount')
-            const leaderBoardByCount = await transactionRepository.getLeaderbaords('Count')
+            const leaderBoardByAmount = await transactionRepository.getLeaderbaords('Amount',userId)
+            const leaderBoardByCount = await transactionRepository.getLeaderbaords('Count',userId)
             leaderboard.byAmount = leaderBoardByAmount;
             leaderboard.byCount = leaderBoardByCount
             if(userId){
                let userDetails = await transactionRepository.getLeaderbaords('User', userId)
-                leaderboard.user = userDetails
+                leaderboard.user = userDetails       
             }
             return createSuccessResponse(res, leaderboard);
         }catch (e) {

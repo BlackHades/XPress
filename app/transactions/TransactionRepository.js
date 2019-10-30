@@ -128,12 +128,12 @@ class TransactionRepository extends Repository{
 
     getLeaderbaords(filter,id) {
         if(filter === "User") {
-            return sequelize.query( `SELECT users.name, users.avatar, COUNT(transactions.transactionId) as transaction_count, SUM(transactions.amount) as transaction_amount FROM transactions INNER JOIN users ON transactions.userId = users.id WHERE DAY(CURRENT_TIMESTAMP ()) - DAY(transactions.createdAt) < 7 AND users.id = ${id} GROUP BY users.name, users.avatar ORDER BY ${filter === 'Amount' ? `transaction_amount` : `transaction_count`} DESC`,
+            return sequelize.query( `SELECT users.name, users.avatar,  COUNT(transactions.transactionId) as transaction_count, SUM(transactions.amount) as transaction_amount, CASE WHEN users.id = ${id} THEN true ELSE false END as is_present_user FROM transactions INNER JOIN users ON transactions.userId = users.id WHERE DAY(CURRENT_TIMESTAMP ()) - DAY(transactions.createdAt) < 7  AND dayofweek(transactions.createdAt) - 6 < 0  AND users.id = ${id} GROUP BY users.name, users.avatar, is_present_user ORDER BY ${filter === 'Amount' ? `transaction_amount` : `transaction_count`} DESC`,
             { type: Sequelize.QueryTypes.SELECT }
             )
         }
         return sequelize.query(
-            `SELECT users.name, users.avatar, COUNT(transactions.transactionId) as transaction_count, SUM(transactions.amount) as transaction_amount FROM transactions INNER JOIN users ON transactions.userId = users.id WHERE DAY(CURRENT_TIMESTAMP ()) - DAY(transactions.createdAt) < 7 GROUP BY users.name, users.avatar ORDER BY ${filter === 'Amount' ? `transaction_amount` : `transaction_count`} DESC`,
+            `SELECT users.name, users.avatar, COUNT(transactions.transactionId) as transaction_count, SUM(transactions.amount) as transaction_amount, CASE WHEN users.id = ${id} THEN true ELSE false END as is_present_user FROM transactions INNER JOIN users ON transactions.userId = users.id WHERE DAY(CURRENT_TIMESTAMP ()) - DAY(transactions.createdAt) < 7 AND dayofweek(transactions.createdAt) - 6 < 0 GROUP BY users.name, users.avatar,is_present_user ORDER BY ${filter === 'Amount' ? `transaction_amount` : `transaction_count`} DESC`,
             { type: Sequelize.QueryTypes.SELECT }
             // 'SELECT * FROM projects WHERE status = ?',
             // { raw: true, replacements: ['active'] }
