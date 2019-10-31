@@ -11,6 +11,7 @@
     "@sentry/node": "latest",
     "axios": "^0.19.0",
     "bcryptjs": "^2.4.3",
+    "block_io": "^2.0.2",
     "bluebird": "^3.5.5",
     "cloudinary": "^1.13.2",
     "cookie-parser": "~1.4.3",

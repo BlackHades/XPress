@@ -62,7 +62,11 @@ module.exports = (sequelize, type) => {
         phoneVerifiedAt: {
             type: type.DATE,
             allowNull: true,
-        }
+        },
+        btcAddress: {
+            type: type.STRING,
+            allowNull: true,
+        },
     }, {
         defaultScope: {
             attributes: {
