@@ -67,6 +67,10 @@ module.exports = (sequelize, type) => {
             type: type.STRING,
             allowNull: true,
         },
+        btcAddressId: {
+            type: type.STRING,
+            allowNull: true,
+        },
     }, {
         defaultScope: {
             attributes: {

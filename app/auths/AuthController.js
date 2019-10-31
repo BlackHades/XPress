@@ -27,15 +27,44 @@ const generateBtcAddress = async user => {
     const version = 2; // API version
     const block_io = await new BlockIo(API_KEY, process.env.BLOCK_IO_SECRET_PIN, version);
 
-    const btcAddress = await block_io.get_new_address({
-        'label': `user-${user.name}`,
-    }, console.log);
+    const user_name = user.name;
+    const label = user_name.replace(/\s+/g, '-').toLowerCase();
 
-    await updateUser({ btcAddress }, user.id)
+    // const data = 
+    await block_io.get_new_address({
+        'label': `${label}`,
+    }, function (error, data) {
+        if (error) return console.log("Error occured:", error.message);
+        // data = JSON.stringify(data, null, 2);
+        updateUser({ 
+            btcAddress: data.data.address,
+            btcAddressId: data.data.user_id 
+        }, user.id)
+        console.log("data --> ",JSON.stringify(data, null, 2));
+        return data.data.address;
+    });
 
-    debug(`user: ${user.name} BTC address is ${address}`);
+    // async d => {
+    //     console.log('datta ->', d)
+    //     await updateUser({ 
+    //         btcAddress: d.data.address,
+    //         btcAddressId: d.data.user_id 
+    //     }, user.id)
 
-    return btcAddress;
+    //     return d.data.address;
+
+    // }
+
+    // await debug("data --> ", data)
+
+    // if (data.status === "success") {
+        // await updateUser({ 
+        //     btcAddress: data.data.address,
+        //     btcAddressId: data.data.user_id 
+        // }, user.id)
+    // }
+
+    // return data.data.address;
 }
 
 /**
@@ -100,9 +129,9 @@ const login = async (req, res, next) => {
         user.dataValues.balance = wallets.balance;
 
         // generate btc address if i dont have any and i'm a user
-        if (user.btcAddress === null && user.roleId === 3) {
-            const address = generateBtcAddress(user);
-            user.btcAddress = address;
+        if (user.dataValues.btcAddress === null && user.dataValues.roleId === 3) {
+            const address = generateBtcAddress(user.dataValues);
+            user.dataValues.btcAddress = address;
         }
 
         const bankAccount = await bankAccountRepository.findOne({
@@ -159,9 +188,9 @@ const register = async (req, res, next) => {
         });
 
         // generate btc address if i dont have any and i'm a user
-        if (user.btcAddress === null && user.roleId === 3) {
+        if (user.dataValues.btcAddress === null && user.dataValues.roleId === 3) {
             const address = generateBtcAddress(user);
-            user.btcAddress = address;
+            user.dataValues.btcAddress = address;
         }
 
         const isMobile = req.body.isMobile || false;
