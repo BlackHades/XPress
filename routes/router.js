@@ -27,7 +27,7 @@ module.exports = (app) => {
     app.use('/api/v1/files',filesRouter);
     app.use('/api/v1/cards',cardsRouter);
     app.use('/api/v1/passwords',passwordsRouter);
-    app.use('/api/v1/posts',postRouter);
+    app.use('/api/v1/posts',postRouter);             
     app.use('/api/v1/transactions',transactionRouter);
     app.use('/api/v1/push-tokens',pushRouter);
     app.use('/api/v1/messages',messageRouter);

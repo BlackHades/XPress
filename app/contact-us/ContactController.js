@@ -32,7 +32,8 @@ exports.save = async (req,res,next) => {
 };
 
 exports.callback = async(req,res,next)=>{
-    let {phone,name} = req.body;
+    let { phone, name } = req.body;
+    console.log('------> phone, name', phone, name)
     try {
        await callbackRepository.create(phone,name)
        return createSuccessResponse(res,  "Callback requested ");
