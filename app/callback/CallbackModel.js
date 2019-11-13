@@ -6,7 +6,10 @@ module.exports = (sequelize, type) => {
             autoIncrement: true
         },
         name: type.STRING,
-        phone : type.STRING ,
-        called : type.BOOLEAN,
+        phone: type.STRING,
+        called: {
+            type: type.BOOLEAN,
+            defaultValue: false
+        },
     });
 };

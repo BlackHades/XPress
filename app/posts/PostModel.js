@@ -12,7 +12,8 @@ module.exports = (sequelize, type) => {
             type:type.STRING,
             allowNull:true
         },
-        postedBy: type.INTEGER
+        postedBy: type.INTEGER,
+        tags: type.TEXT
     });
 };
 // Export the model
