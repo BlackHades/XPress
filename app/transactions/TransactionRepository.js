@@ -111,7 +111,8 @@ class TransactionRepository extends Repository {
         }
         return sequelize.query(
             `SELECT users.name, users.avatar, COUNT(transactions.transactionId) as transaction_count, SUM(transactions.amount) as transaction_amount, CASE WHEN users.id = ${id} THEN true ELSE false END as is_present_user FROM transactions INNER JOIN users ON transactions.userId = users.id WHERE DATEDIFF( CURRENT_TIMESTAMP(), transactions.createdAt) < 7  AND dayofweek(transactions.createdAt) - 6 < 0 GROUP BY users.name, users.avatar,is_present_user ORDER BY ${filter === 'Amount' ? `transaction_amount` : `transaction_count`} DESC LIMIT 10 `,
-            { type: sequelize.QueryTypes.SELECT }
+            { type: sequelize.QueryTypes.SELECT }    
+            
             // 'SELECT * FROM projects WHERE status = ?',
             // { raw: true, replacements: ['active'] }
         );
