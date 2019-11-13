@@ -4,14 +4,14 @@ const app = express();
 const router = express.Router();
 
 //Middleware
-const {authenticate,adminAuth} = require('../../app/middleware/ApiAuthMiddleware');
+const { authenticate, adminAuth, bloggerAuth } = require('../../app/middleware/ApiAuthMiddleware');
 
 //Controllers
 const postController = require('../../app/posts/PostController');
 const commentController = require('../../app/comments/CommentController');
 
 //Validators
-const postValidator  = require('../../app/posts/PostValidator');
+const postValidator = require('../../app/posts/PostValidator');
 
 
 //No Auth
@@ -19,7 +19,7 @@ router.get("/all", postController.all);
 
 router.get("/view/:postId", postController.show);
 
-router.get("/:postId/comments/fetch",commentController.fetchByPostId);
+router.get("/:postId/comments/fetch", commentController.fetchByPostId);
 
 
 //General Auth
@@ -30,21 +30,13 @@ router.post("/:postId/comments/create", commentController.create);
 //Agents And Above
 
 
-//Administrator Only
-//Admin Middleware
+//Administrator & Blogger Only
 
-
-router.use(adminAuth);
-router.post('/create', postValidator.create(),  postController.create);
-router.delete("/delete/:postId",postController.destroy);
-
+router.use(adminAuth, bloggerAuth);
+router.post('/create', postValidator.create(), postController.create);
+router.delete("/delete/:postId", postController.destroy);
 
 //Comments
 router.delete("/comments/delete/:commentId", commentController.destroy);
 
-
-
-
-
 module.exports = router;
-

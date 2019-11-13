@@ -1,25 +1,26 @@
 "use strict";
 
-const {createSuccessResponse, createErrorResponse} = require("../../../helpers/response");
+const { createSuccessResponse, createErrorResponse } = require("../../../helpers/response");
 const emailService = require("../../../services/EmailService");
 const debug = require("debug")("app:debug");
 const mailerRepository = require("./MailRepository");
+
 exports.send = async (req, res) => {
-    let {to, subject, message, from} = req.body;
+    let { to, subject, message, from } = req.body;
     from = from || "no-reply@chiji14xchange.com";
-    if(!message)
+    if (!message)
         return createErrorResponse(res, "Message is required");
-    if(Array.isArray(to)){
-        if(to.length == 0)
+    if (Array.isArray(to)) {
+        if (to.length == 0)
             return createErrorResponse(res, "At least one recipient is required");
 
         let query = to.map(t => {
-           return {
-               to: t,
-               from: from,
-               subject: subject || "No Subject",
-               message: JSON.stringify(message)
-           }
+            return {
+                to: t,
+                from: from,
+                subject: subject || "No Subject",
+                message: JSON.stringify(message)
+            }
         });
 
         await mailerRepository.bulkCreate(query);
@@ -28,20 +29,20 @@ exports.send = async (req, res) => {
 
         const allEmail = to;
         let length = 999;
-        while(allEmail.length) {
-            const data = allEmail.splice(0,length);
+        while (allEmail.length) {
+            const data = allEmail.splice(0, length);
             debug(data.length);
             emailService.sendMultiple(data, subject, message, from)
                 .then(response => debug("Multiple", response.length))
                 .catch(err => {
-                    debug("ErrorMultiple", {err});
+                    debug("ErrorMultiple", { err });
                     debug("ErrorMultiple", JSON.stringify(err));
                     debug("ErrorMultiple", err.response.body.errors);
                 });
         }
 
-    }else{
-        if(!to)
+    } else {
+        if (!to)
             return createErrorResponse(res, "At least one recipient is required");
 
         await mailerRepository.create({
@@ -50,7 +51,7 @@ exports.send = async (req, res) => {
             subject: subject || "No Subject",
             message: JSON.stringify(message)
         });
-        emailService.send(to, message,"", subject, from)
+        emailService.send(to, message, "", subject, from)
             .then(response => debug("Single", response))
             .catch(err => {
                 debug("ErrorSingle", err);
@@ -58,12 +59,12 @@ exports.send = async (req, res) => {
                 debug("ErrorSingle", err.response.body.errors)
             });
     }
-    return createSuccessResponse(res, null,"Email Sent");
+    return createSuccessResponse(res, null, "Email Sent");
 };
 
 
-exports.fetch = async (req,res) => {
+exports.fetch = async (req, res) => {
     const page = Number(req.query.page) || 1;
     const limit = Number(req.query.limit) || 100;
-    return createSuccessResponse(res, await mailerRepository.get(page,limit))
+    return createSuccessResponse(res, await mailerRepository.get(page, limit))
 };
