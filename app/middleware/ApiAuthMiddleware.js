@@ -68,13 +68,22 @@ let bloggerAuth = (req, res, next) => {
         return createErrorResponse(res, "Unauthorized");
 };
 
-let operationAuth = (req,res,next) => {
+let adminOrBloggerAuth = (req, res, next) => {
     console.log("User: ", JSON.stringify(req.user));
-    console.log("User: ", roles.OPERATION);
-    if(req.user && req.user.roleId == roles.OPERATION)
+    console.log("User: ", roles.BLOGGER);
+    if ((req.user && req.user.roleId == roles.BLOGGER) || (req.user && req.user.roleId == roles.ADMINISTRATOR))
         next();
     else
-        return createErrorResponse(res,"Unauthorized");
+        return createErrorResponse(res, "Unauthorized");
+};
+
+let operationAuth = (req, res, next) => {
+    console.log("User: ", JSON.stringify(req.user));
+    console.log("User: ", roles.OPERATION);
+    if (req.user && req.user.roleId == roles.OPERATION)
+        next();
+    else
+        return createErrorResponse(res, "Unauthorized");
 };
 
 let refresh = (req, res, next) => {
@@ -96,5 +105,6 @@ let refresh = (req, res, next) => {
 
 
 module.exports = {
-    authenticate, agentAuth, adminAuth, refresh, bloggerAuth, operationAuth
+    authenticate, agentAuth, adminAuth, refresh,
+    bloggerAuth, operationAuth, adminOrBloggerAuth
 };

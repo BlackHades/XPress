@@ -4,7 +4,7 @@ const app = express();
 const router = express.Router();
 
 //Middleware
-const { authenticate, adminAuth, bloggerAuth } = require('../../app/middleware/ApiAuthMiddleware');
+const { authenticate, adminAuth, adminOrBloggerAuth } = require('../../app/middleware/ApiAuthMiddleware');
 
 //Controllers
 const postController = require('../../app/posts/PostController');
@@ -32,7 +32,7 @@ router.post("/:postId/comments/create", commentController.create);
 
 //Administrator & Blogger Only
 
-router.use(adminAuth, bloggerAuth);
+router.use(adminOrBloggerAuth);
 router.post('/create', postValidator.create(), postController.create);
 router.delete("/delete/:postId", postController.destroy);
 
