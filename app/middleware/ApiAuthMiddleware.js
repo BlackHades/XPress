@@ -42,9 +42,9 @@ let authenticate = (req, res, next) => {
     });
 };
 
-
+// since an operationn is an advanced agent this should work!
 let agentAuth = (req, res, next) => {
-    if (req.user && req.user.roleId <= roles.AGENT)
+    if ((req.user && req.user.roleId <= roles.AGENT) || (req.user && req.user.roleId == roles.OPERATION))
         next();
     else
         return createErrorResponse(res, "Unauthorized");
