@@ -148,7 +148,7 @@ const register = async (req, res, next) => {
             name: payload.name,
             username: `$${payload.name.substr(0, 3)}${randomString.generate({
                 charset: "numeric",
-                length: 3
+                length: 5
             })}`,
             uid: uid,
             roleId: roles.USER,
